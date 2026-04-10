@@ -1,0 +1,98 @@
+.loans-detail-grid {
+  display: grid;
+  gap: 30px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 992px) {
+  .loans-detail-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.loan-detail-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ldc-header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.ldc-icon { font-size: 2.5rem; }
+
+.ldc-title {
+  font-size: 1.4rem;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.ldc-tagline {
+  color: var(--secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.ldc-desc {
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+.ldc-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  background: #f8fafc;
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-label {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meta-val {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+.rate-val {
+  color: var(--primary);
+}
+
+.ldc-features {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ldc-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+}
+
+.ldc-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.ldc-actions .btn {
+  flex: 1;
+  min-width: 140px;
+}
