@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import logo from '../assets/logo.png';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -21,8 +22,11 @@ export default function Navbar() {
     <header className="navbar">
       <div className="container nav-container">
         <Link to="/" className="brand">
-          <span className="brand-avani">Avani</span>
-          <span className="brand-sub">Loan Services</span>
+          <img src={logo} alt="Avani Loan Services Logo" className="logo" />
+          <div className="brand-text">
+            <span className="brand-avani">Avani</span>
+            <span className="brand-sub">Loan Services</span>
+          </div>
         </Link>
 
         {/* Desktop Nav */}

@@ -158,8 +158,23 @@
   text-align: left;
 }
 
-.loan-icon {
-  font-size: 2.5rem;
+.loan-card-img-wrapper {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+}
+
+.loan-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.loan-card:hover .loan-card-img {
+  transform: scale(1.05);
 }
 
 .loan-title {
@@ -269,4 +284,63 @@
 
 .why-section {
   background: linear-gradient(180deg, #f8fafc 0%, #edf3fb 100%);
+}
+
+/* CIBIL Section */
+.cibil-section {
+  padding: 40px;
+  background: white;
+  border: 1px solid rgba(10, 79, 139, 0.1);
+}
+
+.cibil-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+@media (min-width: 992px) {
+  .cibil-grid {
+    grid-template-columns: 4fr 6fr;
+  }
+}
+
+.cibil-img {
+  width: 100%;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.cibil-text-content h3 {
+  font-size: 2rem;
+  margin: 12px 0;
+  color: var(--primary);
+}
+
+.cibil-message {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  color: var(--text-dark);
+}
+
+.cibil-contact-details {
+  margin-bottom: 25px;
+  padding: 15px;
+  background: rgba(10, 79, 139, 0.05);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  color: var(--text-dark);
+}
+
+.cibil-ctas {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.badge-error {
+  background: #fee2e2;
+  color: #dc2626;
 }

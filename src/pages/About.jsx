@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CheckCircle, Award, Users, TrendingUp, ArrowRight } from 'lucide-react';
 import LeadForm from '../components/LeadForm';
+import logo from '../assets/logo.png';
 import './About.css';
 
 const banks = ['State Bank of India', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak Mahindra Bank', 'Bank of Baroda', 'Punjab National Bank', 'Bajaj Finserv', 'Tata Capital', 'Fullerton India'];
@@ -28,9 +29,8 @@ export default function About() {
         <div className="container">
           <div className="about-grid">
             <div className="about-image-block">
-              <div className="about-image-placeholder">
-                <span>🏦</span>
-                <p>Avani Loan Services</p>
+              <div className="about-logo-wrapper glass-card">
+                <img src={logo} alt="Avani Loan Services" className="about-logo" />
                 <p className="img-location">📍 Latur, Maharashtra</p>
               </div>
               <div className="certifications">

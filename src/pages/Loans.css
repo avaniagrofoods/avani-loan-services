@@ -20,7 +20,23 @@
   align-items: flex-start;
 }
 
-.ldc-icon { font-size: 2.5rem; }
+.ldc-image-wrapper {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+.ldc-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.loan-detail-card:hover .ldc-image {
+  transform: scale(1.05);
+}
 
 .ldc-title {
   font-size: 1.4rem;

@@ -26,20 +26,19 @@
   .about-grid { grid-template-columns: 1fr 1.5fr; }
 }
 
-.about-image-placeholder {
-  background: linear-gradient(135deg, #edf3fb, #dce8f8);
+.about-logo-wrapper {
+  background: white;
   border-radius: var(--radius-md);
-  padding: 60px 30px;
+  padding: 40px 20px;
   text-align: center;
-  font-size: 4rem;
-  color: var(--primary);
+  border: 1px solid rgba(10, 79, 139, 0.1);
 }
 
-.about-image-placeholder p {
-  margin-top: 12px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-dark);
+.about-logo {
+  height: 120px;
+  width: auto;
+  margin-bottom: 16px;
+  border-radius: 8px;
 }
 
 .img-location {

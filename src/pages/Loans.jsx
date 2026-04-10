@@ -2,10 +2,17 @@ import { Link } from 'react-router-dom';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import './Loans.css';
 
+// Import Images
+import personalImg from '../assets/personal-loan.png';
+import businessImg from '../assets/business-loan.png';
+import educationImg from '../assets/education-loan.png';
+import homeImg from '../assets/home-loan.png';
+import mortgageImg from '../assets/mortgage-loan.png';
+
 const loans = [
   {
     id: 'salary',
-    icon: '💼',
+    image: personalImg,
     title: 'Salary / Personal Loan',
     tagline: 'Quick cash for salaried employees',
     description: 'Unsecured personal loan for government and private sector employees. No collateral required.',
@@ -16,7 +23,7 @@ const loans = [
   },
   {
     id: 'business',
-    icon: '🏭',
+    image: businessImg,
     title: 'Business Loan',
     tagline: 'Fuel your business growth',
     description: 'Unsecured business loans for MSMEs, proprietors, and small businesses in Maharashtra.',
@@ -27,7 +34,7 @@ const loans = [
   },
   {
     id: 'education-india',
-    icon: '🎓',
+    image: educationImg,
     title: 'Education Loan (India)',
     tagline: 'Invest in your future in India',
     description: 'Education loan for MBBS, Engineering, MBA at top Indian institutions with easy repayment.',
@@ -38,7 +45,7 @@ const loans = [
   },
   {
     id: 'education-global',
-    icon: '✈️',
+    image: educationImg,
     title: 'Education Loan (Study Abroad)',
     tagline: 'Study globally, repay easily',
     description: 'Fund your education at top universities in USA, UK, Canada, Australia, Germany, and more.',
@@ -49,7 +56,7 @@ const loans = [
   },
   {
     id: 'home',
-    icon: '🏠',
+    image: homeImg,
     title: 'Home Loan',
     tagline: 'Own your dream home',
     description: 'Secured home loans for purchase, construction, or renovation of residential property.',
@@ -60,7 +67,7 @@ const loans = [
   },
   {
     id: 'mortgage',
-    icon: '🏦',
+    image: mortgageImg,
     title: 'Mortgage / LAP',
     tagline: 'Unlock your property value',
     description: 'Loan Against Property (LAP) for business or personal needs by pledging residential/commercial property.',
@@ -87,8 +94,10 @@ export default function Loans() {
           <div className="loans-detail-grid">
             {loans.map((loan) => (
               <div key={loan.id} className="loan-detail-card glass-card animate-fade-in">
+                <div className="ldc-image-wrapper">
+                  <img src={loan.image} alt={loan.title} className="ldc-image" />
+                </div>
                 <div className="ldc-header">
-                  <span className="ldc-icon">{loan.icon}</span>
                   <div>
                     <h2 className="ldc-title">{loan.title}</h2>
                     <p className="ldc-tagline">{loan.tagline}</p>

@@ -3,12 +3,20 @@ import { Shield, Clock, Award, TrendingUp, Star, Users, CheckCircle, ArrowRight 
 import LeadForm from '../components/LeadForm';
 import './Home.css';
 
+// Import Images
+import personalImg from '../assets/personal-loan.png';
+import businessImg from '../assets/business-loan.png';
+import educationImg from '../assets/education-loan.png';
+import homeImg from '../assets/home-loan.png';
+import mortgageImg from '../assets/mortgage-loan.png';
+import cibilBanner from '../assets/cibil-banner.png';
+
 const loanCards = [
-  { icon: '💼', title: 'Salary Loan', desc: 'Fast personal loans for salaried employees up to ₹50L', rate: '10.5% p.a.' },
-  { icon: '🏭', title: 'Business Loan', desc: 'Grow your business with unsecured loans up to ₹2Cr', rate: '12% p.a.' },
-  { icon: '🎓', title: 'Education Loan', desc: 'Study in India or abroad with loans up to ₹1.5Cr', rate: '8.15% p.a.' },
-  { icon: '🏠', title: 'Home Loan', desc: 'Realize your dream home with low EMIs for 30 years', rate: '8.5% p.a.' },
-  { icon: '🏦', title: 'Mortgage / LAP', desc: 'Unlock your property value with Loan Against Property', rate: '9% p.a.' },
+  { image: personalImg, title: 'Salary Loan', desc: 'Fast personal loans for salaried employees up to ₹50L', rate: '10.5% p.a.' },
+  { image: businessImg, title: 'Business Loan', desc: 'Grow your business with unsecured loans up to ₹2Cr', rate: '12% p.a.' },
+  { image: educationImg, title: 'Education Loan', desc: 'Study in India or abroad with loans up to ₹1.5Cr', rate: '8.15% p.a.' },
+  { image: homeImg, title: 'Home Loan', desc: 'Realize your dream home with low EMIs for 30 years', rate: '8.5% p.a.' },
+  { image: mortgageImg, title: 'Mortgage / LAP', desc: 'Unlock your property value with Loan Against Property', rate: '9% p.a.' },
 ];
 
 const trustBadges = [
@@ -77,7 +85,9 @@ export default function Home() {
           <div className="loans-grid">
             {loanCards.map((loan, i) => (
               <div key={i} className="loan-card glass-card animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
-                <span className="loan-icon">{loan.icon}</span>
+                <div className="loan-card-img-wrapper">
+                  <img src={loan.image} alt={loan.title} className="loan-card-img" />
+                </div>
                 <h3 className="loan-title">{loan.title}</h3>
                 <p className="loan-desc">{loan.desc}</p>
                 <div className="loan-rate">Starting @ <strong>{loan.rate}</strong></div>
@@ -85,6 +95,37 @@ export default function Home() {
               </div>
             ))}
           </div>
+
+          {/* CIBIL Correction Section */}
+          <div className="cibil-section glass-card animate-fade-in" style={{ marginTop: 60 }}>
+            <div className="cibil-grid">
+              <div className="cibil-image-content">
+                <img src={cibilBanner} alt="CIBIL Correction" className="cibil-img" />
+              </div>
+              <div className="cibil-text-content">
+                <span className="badge badge-error">CIBIL Correction Services</span>
+                <h3>Need a Loan but have a Low Score?</h3>
+                <p className="cibil-message">
+                  "Do you or someone you know is in need of a loan but has a low score? 
+                  📲 <strong>Chat with me – I am ready to help find a solution!</strong>"
+                </p>
+                <div className="cibil-contact-details">
+                  <p><strong>AVANI LOAN SERVICE LATUR</strong></p>
+                  <p>MAHARASHTRA INDIA</p>
+                  <p>📞 7249108474 | 📧 starpowerzlatur2210@gmail.com</p>
+                </div>
+                <div className="cibil-ctas">
+                  <a href="https://b2c.creditsamadhaan.com/?refer_code=FY665935" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                    Fix CIBIL Score Now
+                  </a>
+                  <a href="https://wa.me/917249108474" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+                    Chat on WhatsApp
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="text-center" style={{ marginTop: 40 }}>
             <Link to="/loans" className="btn btn-outline">View All Loan Products</Link>
           </div>
