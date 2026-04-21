@@ -1,25 +1,39 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import { useState } from 'react';
-import logo from '../assets/logo.png';
+import logo from '../assets/avani-brand-logo.png';
 import './Navbar.css';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { language, setLanguage, t } = useLanguage();
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Loan Products', path: '/loans' },
-    { name: 'Eligibility Checker', path: '/eligibility' },
-    { name: 'Documents', path: '/documents' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'Contact', path: '/contact' }
+    { name: t('home'), path: '/' },
+    { name: t('about'), path: '/about' },
+    { name: t('loans'), path: '/loans' },
+    { name: t('eligibility'), path: '/eligibility' },
+    { name: t('cibil_check'), path: '/cibil-check' },
+    { name: t('documents'), path: '/documents' },
+    { name: t('blog'), path: '/blog' },
+    { name: t('contact'), path: '/contact' }
   ];
 
   return (
-    <header className="navbar">
+    <>
+      <div className="notice-bar">
+        <div className="container notice-content">
+          <div className="lang-switcher">
+            <button className={`lang-btn ${language === 'en' ? 'active' : ''}`} onClick={() => setLanguage('en')}>Eng</button>
+            <button className={`lang-btn ${language === 'mr' ? 'active' : ''}`} onClick={() => setLanguage('mr')}>मराठी</button>
+            <button className={`lang-btn ${language === 'hi' ? 'active' : ''}`} onClick={() => setLanguage('hi')}>हिंदी</button>
+          </div>
+          <span className="notice-text">⚠️ <strong>{language === 'en' ? 'Disclaimer' : language === 'mr' ? 'सुचना' : 'सूचना'}:</strong> {t('disclaimer')} ⚠️</span>
+        </div>
+      </div>
+      <header className="navbar">
       <div className="container nav-container">
         <Link to="/" className="brand">
           <img src={logo} alt="Avani Loan Services Logo" className="logo" />
@@ -43,7 +57,7 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <Link to="/contact" className="btn btn-primary nav-cta">Apply Now</Link>
+          <Link to="/contact" className="btn btn-primary nav-cta">{t('apply_now')}</Link>
         </nav>
 
         {/* Mobile Menu Toggle */}
@@ -68,7 +82,7 @@ export default function Navbar() {
               ))}
               <li>
                 <Link to="/contact" className="btn btn-primary mobile-cta" onClick={() => setIsOpen(false)}>
-                  Apply Now
+                  {t('apply_now')}
                 </Link>
               </li>
             </ul>
@@ -76,5 +90,6 @@ export default function Navbar() {
         )}
       </div>
     </header>
+    </>
   );
 }

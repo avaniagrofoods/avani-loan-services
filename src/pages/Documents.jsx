@@ -57,6 +57,15 @@ const docs = [
       { category: 'Property Documents', list: ['Original title deed', 'Encumbrance certificate', 'Property tax receipts', 'NOC from co-owners if applicable', 'Valuation report'] },
     ]
   },
+  {
+    title: 'Doctor Loan',
+    icon: '👨‍⚕️',
+    items: [
+      { category: 'Professional Documents', list: ['Degree Certificate', 'Medical Registration Certificate (Old & New)', 'PG Certificate', 'Clinic/Hospital Registration'] },
+      { category: 'Identity & Address Proof', list: ['PAN Card', 'Aadhaar Card', 'Passport size photo'] },
+      { category: 'Financial Documents', list: ['Last 2 years ITR', 'Last 6 months bank statements (Current & Savings)', 'Existing loan details (if any)'] },
+    ]
+  },
 ];
 
 function DocAccordion({ item }) {

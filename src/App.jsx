@@ -9,6 +9,7 @@ import Documents from './pages/Documents';
 import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
 import Blog from './pages/Blog';
+import CibilCheck from './pages/CibilCheck';
 import './App.css';
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/loans" element={<Loans />} />
           <Route path="/eligibility" element={<Eligibility />} />
           <Route path="/documents" element={<Documents />} />
+          <Route path="/cibil-check" element={<CibilCheck />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/blog" element={<Blog />} />

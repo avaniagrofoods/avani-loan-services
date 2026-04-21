@@ -8,6 +8,7 @@ import businessImg from '../assets/business-loan.png';
 import educationImg from '../assets/education-loan.png';
 import homeImg from '../assets/home-loan.png';
 import mortgageImg from '../assets/mortgage-loan.png';
+import doctorImg from '../assets/business-loan.png'; // Reusing business icon if doctor icon not available, or I should use a more specific one if possible, but I'll stick to a placeholder for now and could use generate_image if needed. Actually, let's use business-loan as a placeholder or search for one.
 
 const loans = [
   {
@@ -75,6 +76,34 @@ const loans = [
     tenure: 'Up to 20 years',
     rate: '9% – 14% p.a.',
     features: ['Up to 70% of property value', 'Both residential & commercial', 'Minimal documentation', 'Income from all sources considered', 'Top-up loans available'],
+  },
+  {
+    id: 'doctor',
+    image: doctorImg,
+    title: 'Doctor Loan',
+    tagline: 'Exclusively for Medical Professionals',
+    description: 'Specialized loan for doctors, dentists, and veterinary professionals to expand their practice, clinics, or personal needs.',
+    minAmount: '₹5 Lakhs', maxAmount: '₹1 Crore',
+    tenure: '12–84 months',
+    rate: '10.25% – 14.5% p.a.',
+    features: [
+      'Degree Certificate required',
+      'Registration Certificate (Old & New)',
+      'PG Certificate required',
+      'No collateral for clinical equipment',
+      'Special rates for medical practitioners'
+    ],
+  },
+  {
+    id: 'car',
+    image: mortgageImg,
+    title: 'Car Loan',
+    tagline: 'Drive your success',
+    description: 'Finance your new or used car with flexible repayment options and competitive interest rates.',
+    minAmount: '₹1 Lakh', maxAmount: '₹50 Lakhs',
+    tenure: '12–84 months',
+    rate: '7.5% – 12% p.a.',
+    features: ['Up to 100% on-road funding', 'Used car loans available', 'Quick processing', 'Flexible EMIs', 'Minimal documentation'],
   }
 ];
 

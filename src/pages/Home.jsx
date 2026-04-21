@@ -9,7 +9,7 @@ import businessImg from '../assets/business-loan.png';
 import educationImg from '../assets/education-loan.png';
 import homeImg from '../assets/home-loan.png';
 import mortgageImg from '../assets/mortgage-loan.png';
-import cibilBanner from '../assets/cibil-banner.png';
+import cibilBanner from '../assets/avani_cibil_banner.png';
 
 const loanCards = [
   { image: personalImg, title: 'Salary Loan', desc: 'Fast personal loans for salaried employees up to ₹50L', rate: '10.5% p.a.' },
@@ -32,7 +32,11 @@ const testimonials = [
   { name: 'Sunil P.', loan: 'Home Loan – ₹40L', text: 'Best interest rate I found in Latur. Smooth documentation, highly recommended!' },
 ];
 
+import { useLanguage } from '../context/LanguageContext';
+
 export default function Home() {
+  const { t, language } = useLanguage();
+
   return (
     <div className="home-page">
 
@@ -41,12 +45,18 @@ export default function Home() {
         <div className="hero-bg-overlay"></div>
         <div className="container hero-content">
           <div className="hero-text animate-fade-in">
-            <span className="badge">📍 Trusted in Latur, Maharashtra</span>
-            <h1 className="hero-title">Get Your Loan <br /><span className="hero-highlight">Approved in 48 Hours</span><br />in Latur</h1>
-            <p className="hero-subtitle">Salary, Business, Education, Home & Mortgage Loans across all Maharashtra. No hidden charges. Free consultation.</p>
+            <span className="badge">{t('hero_badge')}</span>
+            <h1 className="hero-title">
+              {language === 'en' ? (
+                <>Get Your Loan <br /><span className="hero-highlight">Approved in 48 Hours</span><br />in Latur</>
+              ) : (
+                <span className="hero-highlight">{t('hero_title')}</span>
+              )}
+            </h1>
+            <p className="hero-subtitle">{t('hero_subtitle')}</p>
             <div className="hero-ctas">
-              <Link to="/contact" className="btn btn-secondary hero-btn">Apply Now →</Link>
-              <Link to="/eligibility" className="btn btn-outline-white hero-btn">Check Eligibility</Link>
+              <Link to="/contact" className="btn btn-secondary hero-btn">{t('apply_now')} →</Link>
+              <Link to="/eligibility" className="btn btn-outline-white hero-btn">{t('check_eligibility')}</Link>
             </div>
             <div className="hero-stats">
               <div className="stat"><span className="stat-num">500+</span><span>Happy Clients</span></div>
@@ -100,25 +110,25 @@ export default function Home() {
           <div className="cibil-section glass-card animate-fade-in" style={{ marginTop: 60 }}>
             <div className="cibil-grid">
               <div className="cibil-image-content">
-                <img src={cibilBanner} alt="CIBIL Correction" className="cibil-img" />
+                <img src={cibilBanner} alt="Avani CIBIL Correction" className="cibil-img" />
               </div>
               <div className="cibil-text-content">
-                <span className="badge badge-error">CIBIL Correction Services</span>
-                <h3>Need a Loan but have a Low Score?</h3>
+                <span className="badge badge-error">Elite CIBIL Services</span>
+                <h3>Improve Your Credit Score with Avani</h3>
                 <p className="cibil-message">
-                  "Do you or someone you know is in need of a loan but has a low score? 
-                  📲 <strong>Chat with me – I am ready to help find a solution!</strong>"
+                  Low CIBIL score stopping your dreams? Don't worry! 
+                  📲 <strong>Avani Loan Service provides expert guidance to fix your credit history and unlock better loan opportunities.</strong>
                 </p>
                 <div className="cibil-contact-details">
-                  <p><strong>AVANI LOAN SERVICE LATUR</strong></p>
-                  <p>MAHARASHTRA INDIA</p>
-                  <p>📞 7249108474 | 📧 starpowerzlatur2210@gmail.com</p>
+                  <p><strong>AVANI LOAN SERVICE – YOUR TRUSTED PARTNER</strong></p>
+                  <p>Expert Credit Correction & Loan Consultation</p>
+                  <p>📞 7249108474 | 💬 Dedicated Support</p>
                 </div>
                 <div className="cibil-ctas">
                   <a href="https://b2c.creditsamadhaan.com/?refer_code=FY665935" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
-                    Fix CIBIL Score Now
+                    Start CIBIL Correction with Avani
                   </a>
-                  <a href="https://wa.me/917249108474" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+                  <a href="https://wa.me/917249108474?text=I%20want%20to%20fix%20my%20CIBIL%20score%20with%20Avani%20Loan%20Service" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
                     Chat on WhatsApp
                   </a>
                 </div>

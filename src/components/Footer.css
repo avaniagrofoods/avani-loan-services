@@ -4,10 +4,18 @@
   padding: 80px 0 20px;
 }
 
+.footer-logo {
+  height: 60px;
+  width: auto;
+  margin-bottom: 15px;
+  filter: brightness(1.1);
+}
+
 .footer-brand {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: var(--primary-light);
   margin-bottom: 20px;
+  font-weight: 700;
 }
 
 .footer-desc {
