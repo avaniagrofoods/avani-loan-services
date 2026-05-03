@@ -65,7 +65,7 @@ export default function Footer() {
               </li>
               <li>
                 <Mail size={18} className="contact-icon" />
-                <span>sales@avaniagrofoods.com</span>
+                <span>enquiry@avanifinserv.com</span>
               </li>
             </ul>
           </div>

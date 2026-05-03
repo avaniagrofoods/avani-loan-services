@@ -27,7 +27,7 @@ export default function Contact() {
               <h3>📍 Our Office</h3>
               <div className="info-row"><MapPin size={20} /><span>Latur, Maharashtra, India<br /><small>Service Area: All Maharashtra</small></span></div>
               <div className="info-row"><Phone size={20} /><a href="tel:+917249108474">+91-7249108474</a></div>
-              <div className="info-row"><Mail size={20} /><a href="mailto:sales@avaniagrofoods.com">sales@avaniagrofoods.com</a></div>
+              <div className="info-row"><Mail size={20} /><a href="mailto:enquiry@avanifinserv.com">enquiry@avanifinserv.com</a></div>
             </div>
 
             <div className="contact-info-card glass-card">

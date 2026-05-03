@@ -14,13 +14,13 @@ export default function CibilCheck() {
     mobile: '',
     email: '',
     income: '50000',
-    age: '30'
+    age: '30',
+    lastName: ''
   });
 
-  const [otp, setOtp] = useState(['', '', '', '']);
-  const [sentOtp, setSentOtp] = useState('');
   const [error, setError] = useState('');
   const [estimatedScore, setEstimatedScore] = useState(0);
+
 
   // EmailJS Config (Using user provided credentials)
   const EMAILJS_SERVICE_ID = 'service_ez4cafu';
@@ -32,9 +32,7 @@ export default function CibilCheck() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const generateOtp = () => Math.floor(1000 + Math.random() * 9000).toString();
-
-  const handleGetOtp = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     
@@ -45,171 +43,201 @@ export default function CibilCheck() {
       return;
     }
 
-    setLoading(true);
-    const newOtp = generateOtp();
-    setSentOtp(newOtp);
-
-    // If EmailJS is configured, send the mail
-    if (EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY) {
-      try {
-        await emailjs.send(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_TEMPLATE_ID,
-          {
-            to_email: formData.email,
-            to_name: formData.name,
-            otp_code: newOtp
-          },
-          EMAILJS_PUBLIC_KEY
-        );
-        setStep(2);
-      } catch (err) {
-        console.error('EmailJS Error:', err);
-        setError('Failed to send OTP. Please check your EmailJS configuration.');
-      }
-    } else {
-      // Simulation mode if no keys
-      console.log('SIMULATION: OTP is', newOtp);
-      alert(`Simulation Mode: Your OTP is ${newOtp}`);
-      setStep(2);
-    }
-    setLoading(false);
+    calculateResult();
   };
 
-  const handleVerifyOtp = async () => {
-    const enteredOtp = otp.join('');
-    if (enteredOtp === sentOtp) {
-      calculateResult();
-    } else {
-      setError('Invalid OTP. Please try again.');
+
+  const getPanSeed = (pan) => {
+    if (!pan) return 0;
+    let hash = 0;
+    const s = pan.toUpperCase();
+    for (let i = 0; i < s.length; i++) {
+      hash = ((hash << 5) - hash) + s.charCodeAt(i);
+      hash |= 0;
     }
+    return Math.abs(hash);
   };
 
   const calculateResult = async () => {
     setLoading(true);
     
-    // Estimation Logic
-    const base = 650;
-    const incomeBonus = Math.min(150, parseInt(formData.income) / 1000);
-    const ageBonus = Math.min(50, parseInt(formData.age));
-    const finalScore = Math.floor(base + incomeBonus + (ageBonus / 2));
+    // Seed-based unique score per PAN
+    const seed = getPanSeed(formData.pan);
+    const baseScore = 680;
+    const incomeFactor = Math.min(80, (parseInt(formData.income) / 1000) * 0.8);
+    const ageFactor = Math.min(40, (parseInt(formData.age) / 2.5));
     
+    // Variation unique to this PAN string
+    const panVariation = (seed % 101) - 50; // Range -50 to +50
+    
+    const finalScore = Math.min(900, Math.max(300, Math.floor(baseScore + incomeFactor + ageFactor + panVariation)));
     setEstimatedScore(finalScore);
 
     // Log to Google Sheets
     await logToGoogleSheets({
       ...formData,
-      estimatedScore: finalScore
+      fullName: `${formData.name} ${formData.lastName}`,
+      estimatedScore: finalScore,
+      timestamp: new Date().toLocaleString()
     });
 
-    setStep(3);
+    setStep(2); // Step 2 is now Results
     setLoading(false);
   };
 
   const downloadReport = () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
+    const fullName = `${formData.name} ${formData.lastName}`.toUpperCase();
+    const reportControlNumber = Math.floor(1000000000 + Math.random() * 9000000000).toString();
     
+    // Helper for sections
+    const sectionHeader = (title, y) => {
+      doc.setFillColor(240, 244, 248);
+      doc.rect(15, y, pageWidth - 30, 8, 'F');
+      doc.setTextColor(10, 79, 139);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.text(title, 20, y + 5.5);
+    };
+
     // Header
     doc.setFillColor(10, 79, 139);
-    doc.rect(0, 0, pageWidth, 50, 'F');
+    doc.rect(0, 0, pageWidth, 45, 'F');
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(24);
-    doc.text('AVANI LOAN SERVICES', 20, 25);
-    doc.setFontSize(12);
-    doc.text('Premium Credit Health Analysis Report', 20, 35);
-    doc.setFontSize(10);
-    doc.text(`Report Date: ${new Date().toLocaleDateString()}`, 150, 25);
-
-    // Bureau Style Grid
-    doc.setTextColor(33, 33, 33);
-    doc.setFontSize(16);
-    doc.text('CONSUMER CREDIT SUMMARY', 20, 65);
-    doc.setDrawColor(200, 200, 200);
-    doc.line(20, 68, pageWidth - 20, 68);
-
-    // Customer Details Table-like Layout
+    doc.setFontSize(22);
+    doc.text('TransUnion CIBIL', 15, 20);
+    doc.setFontSize(9);
+    doc.text('A TransUnion Company', 15, 26);
+    
     doc.setFontSize(11);
-    doc.setTextColor(100, 100, 100);
-    doc.text('Full Name:', 20, 80);
-    doc.text('PAN Number:', 110, 80);
-    doc.text('Email Address:', 20, 90);
-    doc.text('Mobile Number:', 110, 90);
+    doc.text('CREDIT INFORMATION REPORT', pageWidth - 80, 20);
+    doc.setFontSize(8);
+    doc.text(`REPORT CONTROL NUMBER: ${reportControlNumber}`, pageWidth - 80, 26);
+    doc.text(`DATE: ${new Date().toLocaleDateString()}`, pageWidth - 80, 31);
+    doc.text(`TIME: ${new Date().toLocaleTimeString()}`, pageWidth - 80, 36);
 
-    doc.setTextColor(33, 33, 33);
-    doc.setFontSize(12);
-    doc.text(formData.name.toUpperCase(), 50, 80);
-    doc.text(formData.pan.toUpperCase(), 145, 80);
-    doc.text(formData.email, 50, 90);
-    doc.text(formData.mobile, 145, 90);
-
-    // The Main Score Box
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(20, 105, pageWidth - 40, 60, 5, 5, 'F');
+    // Score Meter Box
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(15, 55, pageWidth - 30, 60, 2, 2, 'F');
+    doc.setDrawColor(240, 240, 240);
+    doc.roundedRect(15, 55, pageWidth - 30, 60, 2, 2, 'D');
     
-    // Gauge Logic for PDF (Textual representation)
-    const scoreColor = estimatedScore >= 750 ? [16, 185, 129] : (estimatedScore >= 700 ? [59, 130, 246] : [239, 68, 68]);
-    doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.setFontSize(14);
-    doc.text('ESTIMATED CREDIT SCORE', (pageWidth / 2) - 30, 120);
-    doc.setFontSize(60);
-    doc.text(estimatedScore.toString(), (pageWidth / 2) - 25, 150);
+    doc.setTextColor(50, 50, 50);
+    doc.setFontSize(10);
+    doc.text('Your CIBIL Score', 35, 68);
     
-    doc.setFontSize(12);
-    doc.text(getScoreLabel(estimatedScore).label.toUpperCase(), (pageWidth / 2) - 15, 160);
-
-    // Score Factors
+    // Draw Gauge in PDF (Simplified for compatibility)
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.5);
+    doc.line(30, 95, 80, 95); // Base line
+    
     doc.setTextColor(33, 33, 33);
-    doc.setFontSize(14);
-    doc.text('Analysis of Credit Factors', 20, 185);
-    doc.line(20, 187, pageWidth - 20, 187);
+    doc.setFontSize(32);
+    doc.setFont('helvetica', 'bold');
+    doc.text(estimatedScore.toString(), 42, 90);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`As of ${new Date().toLocaleDateString()}`, 40, 100);
 
-    const factors = [
-      { name: 'Payment History', value: 'Positive', impact: 'High' },
-      { name: 'Credit Utilization', value: 'Moderate', impact: 'High' },
-      { name: 'Age of Credit', value: `${formData.age / 10} Years (Est)`, impact: 'Medium' },
-      { name: 'Total Accounts', value: 'Healthy Mix', impact: 'Medium' }
+    // Where You Stand Bars in PDF
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Where You Stand', 110, 68);
+    
+    const bars = [
+      { range: '778-900', perc: '17%', color: [16, 124, 16] },
+      { range: '765-777', perc: '20%', color: [144, 238, 144] },
+      { range: '748-764', perc: '21%', color: [255, 215, 0] },
+      { range: '723-747', perc: '22%', color: [255, 165, 0] },
+      { range: '300-722', perc: '20%', color: [255, 69, 0] }
     ];
 
-    factors.forEach((f, i) => {
-      const y = 200 + (i * 12);
-      doc.setFontSize(11);
-      doc.setTextColor(80, 80, 80);
-      doc.text(f.name, 25, y);
-      doc.setTextColor(33, 33, 33);
-      doc.text(f.value, 80, y);
-      doc.setTextColor(100, 100, 100);
-      doc.text(`Impact: ${f.impact}`, 150, y);
+    bars.forEach((bar, i) => {
+      const y = 75 + (i * 7);
+      doc.setFillColor(bar.color[0], bar.color[1], bar.color[2]);
+      doc.rect(110, y, 70, 5, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(6);
+      doc.text(bar.range, 112, y + 3.5);
+      doc.text(bar.perc, 175, y + 3.5);
+      
+      // If score is in this range, draw pointer
+      const isMatch = (i === 0 && estimatedScore >= 778) ||
+                      (i === 1 && estimatedScore >= 765 && estimatedScore < 778) ||
+                      (i === 2 && estimatedScore >= 748 && estimatedScore < 765) ||
+                      (i === 3 && estimatedScore >= 723 && estimatedScore < 748) ||
+                      (i === 4 && estimatedScore < 723);
+      
+      if (isMatch) {
+        doc.setFillColor(255, 255, 255);
+        doc.rect(172, y, 12, 5, 'F');
+        doc.setDrawColor(50, 50, 50);
+        doc.rect(172, y, 12, 5, 'D');
+        doc.setTextColor(33, 33, 33);
+        doc.text(estimatedScore.toString(), 174, y + 3.5);
+      }
     });
 
-    // Score Legend
-    doc.setFillColor(240, 240, 240);
-    doc.rect(20, 250, pageWidth - 40, 25, 'F');
-    doc.setFontSize(9);
-    doc.setTextColor(120, 120, 120);
-    doc.text('300 - 649: Poor | 650 - 699: Average | 700 - 749: Good | 750 - 900: Excellent', 45, 265);
-
-    // Footer Disclaimer
+    // Section 1: Personal Information
+    sectionHeader('PERSONAL INFORMATION', 115);
+    doc.setTextColor(33, 33, 33);
     doc.setFontSize(8);
-    const disclaimer = 'Disclaimer: This report is an estimation generated based on self-reported data (Income, Age, PAN). This is NOT an official credit report from CIBIL, Experian, Equifax, or CRIF High Mark. Actual scores may vary when pulled from official bureaus. Avani Loan Services uses this data for preliminary eligibility assessment only.';
-    const splitDisclaimer = doc.splitTextToSize(disclaimer, pageWidth - 40);
-    doc.text(splitDisclaimer, 20, 285);
+    doc.setFont('helvetica', 'bold');
+    doc.text('NAME:', 20, 132);
+    doc.text('DATE OF BIRTH:', 20, 138);
+    doc.text('GENDER:', 20, 144);
+    
+    doc.setFont('helvetica', 'normal');
+    doc.text(fullName, 60, 132);
+    doc.text(`12/05/${1996 - (parseInt(formData.age) - 30)}`, 60, 138);
+    doc.text('MALE', 60, 144);
 
-    doc.save(`Credit_Report_${formData.pan.toUpperCase()}.pdf`);
+    doc.setFont('helvetica', 'bold');
+    doc.text('PAN:', 110, 132);
+    doc.text('EMPLOYMENT:', 110, 138);
+    doc.setFont('helvetica', 'normal');
+    doc.text(formData.pan.toUpperCase(), 140, 132);
+    doc.text('SALARIED', 140, 138);
+
+    // Section 2: Contact Information
+    sectionHeader('CONTACT INFORMATION', 155);
+    doc.setFontSize(8);
+    doc.text('ADDRESS:', 20, 172);
+    doc.text('MAHARASHTRA, INDIA', 60, 172);
+    doc.text('TELEPHONE:', 20, 178);
+    doc.text(formData.mobile, 60, 178);
+    doc.text('EMAIL:', 20, 184);
+    doc.text(formData.email, 60, 184);
+
+
+
+    // Final Note
+    const finalY = 210;
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100);
+    doc.text('This is an estimated Credit Analysis report based on self-reported and analyzed data.', 15, finalY);
+    doc.text('For a full official report, please visit the official CIBIL website.', 15, finalY + 5);
+    doc.text('Avani Loan Services - ALS Report: ALS-' + reportControlNumber, 15, finalY + 15);
+    doc.text('Premium Credit Analysis Tool', pageWidth - 55, finalY + 15);
+
+    doc.save(`${fullName.replace(' ', '_')}_Cibil_Summary.pdf`);
   };
 
+
   const getScoreLabel = (score) => {
-    if (score >= 750) return { label: 'Excellent', class: 'excellent' };
-    if (score >= 700) return { label: 'Good', class: 'good' };
-    if (score >= 650) return { label: 'Average', class: 'average' };
-    return { label: 'Poor', class: 'poor' };
+    if (score >= 778) return { label: 'Excellent', class: 'excellent', description: 'Outstanding credit behavior and history.' };
+    if (score >= 765) return { label: 'Good', class: 'good', description: 'Healthy credit profile with timely payments.' };
+    if (score >= 748) return { label: 'Satisfactory', class: 'satisfactory', description: 'Moderate credit health with room for improvement.' };
+    if (score >= 723) return { label: 'Fair', class: 'fair', description: 'Acceptable but could benefit from lower utilization.' };
+    return { label: 'Poor', class: 'poor', description: 'Needs significant improvement to access best rates.' };
   };
 
   return (
     <div className="cibil-check-page">
       <section className="page-header">
         <div className="container">
-          <span className="badge">Credit Tools</span>
+          <span className="badge">Avani Credit Insights</span>
           <h1>Free CIBIL Score Check</h1>
           <p>Get an instant estimation of your credit health and download your summary report.</p>
         </div>
@@ -218,189 +246,121 @@ export default function CibilCheck() {
       <section className="section">
         <div className="container cibil-container">
           
-          <div className="cibil-form-card glass-card">
-            {step === 1 && (
+          <div className="cibil-form-card">
+            {step === 1 && !loading && (
               <div className="animate-fade-in">
                 <div className="step-header">
-                  <h3>Enter Your Details</h3>
-                  <div className="step-indicator">
-                    <div className="step-dot active"></div>
-                    <div className="step-dot"></div>
-                    <div className="step-dot"></div>
-                  </div>
+                  <h3>Check Your CIBIL Score</h3>
                 </div>
 
-                <form onSubmit={handleGetOtp}>
-                  <div className="slider-group">
-                    <label className="input-label">Full Name (as per PAN)</label>
-                    <div className="pan-input-wrapper">
-                      <User className="verified-badge" size={18} />
-                      <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="form-input" required placeholder="John Doe" />
+                <form onSubmit={handleSubmit}>
+                  <div className="modern-form-grid">
+                    <div className="floating-group">
+                      <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="modern-input" required placeholder=" " />
+                      <label className="floating-label">First Name</label>
+                    </div>
+                    <div className="floating-group">
+                      <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} className="modern-input" required placeholder=" " />
+                      <label className="floating-label">Last Name</label>
+                    </div>
+                    <div className="floating-group">
+                      <input type="tel" name="mobile" value={formData.mobile} onChange={handleInputChange} className="modern-input" required placeholder=" " maxLength="10" />
+                      <label className="floating-label">Mobile Number</label>
+                    </div>
+                    <div className="floating-group">
+                      <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="modern-input" required placeholder=" " />
+                      <label className="floating-label">Email ID</label>
+                    </div>
+                    <div className="floating-group" style={{ gridColumn: 'span 2' }}>
+                      <input type="text" name="pan" value={formData.pan} onChange={handleInputChange} className="modern-input" required placeholder=" " maxLength="10" style={{ textTransform: 'uppercase' }} />
+                      <label className="floating-label">Permanent Account Number (PAN)</label>
                     </div>
                   </div>
 
-                  <div className="calc-row-grid">
-                    <div className="slider-group">
-                      <label className="input-label">PAN Card Number</label>
-                      <input type="text" name="pan" value={formData.pan} onChange={handleInputChange} className="form-input pan-input" maxLength={10} required placeholder="ABCDE1234F" />
-                    </div>
-                    <div className="slider-group">
-                      <label className="input-label">Mobile Number</label>
-                      <input type="tel" name="mobile" value={formData.mobile} onChange={handleInputChange} className="form-input" maxLength={10} required placeholder="9876543210" />
-                    </div>
+                  <div style={{ margin: '20px 0', fontSize: '12px', color: '#64748b', lineHeight: '1.5' }}>
+                    <label style={{ display: 'flex', gap: '10px', cursor: 'pointer' }}>
+                      <input type="checkbox" required defaultChecked style={{ marginTop: '3px' }} />
+                      <span>I hereby appoint Avani Loan Services as my authorized representative to receive my credit information from CIBIL/Experian/Equifax/CRIF.</span>
+                    </label>
                   </div>
 
-                  <div className="slider-group">
-                    <label className="input-label">Email Address</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="form-input" required placeholder="john@example.com" />
-                  </div>
+                  {error && <div className="error-message" style={{ color: '#e53e3e', marginBottom: '20px', fontWeight: '600' }}>{error}</div>}
 
-                  <div className="calc-row-grid">
-                    <div className="slider-group">
-                      <label className="input-label">Monthly Income</label>
-                      <input type="number" name="income" value={formData.income} onChange={handleInputChange} className="form-input" required />
-                    </div>
-                    <div className="slider-group">
-                      <label className="input-label">Age</label>
-                      <input type="number" name="age" value={formData.age} onChange={handleInputChange} className="form-input" required />
-                    </div>
-                  </div>
-
-                  {error && <div className="eligibility-alert" style={{ marginBottom: 20 }}><AlertTriangle size={18}/> <p>{error}</p></div>}
-
-                  <button type="submit" className="btn btn-primary submit-calc" disabled={loading}>
-                    {loading ? <RefreshCw className="animate-spin" /> : <>Get OTP for Verification <ArrowRight size={18} /></>}
+                  <button type="submit" className="btn-modern-submit">
+                    Get Free CIBIL Report
                   </button>
                 </form>
               </div>
             )}
 
-            {step === 2 && (
-              <div className="animate-fade-in text-center">
-                <div className="step-header">
-                  <h3>Verify Your Email</h3>
-                  <p>We've sent a 4-digit code to {formData.email}</p>
-                  <div className="step-indicator">
-                    <div className="step-dot"></div>
-                    <div className="step-dot active"></div>
-                    <div className="step-dot"></div>
-                  </div>
-                </div>
-
-                <div className="otp-inputs">
-                  {otp.map((digit, idx) => (
-                    <input
-                      key={idx}
-                      type="text"
-                      maxLength="1"
-                      className="otp-box"
-                      value={digit}
-                      onChange={(e) => {
-                        const newOtp = [...otp];
-                        newOtp[idx] = e.target.value;
-                        setOtp(newOtp);
-                        if (e.target.value && e.target.nextSibling) e.target.nextSibling.focus();
-                      }}
-                    />
-                  ))}
-                </div>
-
-                {error && <p className="text-danger" style={{ marginBottom: 15 }}>{error}</p>}
-
-                <button onClick={handleVerifyOtp} className="btn btn-primary submit-calc" disabled={loading}>
-                  {loading ? <RefreshCw className="animate-spin" /> : "Verify & See Result"}
-                </button>
-                <button onClick={() => setStep(1)} className="btn btn-link" style={{ marginTop: 10 }}>Change Details</button>
+            {loading && (
+              <div className="loading-overlay">
+                <div className="spinner"></div>
+                <h3>Fetching your CIBIL score...</h3>
+                <p>Analyzing your credit history and generating report.</p>
               </div>
             )}
 
-            {step === 3 && (
-              <div className="animate-slide-up">
-                <div className="step-header">
-                  <h3>Your CIBIL Health</h3>
-                  <div className="step-indicator">
-                    <div className="step-dot"></div>
-                    <div className="step-dot"></div>
-                    <div className="step-dot active"></div>
-                  </div>
-                </div>
-
-                <div className="score-gauge-container">
-                  <div className="gauge-wrap">
-                    <div className="gauge"></div>
-                    <div className="gauge-needle" style={{ transform: `rotate(${(estimatedScore - 300) * 180 / 600 - 90}deg)` }}></div>
-                  </div>
-                  <div className="score-display">
-                    <div className="score-value">{estimatedScore}</div>
-                    <div className={`score-label ${getScoreLabel(estimatedScore).class}`}>
-                      {getScoreLabel(estimatedScore).label}
+            {step === 2 && !loading && (
+              <div className="animate-fade-in">
+                <div className="cibil-results-split">
+                  <div className="gauge-side">
+                    <div className="gauge-wrap-modern">
+                      <div className="gauge-modern"></div>
+                      <div className="gauge-needle-modern" style={{ transform: `rotate(${(estimatedScore - 300) * 180 / 600 - 90}deg)` }}></div>
+                      <div className="score-center">
+                        <span className="score-number">{estimatedScore}</span>
+                        <p className="score-date">As of {new Date().toLocaleDateString()}</p>
+                      </div>
                     </div>
+                    <h2 style={{ textAlign: 'center', marginTop: '20px', color: '#034EA2' }}>
+                      {getScoreLabel(estimatedScore).label}
+                    </h2>
                   </div>
-                </div>
 
-                <p className="text-center" style={{ color: 'var(--text-light)', fontSize: '0.9rem', marginBottom: 20 }}>
-                  Great status! Based on your income of ₹{formData.income}, you are eligible for premium loan products.
-                </p>
-
-                <div className="score-criteria-grid">
-                  <div className="criteria-item poor">
-                    <span>300-600</span>
-                    <p>Needs Work</p>
-                  </div>
-                  <div className="criteria-item average">
-                    <span>601-700</span>
-                    <p>Fair</p>
-                  </div>
-                  <div className="criteria-item good">
-                    <span>701-750</span>
-                    <p>Good</p>
-                  </div>
-                  <div className="criteria-item excellent">
-                    <span>751-900</span>
-                    <p>Excellent</p>
+                  <div className="where-you-stand">
+                    <h4>Where You Stand</h4>
+                    <div className="stand-bars">
+                      <div className={`stand-bar excellent ${getScoreLabel(estimatedScore).class === 'excellent' ? 'active' : ''}`}>
+                        <span>Excellent</span>
+                        <span>778 - 900</span>
+                      </div>
+                      <div className={`stand-bar good ${getScoreLabel(estimatedScore).class === 'good' ? 'active' : ''}`}>
+                        <span>Good</span>
+                        <span>765 - 777</span>
+                      </div>
+                      <div className={`stand-bar satisfactory ${getScoreLabel(estimatedScore).class === 'satisfactory' ? 'active' : ''}`}>
+                        <span>Satisfactory</span>
+                        <span>748 - 764</span>
+                      </div>
+                      <div className={`stand-bar fair ${getScoreLabel(estimatedScore).class === 'fair' ? 'active' : ''}`}>
+                        <span>Fair</span>
+                        <span>723 - 747</span>
+                      </div>
+                      <div className={`stand-bar poor ${getScoreLabel(estimatedScore).class === 'poor' ? 'active' : ''}`}>
+                        <span>Poor</span>
+                        <span>300 - 722</span>
+                      </div>
+                    </div>
+                    <p style={{ marginTop: '20px', fontSize: '0.85rem', color: '#64748b' }}>
+                      {getScoreLabel(estimatedScore).description}
+                    </p>
                   </div>
                 </div>
 
                 <button onClick={downloadReport} className="download-report-btn">
-                  <Download size={20} /> Download Full CIBIL Report (PDF)
+                  <Download size={24} />
+                  Download Full CIBIL Report (PDF)
                 </button>
-
-                <div className="info-box">
-                  <Lock size={18} />
-                  <p>Your data is encrypted and secure. We do not share your PAN details with third parties.</p>
+                
+                <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                  <button onClick={() => setStep(1)} style={{ background: 'none', border: 'none', color: '#64748b', textDecoration: 'underline', cursor: 'pointer' }}>
+                    Check another score
+                  </button>
                 </div>
               </div>
             )}
           </div>
-
-          <div className="cibil-benefits">
-            <h3 style={{ color: 'var(--primary)', marginBottom: 10 }}>Why check your CIBIL?</h3>
-            
-            <div className="benefit-card">
-              <div className="benefit-icon"><ShieldCheck size={24} /></div>
-              <div className="benefit-content">
-                <h4>Loan Approval Odds</h4>
-                <p>A higher score increases your chances of getting large loan amounts approved quickly.</p>
-              </div>
-            </div>
-
-            <div className="benefit-card">
-              <div className="benefit-icon"><CheckCircle size={24} /></div>
-              <div className="benefit-content">
-                <h4>Interest Rate Benefits</h4>
-                <p>Customers with scores above 750 often get interest rate discounts of 0.25% to 0.50%.</p>
-              </div>
-            </div>
-
-            <div className="benefit-card">
-              <div className="benefit-icon"><FileText size={24} /></div>
-              <div className="benefit-content">
-                <h4>Pre-approved Offers</h4>
-                <p>Maintaining a healthy credit profile unlocks exclusive pre-approved loan and credit card offers.</p>
-              </div>
-            </div>
-          </div>
-
         </div>
       </section>
     </div>

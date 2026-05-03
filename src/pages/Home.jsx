@@ -11,6 +11,7 @@ import homeImg from '../assets/home-loan.png';
 import mortgageImg from '../assets/mortgage-loan.png';
 import cibilBanner from '../assets/avani_cibil_banner.png';
 
+
 const loanCards = [
   { image: personalImg, title: 'Salary Loan', desc: 'Fast personal loans for salaried employees up to ₹50L', rate: '10.5% p.a.' },
   { image: businessImg, title: 'Business Loan', desc: 'Grow your business with unsecured loans up to ₹2Cr', rate: '12% p.a.' },
@@ -68,6 +69,27 @@ export default function Home() {
           </div>
           <div className="hero-form animate-fade-in animate-delay-2">
             <LeadForm compact={true} />
+          </div>
+        </div>
+      </section>
+
+      {/* Partnership Banner */}
+      <section className="partnership-banner" style={{ backgroundColor: '#001d3d', color: '#fff', padding: '2rem', textAlign: 'center' }}>
+        <div className="container">
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#e8a317' }}>🤝 Our Partnership</h2>
+            <p style={{ fontSize: '1.1rem', marginBottom: '1rem', fontWeight: '500' }}>
+              <strong>AVANI LOAN SERVICE IS THE TRUSTED PARTNER OF STAR POWERZ DIGITAL TECHNOLOGIES PVT LTD</strong>
+            </p>
+            <div style={{ backgroundColor: 'rgba(232, 163, 23, 0.1)', padding: '1.5rem', borderRadius: '8px', borderLeft: '4px solid #e8a317', marginBottom: '1rem' }}>
+              <p style={{ fontSize: '0.95rem', lineHeight: '1.6', margin: '0' }}>
+                <strong>REGISTERED OFFICE:</strong><br />
+                5-9-30/5, Level 2, Paigah Plaza, Basheerbagh, Hyderabad, Telangana, India - 500063
+              </p>
+            </div>
+            <p style={{ fontSize: '1rem', lineHeight: '1.6', marginTop: '1rem' }}>
+              Avani Loan Services is a <strong>Latur-based Direct Selling Agent (DSA)</strong> helping individuals, business owners, and students across Maharashtra acquire the right loan product at the right rates.
+            </p>
           </div>
         </div>
       </section>
@@ -135,6 +157,8 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+
 
           <div className="text-center" style={{ marginTop: 40 }}>
             <Link to="/loans" className="btn btn-outline">View All Loan Products</Link>

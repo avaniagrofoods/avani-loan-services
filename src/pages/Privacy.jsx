@@ -62,7 +62,7 @@ export default function Privacy() {
             <h2>7. Contact Us Regarding Privacy</h2>
             <p>For any privacy-related inquiries, contact us at:</p>
             <ul>
-              <li>📧 Email: <a href="mailto:sales@avaniagrofoods.com">sales@avaniagrofoods.com</a></li>
+              <li>📧 Email: <a href="mailto:enquiry@avanifinserv.com">enquiry@avanifinserv.com</a></li>
               <li>📞 Phone: <a href="tel:+917249108474">+91-7249108474</a></li>
               <li>📍 Address: Latur, Maharashtra, India</li>
             </ul>

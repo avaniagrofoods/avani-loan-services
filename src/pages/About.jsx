@@ -41,6 +41,8 @@ export default function About() {
             <div className="about-text">
               <span className="badge">Our Story</span>
               <h2>We Believe Everyone Deserves Financial Freedom</h2>
+              <p><strong>🤝 AVANI LOAN SERVICE IS THE TRUSTED PARTNER OF STAR POWERZ DIGITAL TECHNOLOGIES PVT LTD</strong></p>
+              <p><strong>Registered Office:</strong> 5-9-30/5, Level 2, Paigah Plaza, Basheerbagh, Hyderabad, Telangana, India - 500063</p>
               <p>Avani Loan Services is a Latur-based Direct Selling Agent (DSA) helping individuals, business owners, and students across Maharashtra acquire the right loan product at the right rates.</p>
               <p style={{ marginTop: 16 }}>Founded with a mission to simplify the loan process for common people, we have partnered with 10+ leading banks and NBFCs ensuring you get competitive interest rates without running from branch to branch.</p>
               <ul className="about-points">
