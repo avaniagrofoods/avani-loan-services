@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Shield, Clock, Award, TrendingUp, Star, Users, CheckCircle, ArrowRight } from 'lucide-react';
 import LeadForm from '../components/LeadForm';
+import brandLogo from '../assets/avani-brand-logo.png';
 import './Home.css';
 
 // Import Images
@@ -45,6 +46,13 @@ export default function Home() {
       <section className="hero-section">
         <div className="hero-bg-overlay"></div>
         <div className="container hero-content">
+          <div className="page-header-top">
+            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <div>
+              <span className="badge">{t('hero_badge')}</span>
+              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+            </div>
+          </div>
           <div className="hero-text animate-fade-in">
             <span className="badge">{t('hero_badge')}</span>
             <h1 className="hero-title">

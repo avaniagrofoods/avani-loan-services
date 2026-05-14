@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import brandLogo from '../assets/avani-brand-logo.png';
 import './Blog.css';
 
 const posts = [
@@ -19,7 +20,13 @@ export default function Blog() {
     <div>
       <section className="page-header">
         <div className="container">
-          <span className="badge">Blog & Tips</span>
+          <div className="page-header-top">
+            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <div>
+              <span className="badge">Blog & Tips</span>
+              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+            </div>
+          </div>
           <h1>Loan Tips, Guides & Financial Advice</h1>
           <p>Expert articles to help you make smarter financial decisions</p>
         </div>
@@ -50,7 +57,7 @@ export default function Blog() {
       <section className="blog-cta-section section">
         <div className="container text-center">
           <h2>Have a Loan Question?</h2>
-          <p style={{ color: 'var(--text-light)', marginBottom: 24 }}>Our advisors in Latur give free consultations. WhatsApp us now.</p>
+          <p style={{ color: 'var(--text-light)', marginBottom: 24 }}>Visit us: RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA — WhatsApp us now.</p>
           <a href="https://wa.me/917249108474" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">💬 WhatsApp for Free Advice</a>
         </div>
       </section>

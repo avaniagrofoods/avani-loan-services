@@ -3,6 +3,7 @@ import { ShieldCheck, Mail, Phone, User, FileText, Download, CheckCircle, ArrowR
 import emailjs from '@emailjs/browser';
 import { jsPDF } from 'jspdf';
 import { logToGoogleSheets } from '../lib/googleSheets';
+import brandLogo from '../assets/avani-brand-logo.png';
 import './CibilCheck.css';
 
 export default function CibilCheck() {
@@ -237,7 +238,13 @@ export default function CibilCheck() {
     <div className="cibil-check-page">
       <section className="page-header">
         <div className="container">
-          <span className="badge">Avani Credit Insights</span>
+          <div className="page-header-top">
+            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <div>
+              <span className="badge">Avani Credit Insights</span>
+              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+            </div>
+          </div>
           <h1>Free CIBIL Score Check</h1>
           <p>Get an instant estimation of your credit health and download your summary report.</p>
         </div>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { CheckCircle, ArrowRight } from 'lucide-react';
+import brandLogo from '../assets/avani-brand-logo.png';
 import './Loans.css';
 
 // Import Images
@@ -112,7 +113,13 @@ export default function Loans() {
     <div className="loans-page">
       <section className="page-header">
         <div className="container">
-          <span className="badge">All Loan Products</span>
+          <div className="page-header-top">
+            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <div>
+              <span className="badge">All Loan Products</span>
+              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+            </div>
+          </div>
           <h1>Find the Right Loan for You</h1>
           <p>Explore all loan products with transparent rates, eligibility, and terms</p>
         </div>

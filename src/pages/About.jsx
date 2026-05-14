@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { CheckCircle, Award, Users, TrendingUp, ArrowRight } from 'lucide-react';
 import LeadForm from '../components/LeadForm';
 import logo from '../assets/logo.png';
+import brandLogo from '../assets/avani-brand-logo.png';
 import './About.css';
 
 const banks = ['State Bank of India', 'HDFC Bank', 'ICICI Bank', 'Axis Bank', 'Kotak Mahindra Bank', 'Bank of Baroda', 'Punjab National Bank', 'Bajaj Finserv', 'Tata Capital', 'Fullerton India'];
@@ -18,7 +19,13 @@ export default function About() {
       {/* Page Header */}
       <section className="page-header">
         <div className="container">
-          <span className="badge">About Us</span>
+          <div className="page-header-top">
+            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <div>
+              <span className="badge">About Us</span>
+              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+            </div>
+          </div>
           <h1>Latur's Most Trusted Loan Advisor</h1>
           <p>Serving Maharashtra with transparency and dedication since 2019</p>
         </div>
@@ -31,7 +38,7 @@ export default function About() {
             <div className="about-image-block">
               <div className="about-logo-wrapper glass-card">
                 <img src={logo} alt="Avani Loan Services" className="about-logo" />
-                <p className="img-location">📍 Latur, Maharashtra</p>
+                <p className="img-location">📍 RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</p>
               </div>
               <div className="certifications">
                 <div className="cert-badge"><Award size={18} /> Registered DSA Partner</div>

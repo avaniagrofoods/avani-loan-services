@@ -1,5 +1,6 @@
-import LeadForm from '../components/LeadForm';
+import HubspotLeadForm from '../components/HubspotLeadForm';
 import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
+import logo from '../assets/avani-brand-logo.png';
 import './Contact.css';
 
 export default function Contact() {
@@ -7,7 +8,13 @@ export default function Contact() {
     <div>
       <section className="page-header">
         <div className="container">
-          <span className="badge">Get in Touch</span>
+          <div className="page-header-top">
+            <img src={logo} alt="Avani Loan Services" className="page-header-logo" />
+            <div>
+              <span className="badge">Get in Touch</span>
+              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+            </div>
+          </div>
           <h1>Contact Us — Get Free Loan Consultation</h1>
           <p>Fill the form and our advisor will call you back within 5 minutes during business hours</p>
         </div>
@@ -16,16 +23,16 @@ export default function Contact() {
       <section className="section">
         <div className="container contact-container">
 
-          {/* Lead Form */}
+          {/* HubSpot Embedded Form */}
           <div className="contact-form-col">
-            <LeadForm />
+            <HubspotLeadForm />
           </div>
 
           {/* Info */}
           <div className="contact-info-col">
             <div className="contact-info-card glass-card">
               <h3>📍 Our Office</h3>
-              <div className="info-row"><MapPin size={20} /><span>Latur, Maharashtra, India<br /><small>Service Area: All Maharashtra</small></span></div>
+              <div className="info-row"><MapPin size={20} /><span>RAJIV GANDHI CHAUK, OPP BANK OF BARODA,<br />ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD,<br />LATUR-413512, MAHARASHTRA INDIA<br /><small>Service Area: All Maharashtra</small></span></div>
               <div className="info-row"><Phone size={20} /><a href="tel:+917249108474">+91-7249108474</a></div>
               <div className="info-row"><Mail size={20} /><a href="mailto:enquiry@avanifinserv.com">enquiry@avanifinserv.com</a></div>
             </div>

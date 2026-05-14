@@ -19,6 +19,10 @@
   padding: 24px;
 }
 
+.contact-info-card {
+  padding: 24px;
+}
+
 .contact-info-card h3 {
   font-size: 1.1rem;
   color: var(--primary);

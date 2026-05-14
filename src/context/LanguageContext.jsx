@@ -1,6 +1,6 @@
 import { createContext, useState, useContext } from 'react';
 
-const LanguageContext = createContext();
+export const LanguageContext = createContext();
 
 const translations = {
   en: {
@@ -14,8 +14,8 @@ const translations = {
     contact: "Contact",
     cibil_check: "CIBIL Check",
     apply_now: "Apply Now",
-    hero_badge: "📍 Trusted in Latur, Maharashtra",
-    hero_title: "Get Your Loan Approved in 48 Hours in Latur",
+    hero_badge: "📍 RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA",
+    hero_title: "Get Your Loan Approved in 48 Hours",
     hero_subtitle: "Salary, Business, Education, Home & Mortgage Loans across all Maharashtra. No hidden charges. Free consultation.",
     check_eligibility: "Check Eligibility",
     quick_links: "Quick Links",
@@ -35,8 +35,8 @@ const translations = {
     contact: "संपर्क",
     cibil_check: "CIBIL तपासा",
     apply_now: "आता अर्ज करा",
-    hero_badge: "📍 लातूर, महाराष्ट्र मध्ये विश्वसनीय",
-    hero_title: "लातूरमध्ये ४८ तासांत कर्ज मंजूर करा",
+    hero_badge: "📍 RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA",
+    hero_title: "४८ तासांत कर्ज मंजूर करा",
     hero_subtitle: "पगार, व्यवसाय, शिक्षण, घर आणि मॉर्टगेज कर्ज संपूर्ण महाराष्ट्रात. कोणतेही छुपे चार्जेस नाही. मोफत सल्ला.",
     check_eligibility: "पात्रता तपासा",
     quick_links: "द्रुत दुवे",
@@ -56,8 +56,8 @@ const translations = {
     contact: "संपर्क",
     cibil_check: "CIBIL जांच",
     apply_now: "अभी आवेदन करें",
-    hero_badge: "📍 लातूर, महाराष्ट्र में विश्वसनीय",
-    hero_title: "लातूर में 48 घंटों में अपना ऋण स्वीकृत कराएं",
+    hero_badge: "📍 RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA",
+    hero_title: "48 घंटों में अपना ऋण स्वीकृत कराएं",
     hero_subtitle: "पूरे महाराष्ट्र में वेतन, व्यवसाय, शिक्षा, घर और मॉर्टगेज ऋण। कोई छिपा हुआ शुल्क नहीं। मुफ्त परामर्श।",
     check_eligibility: "पात्रता जांचें",
     quick_links: "त्वरित लिंक",

@@ -1,0 +1,34 @@
+Business,Field Label,Internal Name,Field Type,Field Options,Required,Source,Description,Mapping Logic
+Avani Loan Services,First Name,firstname,Text,,Yes,VAPI structuredData.customer_name,Contact first name,Direct mapping
+Avani Loan Services,Phone Number,phone,Phone,,Yes,VAPI structuredData.phone_number,Primary contact phone,Direct mapping
+Avani Loan Services,Email,email,Email,,No,VAPI structuredData.email,Primary contact email,Direct mapping
+Avani Loan Services,City,city,Text,,No,Default: Latur,Contact city,Default to Latur if not provided
+Avani Loan Services,VAPI Call ID,vapi_call_id,Text,,Yes,VAPI callId,Unique call identifier,Direct mapping - callId from webhook
+Avani Loan Services,Lead Source,hs_lead_source,Dropdown,"VAPI AI Outbound, Website Form, Manual Lead Entry, Missed Call Automation, Referral",Yes,VAPI or Form Source,How lead originated,Mapped from source field
+Avani Loan Services,Loan Product,loan_product,Dropdown,"Personal Loan, Business Loan, Doctor Loan, Home Loan, Education Loan, Mortgage/LAP",Yes,VAPI or Form selection,Selected loan product,Direct mapping - loanType from webhook
+Avani Loan Services,Loan Amount Required,loan_amount_required,Number,Currency (INR),No,VAPI structuredData.loan_amount,Loan amount customer mentioned,Parse from webhook analysis
+Avani Loan Services,Monthly Income,monthly_income,Number,Currency (INR),No,VAPI structuredData.monthly_income,Customer's reported monthly income,Parse from webhook analysis
+Avani Loan Services,Employment Type,employment_type,Dropdown,"Salaried, Self-Employed, Business Owner, Doctor, Student, Retired, Other",No,VAPI structuredData.employment_type,Type of employment,Parse from VAPI AI analysis
+Avani Loan Services,Existing EMI,existing_emi,Number,Currency (INR),No,VAPI structuredData.existing_emi,Monthly EMI obligations,Parse from webhook analysis
+Avani Loan Services,Qualification Status,qualification_status,Dropdown,"Qualified, Needs Review, Not Qualified",Yes,VAPI structuredData.qualification_status,AI qualification outcome,Direct mapping from VAPI analysis
+Avani Loan Services,Next Action,next_action,Dropdown,"Send WhatsApp, Schedule Followup, Human Transfer, Close Lead",Yes,VAPI structuredData.next_action,Recommended next action,Direct mapping from VAPI recommendation
+Avani Loan Services,Call Transcript,call_transcript,Text (Multi-line),,No,VAPI transcript,Full call conversation text,Direct mapping - call transcript
+Avani Loan Services,Call Recording URL,call_recording_url,Text,URL format,No,VAPI recordingUrl,Link to VAPI call recording,Direct mapping - recordingUrl from webhook
+Avani Loan Services,Call Duration (seconds),call_duration_seconds,Number,Integer (seconds),No,VAPI duration,Total call length in seconds,Direct mapping - duration from webhook
+Avani Loan Services,Call Date & Time,call_timestamp,Date,ISO 8601 format (YYYY-MM-DD HH:MM:SS UTC),No,VAPI timestamp,When call was made,Convert timestamp to HubSpot datetime format
+Avani Loan Services,AI Sentiment,call_sentiment,Dropdown,"Positive, Neutral, Negative",No,VAPI analysis.sentiment,Customer sentiment from VAPI analysis,Parse from VAPI sentiment field
+Avani Loan Services,Interest Level,interest_level,Dropdown,"High, Medium, Low",No,VAPI analysis structuredData,Customer's expressed interest,Inferred from qualification status and sentiment
+Avani Loan Services,Appointment Scheduled,appointment_scheduled,Date,YYYY-MM-DD HH:MM UTC,No,Make.com or Manual,When appointment was booked,Set when next_action = Schedule Followup
+Avani Loan Services,WhatsApp Sent Date,whatsapp_sent_date,Date,ISO 8601 format,No,Make.com automation,When follow-up WhatsApp was sent,Timestamp from WhatsApp API response
+Avani Loan Services,WhatsApp Status,whatsapp_status,Dropdown,"Sent, Delivered, Read, Failed",No,Make.com automation,WhatsApp message delivery status,Track WhatsApp delivery status
+Avani Loan Services,CIBIL Score,cibil_score,Number,Score 300-900,No,CIBIL API integration,Customer credit score,To be integrated with CIBIL API
+Avani Loan Services,Documents Submitted,documents_submitted,Checkbox,,No,Manual input,Whether customer submitted documents,Check box when documents received
+Avani Loan Services,Applied Date,applied_date,Date,ISO 8601 format,No,Manual input,When customer applied for loan,Set when status changes to Applied
+Avani Loan Services,Approval Status,approval_status,Dropdown,"Pending, Approved, Rejected, Withdrawn",No,Manual input,Final loan approval status,Update based on bank decision
+Avani Loan Services,Deal Amount,deal_amount,Number,Currency (INR),No,Approval decision,Final approved loan amount,Set when deal is approved
+Avani Loan Services,Deal Stage,dealstage,Dropdown,"New Lead, AI Called, Qualified, Needs Review, Follow-up Scheduled, Document Shared, Application Submitted, Approved, Rejected, Not Interested",Yes,VAPI and Workflow,Current position in sales pipeline,Update based on lead progression
+Avani Loan Services,Created Date,hs_createdate,Date,Auto-generated,Auto,System,Lead creation timestamp,Auto-populated by HubSpot
+Avani Loan Services,Last Activity Date,hs_lastmodifieddate,Date,Auto-generated,Auto,System,Last update timestamp,Auto-populated by HubSpot
+Avani Loan Services,Lead Owner,hubspotownerId,Dropdown,"Sachin Shinde, Loan Officer 1, Loan Officer 2, etc",No,Workflow/Manual,Assigned sales rep,Assign based on loan product and region
+Avani Loan Services,Notes,notes,Text (Multi-line),,No,Manual input,Internal notes about lead,Add custom notes about lead interactions
+Avani Loan Services,Marketing Language,marketing_language,Dropdown,"English, Hindi, Marathi",No,Form/VAPI,Customer preferred language,Track language preference for follow-ups

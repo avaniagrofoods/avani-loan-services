@@ -1,3 +1,4 @@
+import brandLogo from '../assets/avani-brand-logo.png';
 import './Privacy.css';
 
 export default function Privacy() {
@@ -5,7 +6,13 @@ export default function Privacy() {
     <div>
       <section className="page-header">
         <div className="container">
-          <span className="badge">Legal</span>
+          <div className="page-header-top">
+            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <div>
+              <span className="badge">Legal</span>
+              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+            </div>
+          </div>
           <h1>Privacy Policy</h1>
           <p>Last updated: April 10, 2025</p>
         </div>
@@ -64,7 +71,7 @@ export default function Privacy() {
             <ul>
               <li>📧 Email: <a href="mailto:enquiry@avanifinserv.com">enquiry@avanifinserv.com</a></li>
               <li>📞 Phone: <a href="tel:+917249108474">+91-7249108474</a></li>
-              <li>📍 Address: Latur, Maharashtra, India</li>
+              <li>📍 Address: RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</li>
             </ul>
 
             <h2>8. Changes to This Policy</h2>

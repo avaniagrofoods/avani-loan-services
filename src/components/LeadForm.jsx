@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { CheckCircle, Loader } from 'lucide-react';
+import { CheckCircle, Loader, Phone } from 'lucide-react';
 import './LeadForm.css';
+import vapiService from '../lib/vapiService';
 
 const ZOHO_URL = 'https://crmplus.zoho.in/starpowerzlatur22101/index.do/cxapp/crm/org60057545957/settings/connected-workflow';
 
@@ -8,11 +9,55 @@ export default function LeadForm({ compact = false, loanType = '' }) {
   const [form, setForm] = useState({
     name: '', phone: '', email: '', loanType: loanType, amount: '', city: ''
   });
-  const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error | ai-calling
+  const [showAIOption, setShowAIOption] = useState(false);
+  const [aiCallStatus, setAICallStatus] = useState('ready'); // ready | calling | connected | ended
 
   const loanTypes = ['Salary Loan', 'Business Loan', 'Education Loan (India)', 'Education Loan (Abroad)', 'Home Loan', 'Mortgage / LAP'];
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleAICall = async e => {
+    e.preventDefault();
+    setAICallStatus('calling');
+    
+    try {
+      // Map traditional loan types to VAPI loan types
+      const vapiLoanType = form.loanType.toLowerCase().includes('salary') ? 'personal' :
+        form.loanType.toLowerCase().includes('business') ? 'business' :
+        form.loanType.toLowerCase().includes('education') ? 'education' :
+        form.loanType.toLowerCase().includes('home') ? 'home' :
+        form.loanType.toLowerCase().includes('mortgage') ? 'mortgage' : 'personal';
+
+      const callResult = await vapiService.makeCall(form.phone, '9f322737-3bb8-467a-95e3-7a66f9a93dc1', vapiLoanType);
+      
+      if (callResult.id) {
+        setAICallStatus('connected');
+        
+        // Save lead data with AI call initiation
+        await vapiService.saveLeadData({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          loanType: form.loanType,
+          amount: form.amount,
+          city: form.city || 'Latur',
+          callId: callResult.id,
+          aiCallInitiated: true,
+          timestamp: new Date().toISOString()
+        });
+
+        setTimeout(() => {
+          setAICallStatus('ended');
+          setStatus('success');
+        }, 3000);
+      }
+    } catch (error) {
+      console.error('AI call error:', error);
+      setAICallStatus('ready');
+      alert('Error initiating AI call. Please try again.');
+    }
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -99,6 +144,28 @@ export default function LeadForm({ compact = false, loanType = '' }) {
       <button type="submit" className="btn btn-secondary submit-btn" disabled={status === 'loading'}>
         {status === 'loading' ? <><Loader size={18} className="spin" /> Processing...</> : '🚀 Get Free Callback'}
       </button>
+
+      {status === 'idle' && !compact && (
+        <div className="ai-call-option">
+          <p className="or-divider">─── OR ───</p>
+          <button 
+            type="button" 
+            onClick={() => handleAICall(new Event('submit'))}
+            className="btn btn-ai-call"
+            disabled={!form.name || !form.phone || !form.loanType}
+          >
+            {aiCallStatus === 'calling' ? (
+              <><Loader size={18} className="spin" /> AI Calling...</>
+            ) : aiCallStatus === 'connected' ? (
+              <><Phone size={18} /> Call Connected...</>
+            ) : (
+              <><Phone size={18} /> Get Instant AI Call</>
+            )}
+          </button>
+          <p className="ai-call-note">🤖 Speak with our AI Loan Advisor instantly</p>
+        </div>
+      )}
+
       <p className="form-note">✅ 100% Free. No spam. Advisor calls in 5 minutes.</p>
     </form>
   );

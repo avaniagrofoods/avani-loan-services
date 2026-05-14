@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Info, CheckCircle2, AlertCircle, ArrowRight, MousePointer2, UserCheck, ShieldCheck, Clock, Calculator } from 'lucide-react';
+import brandLogo from '../assets/avani-brand-logo.png';
 import './Eligibility.css';
 
 export default function Eligibility() {
@@ -58,7 +59,13 @@ export default function Eligibility() {
     <div className="eligibility-page">
       <section className="page-header">
         <div className="container">
-          <span className="badge">Calculators</span>
+          <div className="page-header-top">
+            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <div>
+              <span className="badge">Calculators</span>
+              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+            </div>
+          </div>
           <h1>Loan Eligibility Calculator</h1>
           <p>Lenders determine your loan eligibility using the Fixed Obligation to Income Ratio (FOIR). Check yours instantly.</p>
         </div>

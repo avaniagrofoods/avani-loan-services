@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import brandLogo from '../assets/avani-brand-logo.png';
 import './Documents.css';
 
 const docs = [
@@ -98,7 +99,13 @@ export default function Documents() {
     <div>
       <section className="page-header">
         <div className="container">
-          <span className="badge">Documentation</span>
+          <div className="page-header-top">
+            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <div>
+              <span className="badge">Documentation</span>
+              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+            </div>
+          </div>
           <h1>Documents Required for Each Loan</h1>
           <p>Click on any loan type to see the exact documents you need to prepare</p>
         </div>

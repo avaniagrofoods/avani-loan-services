@@ -10,6 +10,8 @@ import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
 import Blog from './pages/Blog';
 import CibilCheck from './pages/CibilCheck';
+import AIAssistant from './pages/AIAssistant';
+import AdminDashboard from './pages/AdminDashboard';
 import './App.css';
 
 export default function App() {
@@ -27,6 +29,8 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/ai-assistant" element={<AIAssistant />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </main>
       <Footer />

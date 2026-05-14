@@ -57,7 +57,7 @@ export default function Footer() {
             <ul className="footer-contact">
               <li>
                 <MapPin size={18} className="contact-icon" />
-                <span>{language === 'en' ? 'Latur, Maharashtra, India' : 'लातूर, महाराष्ट्र, भारत'}<br/>({language === 'en' ? 'Service Area: All Maharashtra' : language === 'mr' ? 'सेवा क्षेत्र: संपूर्ण महाराष्ट्र' : 'सेवा क्षेत्र: पूरे महाराष्ट्र'})</span>
+                <span>RAJIV GANDHI CHAUK, OPP BANK OF BARODA,<br />ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD,<br />LATUR-413512, MAHARASHTRA INDIA<br /><small>{language === 'en' ? 'Service Area: All Maharashtra' : language === 'mr' ? 'सेवा क्षेत्र: संपूर्ण महाराष्ट्र' : 'सेवा क्षेत्र: पूरे महाराष्ट्र'}</small></span>
               </li>
               <li>
                 <Phone size={18} className="contact-icon" />
