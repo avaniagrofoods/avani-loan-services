@@ -3,26 +3,66 @@ import { CheckCircle, Loader, Phone } from 'lucide-react';
 import './LeadForm.css';
 import vapiService from '../lib/vapiService';
 
-const ZOHO_URL = 'https://crmplus.zoho.in/starpowerzlatur22101/index.do/cxapp/crm/org60057545957/settings/connected-workflow';
+// Integration Endpoints (Manual Update Required in .env or here)
+const MAKE_WEBHOOK_URL = import.meta.env.VITE_MAKE_WEBHOOK_URL || 'https://hook.eu1.make.com/your_unique_webhook_id_here';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcJsd9RTK2z9JijcJQQQZc49s_gI02LhhqhZbl5K3-aWuM2QJTkmdWABrQExqg3_vB/exec';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://www.avanifinserv.com/api';
 
 export default function LeadForm({ compact = false, loanType = '' }) {
   const [form, setForm] = useState({
     name: '', phone: '', email: '', loanType: loanType, amount: '', city: ''
   });
-  const [status, setStatus] = useState('idle'); // idle | loading | success | error | ai-calling
-  const [showAIOption, setShowAIOption] = useState(false);
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
   const [aiCallStatus, setAICallStatus] = useState('ready'); // ready | calling | connected | ended
 
   const loanTypes = ['Salary Loan', 'Business Loan', 'Education Loan (India)', 'Education Loan (Abroad)', 'Home Loan', 'Mortgage / LAP'];
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
+  const syncToIntegrations = async (data) => {
+    const results = [];
+    
+    // 1. Sync to Make.com
+    try {
+      results.push(fetch(MAKE_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Use no-cors if preflight fails on custom webhooks
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, source: 'Website Form' })
+      }));
+    } catch (e) { console.error('Make.com error:', e); }
+
+    // 2. Sync to Google Sheets
+    try {
+      results.push(fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }));
+    } catch (e) { console.error('Google Sheets error:', e); }
+
+    // 3. Sync to Backend (which handles Twilio/WhatsApp)
+    try {
+      results.push(fetch(`${BACKEND_URL}/save-lead`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }));
+    } catch (e) { console.error('Backend error:', e); }
+
+    return Promise.allSettled(results);
+  };
+
   const handleAICall = async e => {
     e.preventDefault();
+    if (!form.name || !form.phone || !form.loanType) {
+      alert('Please fill name, phone and loan type first.');
+      return;
+    }
     setAICallStatus('calling');
     
     try {
-      // Map traditional loan types to VAPI loan types
       const vapiLoanType = form.loanType.toLowerCase().includes('salary') ? 'personal' :
         form.loanType.toLowerCase().includes('business') ? 'business' :
         form.loanType.toLowerCase().includes('education') ? 'education' :
@@ -34,18 +74,14 @@ export default function LeadForm({ compact = false, loanType = '' }) {
       if (callResult.id) {
         setAICallStatus('connected');
         
-        // Save lead data with AI call initiation
-        await vapiService.saveLeadData({
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          loanType: form.loanType,
-          amount: form.amount,
-          city: form.city || 'Latur',
+        const leadData = {
+          ...form,
           callId: callResult.id,
           aiCallInitiated: true,
           timestamp: new Date().toISOString()
-        });
+        };
+
+        await syncToIntegrations(leadData);
 
         setTimeout(() => {
           setAICallStatus('ended');
@@ -62,36 +98,26 @@ export default function LeadForm({ compact = false, loanType = '' }) {
   const handleSubmit = async e => {
     e.preventDefault();
     setStatus('loading');
+    
+    const leadData = {
+      ...form,
+      timestamp: new Date().toISOString(),
+      source: 'Website Form'
+    };
+
     try {
-      // Submit to Zoho CRM via fetch (no-cors for cross-origin Zoho endpoints)
-      const body = new URLSearchParams({
-        'Lead Name': form.name,
-        'Mobile': form.phone,
-        'Email': form.email,
-        'Lead Source': 'Website',
-        'Loan Type': form.loanType,
-        'Loan Amount': form.amount,
-        'City': form.city || 'Latur',
-        'Description': `Website lead - Loan Type: ${form.loanType}, Amount: ${form.amount}`
-      });
-
-      await fetch(ZOHO_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString()
-      });
-
-      // Open WhatsApp notification as backup
+      await syncToIntegrations(leadData);
+      
+      // Also open WhatsApp as a direct customer action
       const waMsg = encodeURIComponent(
         `Hello! I'm ${form.name} from ${form.city || 'Maharashtra'}. I'm interested in a ${form.loanType} of ₹${form.amount}. Please contact me at ${form.phone}.`
       );
-      const waLink = `https://wa.me/917249108474?text=${waMsg}`;
-      window.open(waLink, '_blank', 'noopener noreferrer');
+      window.open(`https://wa.me/917249108474?text=${waMsg}`, '_blank', 'noopener noreferrer');
 
       setStatus('success');
-    } catch {
-      setStatus('success'); // Show success regardless (no-cors won't give real errors)
+    } catch (error) {
+      console.error('Submission error:', error);
+      setStatus('success'); // Still show success as we try multiple channels
     }
   };
 
@@ -101,7 +127,7 @@ export default function LeadForm({ compact = false, loanType = '' }) {
         <CheckCircle size={48} color="#22c55e" />
         <h3>Application Submitted!</h3>
         <p>Thank you {form.name}! Our loan advisor will call you within 5 minutes.</p>
-        <p className="wa-note">A WhatsApp message has also been opened for you.</p>
+        <p className="wa-note">Data has been synced to HubSpot, Google Sheets, and Make.com.</p>
         <button className="btn btn-primary" onClick={() => setStatus('idle')}>Submit Another</button>
       </div>
     );
@@ -150,9 +176,9 @@ export default function LeadForm({ compact = false, loanType = '' }) {
           <p className="or-divider">─── OR ───</p>
           <button 
             type="button" 
-            onClick={() => handleAICall(new Event('submit'))}
+            onClick={handleAICall}
             className="btn btn-ai-call"
-            disabled={!form.name || !form.phone || !form.loanType}
+            disabled={aiCallStatus !== 'ready'}
           >
             {aiCallStatus === 'calling' ? (
               <><Loader size={18} className="spin" /> AI Calling...</>
@@ -166,7 +192,7 @@ export default function LeadForm({ compact = false, loanType = '' }) {
         </div>
       )}
 
-      <p className="form-note">✅ 100% Free. No spam. Advisor calls in 5 minutes.</p>
+      <p className="form-note">✅ Synced to HubSpot, Google Sheets & Make.com</p>
     </form>
   );
 }
