@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CheckCircle, Award, Users, TrendingUp, ArrowRight } from 'lucide-react';
 import LeadForm from '../components/LeadForm';
-import logo from '../assets/avani-brand-logo.png';
+import logo from '../assets/logo.png';
 import brandLogo from '../assets/avani-brand-logo.png';
 import './About.css';
 

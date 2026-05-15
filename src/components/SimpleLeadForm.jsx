@@ -41,6 +41,17 @@ export default function SimpleLeadForm() {
         })
       });
 
+      // 3. Sync to Backend (for Twilio/SMS/Database)
+      try {
+        await fetch('/api/save-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+      } catch (err) {
+        console.warn('Backend sync failed, but other syncs succeeded.');
+      }
+
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', loanType: 'Personal Loan', amount: '', message: '' });
     } catch (error) {
