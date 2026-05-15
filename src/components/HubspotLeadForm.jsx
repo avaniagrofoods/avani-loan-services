@@ -1,52 +1,29 @@
 import { useEffect } from 'react';
 
-// Use Vite env vars so the formId can be injected at build time
-const portalId = import.meta.env.VITE_HUBSPOT_PORTAL_ID || '244236573';
-const formId = import.meta.env.VITE_HUBSPOT_FORM_ID || 'YOURHUBSPOTFORM_ID';
+const portalId = '244236573';
+const formId = 'edde042c-3451-420a-a472-6a5c42cbdf98';
 
 export default function HubspotLeadForm() {
   useEffect(() => {
-    const scriptId = 'hs-form-script';
-
-    function createForm() {
-      if (!formId || formId === 'YOURHUBSPOTFORM_ID') {
-        console.warn('HubSpot formId is not set. Set VITE_HUBSPOT_FORM_ID in your .env to load the embedded form.');
-        return;
-      }
+    const renderForm = () => {
       if (window.hbspt && window.hbspt.forms) {
-        try {
-          window.hbspt.forms.create({
-            region: 'na1',
-            portalId,
-            formId,
-            target: '#hubspot-lead-form',
-          });
-        } catch (e) {
-          console.error('Error creating HubSpot form:', e);
-        }
+        window.hbspt.forms.create({
+          region: 'na2',
+          portalId: portalId,
+          formId: formId,
+          target: '#hubspot-lead-form'
+        });
+      } else {
+        setTimeout(renderForm, 500);
       }
-    }
-
-    // Load HubSpot forms script once
-    if (!document.getElementById(scriptId)) {
-      const script = document.createElement('script');
-      script.src = 'https://js.hsforms.net/forms/embed/v2.js';
-      script.type = 'text/javascript';
-      script.async = true;
-      script.id = scriptId;
-      script.onload = () => {
-        createForm();
-      };
-      document.body.appendChild(script);
-    } else {
-      createForm();
-    }
+    };
+    renderForm();
   }, []);
 
   return (
-    <div className="hubspot-lead-form-wrapper">
+    <div className="hubspot-lead-form-wrapper" style={{ minHeight: '500px', background: '#f9fafb', padding: '24px', borderRadius: '12px' }}>
       <div id="hubspot-lead-form"></div>
-      <p className="form-note">✅ 100% Free. No spam. Advisor calls in 5 minutes.</p>
+      <p className="form-note">✅ 100% Free Consultation. No spam. Advisor calls in 5 minutes.</p>
     </div>
   );
 }

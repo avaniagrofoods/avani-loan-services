@@ -16,10 +16,19 @@ The project is configured for **Auto Mode**. Every time you push changes to the 
 3. The live site is updated within minutes.
 
 ### Manual Command Sync
-If you need to push updates manually from your local machine, navigate to this folder and use:
-```powershell
-npx vercel --prod
-```
+The easiest way to update is using the new **Auto Mode** commands:
+
+1. **Via NPM (Fastest)**:
+   ```bash
+   npm run deploy
+   ```
+
+2. **Via PowerShell Script**:
+   ```powershell
+   ./auto-deploy.ps1
+   ```
+
+*Note: If you see a 'token not valid' error, run `npx vercel login` first.*
 
 ## 3. Professional Domain (Optional)
 Currently, your site is on a Vercel subdomain. To link a professional domain (e.g., `loans.avaniagrofoods.com`), you can add the domain in the Vercel Dashboard settings. Use the following DNS settings in Hostinger:

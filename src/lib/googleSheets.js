@@ -3,7 +3,7 @@
  * This utility handles sending form data to a Google Apps Script Webhook.
  */
 
-const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbylRZzHt8TJnLlfwuVlTcjh7qd1IiP5FEjTlxwaJ9GSRZy5El-Ur8TgVv1M6nYeZZNc8Q/exec';
+const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwadPvvLiVgLOUbIcnQm7ZeLEOsh1bamEYVJKi11ub8fZc-EAVugAv2WvgfTc5Izg7A4w/exec';
 
 export const logToGoogleSheets = async (data) => {
   if (!GOOGLE_SHEETS_WEBHOOK_URL) {

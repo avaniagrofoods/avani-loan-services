@@ -30,24 +30,28 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <script
-      src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"
-      defer
-      async
-    ></script>
+    
+    <!-- Vapi AI Integration -->
+    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js" defer async></script>
+    
+    <!-- HubSpot Forms Script (Pre-loaded for React reliability) -->
+    <script type="text/javascript" id="hs-script-loader" async defer src="https://js.hsforms.net/forms/embed/v2.js"></script>
+
     <script>
       window.addEventListener('load', () => {
-        window.vapiSDK.run({
-          apiKey: "8ce7fb85-56b8-482b-95e5-630612b32554",
-          assistant: "9f322737-3bb8-467a-95e3-7a66f9a93dc1",
-          config: {
-            position: "bottom-right",
-            theme: {
-              primary: "#111827",
-              secondary: "#ffffff"
+        if (window.vapiSDK) {
+          window.vapiSDK.run({
+            apiKey: "8ce7fb85-56b8-482b-95e5-630612b32554",
+            assistant: "9f322737-3bb8-467a-95e3-7a66f9a93dc1",
+            config: {
+              position: "bottom-right",
+              theme: {
+                primary: "#111827",
+                secondary: "#ffffff"
+              }
             }
-          }
-        });
+          });
+        }
       });
     </script>
   </body>

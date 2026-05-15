@@ -1,4 +1,4 @@
-import HubspotLeadForm from '../components/HubspotLeadForm';
+import SimpleLeadForm from '../components/SimpleLeadForm';
 import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
 import logo from '../assets/avani-brand-logo.png';
 import './Contact.css';
@@ -23,9 +23,13 @@ export default function Contact() {
       <section className="section">
         <div className="container contact-container">
 
-          {/* HubSpot Embedded Form */}
+          {/* Fallback Form (More reliable than HubSpot) */}
           <div className="contact-form-col">
-            <HubspotLeadForm />
+            <div className="contact-form-wrapper">
+              <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '10px' }}>Apply for a Loan</h2>
+              <p style={{ color: '#64748b', marginBottom: '25px' }}>Fast processing for all bank loans across Maharashtra.</p>
+              <SimpleLeadForm />
+            </div>
           </div>
 
           {/* Info */}

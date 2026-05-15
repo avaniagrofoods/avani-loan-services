@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Info, CheckCircle2, AlertCircle, ArrowRight, MousePointer2, UserCheck, ShieldCheck, Clock, Calculator } from 'lucide-react';
+import { logToGoogleSheets } from '../lib/googleSheets';
 import brandLogo from '../assets/avani-brand-logo.png';
 import './Eligibility.css';
 
@@ -47,6 +48,19 @@ export default function Eligibility() {
     }
     
     setShowResult(true);
+    
+    // Auto Mode: Sync result to Google Sheets using central utility
+    logToGoogleSheets({
+      name: 'Eligibility Checker',
+      phone: 'N/A',
+      loanType: loanType,
+      amount: Math.round(amount),
+      income: income,
+      source: 'Eligibility Calculator',
+      city: propertyType,
+      timestamp: new Date().toLocaleString()
+    });
+
     // Optional: Scroll to results
     setTimeout(() => {
         document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' });

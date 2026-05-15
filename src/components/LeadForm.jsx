@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { CheckCircle, Loader, Phone } from 'lucide-react';
 import './LeadForm.css';
 import vapiService from '../lib/vapiService';
+import { logToGoogleSheets } from '../lib/googleSheets';
 
 // Integration Endpoints (Manual Update Required in .env or here)
 const MAKE_WEBHOOK_URL = import.meta.env.VITE_MAKE_WEBHOOK_URL || 'https://hook.eu1.make.com/your_unique_webhook_id_here';
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcJsd9RTK2z9JijcJQQQZc49s_gI02LhhqhZbl5K3-aWuM2QJTkmdWABrQExqg3_vB/exec';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://www.avanifinserv.com/api';
 
 export default function LeadForm({ compact = false, loanType = '' }) {
@@ -34,12 +34,7 @@ export default function LeadForm({ compact = false, loanType = '' }) {
 
     // 2. Sync to Google Sheets
     try {
-      results.push(fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      }));
+      results.push(logToGoogleSheets(data));
     } catch (e) { console.error('Google Sheets error:', e); }
 
     // 3. Sync to Backend (which handles Twilio/WhatsApp)
