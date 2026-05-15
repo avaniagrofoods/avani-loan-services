@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { CheckCircle, Award, Users, TrendingUp, ArrowRight } from 'lucide-react';
 import LeadForm from '../components/LeadForm';
-import logo from '../assets/logo.png';
 import brandLogo from '../assets/avani-brand-logo.png';
 import './About.css';
 
@@ -37,7 +36,7 @@ export default function About() {
           <div className="about-grid">
             <div className="about-image-block">
               <div className="about-logo-wrapper glass-card">
-                <img src={logo} alt="Avani Loan Services" className="about-logo" />
+                <img src={brandLogo} alt="Avani Loan Services" className="about-logo" />
                 <p className="img-location">📍 RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</p>
               </div>
               <div className="certifications">
