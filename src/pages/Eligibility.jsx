@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Info, CheckCircle2, AlertCircle, ArrowRight, MousePointer2, UserCheck, ShieldCheck, Clock, Calculator } from 'lucide-react';
-import { logToGoogleSheets } from '../lib/googleSheets';
+import { syncLeadData } from '../lib/syncLeads';
 import brandLogo from '../assets/avani-brand-logo.png';
 import './Eligibility.css';
 
@@ -37,28 +37,28 @@ export default function Eligibility() {
     
     setAvailableEmi(newEmiAffordability);
 
+    let amount = 0;
     if (newEmiAffordability <= 0) {
       setMaxLoanAmount(0);
       setIsEligible(false);
     } else {
       const monthlyRate = r / 100 / 12;
-      const amount = newEmiAffordability * (Math.pow(1 + monthlyRate, n) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, n));
+      amount = newEmiAffordability * (Math.pow(1 + monthlyRate, n) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, n));
       setMaxLoanAmount(Math.round(amount));
       setIsEligible(true);
     }
     
     setShowResult(true);
     
-    // Auto Mode: Sync result to Google Sheets using central utility
-    logToGoogleSheets({
-      name: 'Eligibility Checker',
+    // Auto Mode: Sync result to all platforms using central utility
+    syncLeadData({
+      name: 'Eligibility Checker User',
       phone: 'N/A',
       loanType: loanType,
       amount: Math.round(amount),
       income: income,
-      source: 'Eligibility Calculator',
-      city: propertyType,
-      timestamp: new Date().toLocaleString()
+      source: 'Eligibility_Calculator',
+      details: `Property: ${propertyType}, Age: ${age}`
     });
 
     // Optional: Scroll to results

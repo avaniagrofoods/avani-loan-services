@@ -133,11 +133,6 @@ const AdminDashboard = () => {
 
   const t = translations[language] || translations.en;
 
-  // Fetch metrics on mount
-  useEffect(() => {
-    fetchMetrics();
-  }, []);
-
   const fetchMetrics = async () => {
     setLoading(true);
     try {
@@ -208,6 +203,11 @@ const AdminDashboard = () => {
     }
     setLoading(false);
   };
+
+  // Fetch metrics on mount
+  useEffect(() => {
+    fetchMetrics();
+  }, []);
 
   const handleUploadContacts = async (e) => {
     const file = e.target.files[0];

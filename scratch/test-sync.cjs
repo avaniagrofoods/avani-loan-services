@@ -55,12 +55,21 @@ async function runTest() {
   }
 
   // 3. Test Backend Sync Route
+  console.log('\nTesting Backend /api/save-lead (Localhost)...');
+  try {
+    const res = await post('http://localhost:5000/api/save-lead', leadData);
+    console.log('✅ Local Backend Response:', res.status, res.data);
+  } catch (error) {
+    console.error('❌ Local Backend Failed:', error.message);
+  }
+
+  // 4. Test Backend Sync Route (Live)
   console.log('\nTesting Backend /api/save-lead (Live)...');
   try {
     const res = await post('https://www.avanifinserv.com/api/save-lead', leadData);
-    console.log('✅ Backend Response:', res.status, res.data);
+    console.log('✅ Live Backend Response:', res.status, res.data);
   } catch (error) {
-    console.error('❌ Backend Route Failed:', error.message);
+    console.error('❌ Live Backend Failed:', error.message);
   }
 
   console.log('\n--- TEST CYCLE COMPLETE ---');

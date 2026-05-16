@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
-import { logToGoogleSheets } from '../lib/googleSheets';
+import { syncLeadData } from '../lib/syncLeads';
 
 export default function SimpleLeadForm() {
   const [formData, setFormData] = useState({
@@ -22,35 +22,11 @@ export default function SimpleLeadForm() {
     setStatus('loading');
 
     try {
-      // 1. Sync to Google Sheets
-      await logToGoogleSheets({
+      // Unified Sync to Sheets, Make.com, and Backend
+      await syncLeadData({
         ...formData,
-        source: 'Contact Page Fallback',
-        timestamp: new Date().toISOString()
+        source: 'Website_Contact_Form'
       });
-
-      // 2. Sync to Make.com Webhook
-      const webhookUrl = 'https://hook.eu1.make.com/n46s2vx5oil7ptwdhhgsnn9rpm6ck5j0';
-      await fetch(webhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          source: 'Website_Contact_Form',
-          type: 'Direct_Inquiry'
-        })
-      });
-
-      // 3. Sync to Backend (for Twilio/SMS/Database)
-      try {
-        await fetch('/api/save-lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
-      } catch (err) {
-        console.warn('Backend sync failed, but other syncs succeeded.');
-      }
 
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', loanType: 'Personal Loan', amount: '', message: '' });

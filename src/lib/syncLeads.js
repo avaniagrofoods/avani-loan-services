@@ -1,0 +1,61 @@
+import { logToGoogleSheets } from './googleSheets';
+
+const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/n46s2vx5oil7ptwdhhgsnn9rpm6ck5j0';
+
+/**
+ * Centralized function to sync lead data to all platforms in Auto Mode.
+ * Ensures data reaches Google Sheets, Make.com (HubSpot), and the Backend.
+ */
+export const syncLeadData = async (data) => {
+  const timestamp = new Date().toISOString();
+  const enrichedData = {
+    ...data,
+    timestamp,
+    source: data.source || 'Website_AutoMode'
+  };
+
+  console.log('--- Syncing Lead Data ---', enrichedData);
+
+  const results = {
+    sheets: false,
+    make: false,
+    backend: false
+  };
+
+  // 1. Google Sheets Sync (Primary)
+  try {
+    await logToGoogleSheets(enrichedData);
+    results.sheets = true;
+    console.log('✅ Google Sheets Sync: Success');
+  } catch (error) {
+    console.error('❌ Google Sheets Sync: Failed', error.message);
+  }
+
+  // 2. Make.com Webhook Sync (for HubSpot/WhatsApp/Vapi)
+  try {
+    const response = await fetch(MAKE_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(enrichedData)
+    });
+    results.make = response.ok;
+    console.log(`✅ Make.com Sync: ${response.status} ${response.statusText}`);
+  } catch (error) {
+    console.error('❌ Make.com Sync: Failed', error.message);
+  }
+
+  // 3. Backend Sync (for Twilio Notifications)
+  try {
+    const response = await fetch('/api/save-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(enrichedData)
+    });
+    results.backend = response.ok;
+    console.log(`✅ Backend Sync: ${response.status}`);
+  } catch (error) {
+    console.warn('⚠️ Backend Sync: Failed (Non-critical)', error.message);
+  }
+
+  return results;
+};

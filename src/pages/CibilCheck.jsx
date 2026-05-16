@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ShieldCheck, Mail, Phone, User, FileText, Download, CheckCircle, ArrowRight, Lock, AlertTriangle, RefreshCw } from 'lucide-react';
-import emailjs from '@emailjs/browser';
 import { jsPDF } from 'jspdf';
-import { logToGoogleSheets } from '../lib/googleSheets';
+import { syncLeadData } from '../lib/syncLeads';
 import brandLogo from '../assets/avani-brand-logo.png';
 import './CibilCheck.css';
 
@@ -74,12 +73,15 @@ export default function CibilCheck() {
     const finalScore = Math.min(900, Math.max(300, Math.floor(baseScore + incomeFactor + ageFactor + panVariation)));
     setEstimatedScore(finalScore);
 
-    // Log to Google Sheets
-    await logToGoogleSheets({
-      ...formData,
-      fullName: `${formData.name} ${formData.lastName}`,
-      estimatedScore: finalScore,
-      timestamp: new Date().toLocaleString()
+    // Sync to all platforms in Auto Mode
+    await syncLeadData({
+      name: `${formData.name} ${formData.lastName}`,
+      phone: formData.mobile,
+      email: formData.email,
+      loanType: 'CIBIL_Report',
+      amount: finalScore,
+      details: `PAN: ${formData.pan}, Income: ${formData.income}`,
+      source: 'CIBIL_Checker'
     });
 
     setStep(2); // Step 2 is now Results
