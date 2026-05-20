@@ -2,111 +2,60 @@ import twilio from 'twilio';
 import axios from 'axios';
 
 // Vercel Serverless Function: POST /api/save-lead
-// Pipeline: Website Form → Google Apps Script (Sheets + HubSpot) → Twilio WhatsApp
+// Integrated with Pabbly, Google Web App, and PICKY ASSIST
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   try {
+    const PABBLY_CONNECT_URL = "https://connect.pabbly.com/webhook-listener/webhook/IjU3NjIwNTY0MDYzMDA0M2Q1MjY4NTUzNCI_3D_pc/IjU3NjcwNTZlMDYzMDA0MzU1MjZhNTUzYzUxMzIi_pc";
+    const PICKY_ASSIST_URL = "https://app.pickyassist.com/url/5cb2564f744736ff1b4d09e1ebad26748625043e";
+    const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx_BiUDUesN9WC4OK-5eznfKOVqfHS-55enFvWni58dVHVUm08HjIqkFIcVUTnWCKxLXg/exec";
+    
+    const BUSINESS_DETAILS = {
+      businessName: "AVANI LOAN SERVICE",
+      address: "RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512",
+      supportPhone: "+91 9175635165",
+      email: "ENQUIRY@AVANIFINSERV.COM",
+      website: "https://www.avanifinserv.com"
+    };
+
     const leadData = {
       ...req.body,
+      ...BUSINESS_DETAILS,
       id: Date.now(),
       timestamp: new Date().toISOString(),
       source: req.body.source || 'Website_Avani_Form'
     };
 
-    console.log('Lead Received:', leadData.name, leadData.phone, leadData.loanType);
-
     const syncResults = {
-      sheets: false,
-      hubspot: false,
-      whatsapp: false
+      pabbly: false,
+      pickyAssist: false,
+      googleWebApp: false
     };
 
-    // ── 1. Google Apps Script (handles Sheets + HubSpot internally) ──
-    if (process.env.GOOGLE_SHEET_APP_SCRIPT_URL) {
-      try {
-        const sheetsPayload = {
-          name: leadData.name,
-          phone: leadData.phone,
-          email: leadData.email || '',
-          loanType: leadData.loanType || '',
-          amount: leadData.amount || '',
-          city: leadData.city || '',
-          source: leadData.source,
-          timestamp: leadData.timestamp,
-          id: leadData.id
-        };
-        await axios.post(process.env.GOOGLE_SHEET_APP_SCRIPT_URL, sheetsPayload, {
-          timeout: 10000,
-          headers: { 'Content-Type': 'application/json' }
-        });
-        syncResults.sheets = true;
-      } catch (err) {
-        console.error('Google Sheets Error:', err.message);
-      }
-    }
+    // ── 1. Picky Assist (WhatsApp Automation) ──
+    try {
+      await axios.post(PICKY_ASSIST_URL, leadData, { timeout: 10000 });
+      syncResults.pickyAssist = true;
+    } catch (err) { console.error('Picky Assist Error:', err.message); }
 
-    // ── 2. HubSpot CRM (direct API — no Make.com needed) ──
-    const hubspotPortalId = process.env.HUBSPOT_PORTAL_ID || '244236573';
-    const hubspotFormId   = process.env.HUBSPOT_FORM_ID   || 'edde042c-3451-420a-a472-6a5c42cbdf98';
-    if (leadData.email || leadData.phone) {
-      try {
-        await axios.post(
-          `https://api.hsforms.com/submissions/v3/integration/submit/${hubspotPortalId}/${hubspotFormId}`,
-          {
-            fields: [
-              { name: 'firstname', value: leadData.name || '' },
-              { name: 'email',     value: leadData.email || 'noemail@avanifinserv.com' },
-              { name: 'phone',     value: leadData.phone || '' },
-              { name: 'loan_type__c', value: leadData.loanType || '' },
-              { name: 'message',   value: `Loan Amount: ${leadData.amount || 'Not specified'} | City: ${leadData.city || 'Not specified'} | Source: ${leadData.source}` }
-            ],
-            context: {
-              pageUri: 'https://www.avanifinserv.com',
-              pageName: 'Avani Loan Services - Lead Form'
-            }
-          },
-          { timeout: 8000, headers: { 'Content-Type': 'application/json' } }
-        );
-        syncResults.hubspot = true;
-      } catch (err) {
-        console.error('HubSpot Error:', err.message);
-      }
-    }
+    // ── 2. Google Web App (Lead Scorer) ──
+    try {
+      await axios.post(GOOGLE_WEB_APP_URL, leadData, { timeout: 10000 });
+      syncResults.googleWebApp = true;
+    } catch (err) { console.error('Google Web App Error:', err.message); }
 
-    // ── 3. Twilio WhatsApp Notification to Business Owner ──
-    if (
-      process.env.TWILIO_ACCOUNT_SID &&
-      process.env.TWILIO_AUTH_TOKEN &&
-      process.env.TWILIO_WHATSAPP_NUMBER &&
-      leadData.phone
-    ) {
-      try {
-        const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+    // ── 3. Pabbly Connect ──
+    try {
+      await axios.post(PABBLY_CONNECT_URL, leadData, { timeout: 10000 });
+      syncResults.pabbly = true;
+    } catch (err) { console.error('Pabbly Connect Error:', err.message); }
 
-        // Notify customer
-        await client.messages.create({
-          from: `whatsapp:${process.env.TWILIO_WHATSAPP_NUMBER}`,
-          to:   `whatsapp:${leadData.phone}`,
-          body: `🙏 नमस्कार ${leadData.name}!\n\nAvani Loan Services में आपका स्वागत है।\n\nहमें आपकी ${leadData.loanType ? leadData.loanType.toUpperCase() : 'LOAN'} enquiry मिल गई है।\n\nहमारी टीम 30 मिनट में आपसे संपर्क करेगी।\n\n📞 +91 7249108474\n🌐 www.avanifinserv.com`
-        });
-        syncResults.whatsapp = true;
-      } catch (err) {
-        console.error('Twilio Error:', err.message);
-      }
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: 'Lead processed successfully',
-      lead: { name: leadData.name, phone: leadData.phone, loanType: leadData.loanType },
-      syncResults
-    });
+    return res.status(200).json({ success: true, syncResults });
 
   } catch (error) {
-    console.error('Global Error:', error);
     return res.status(500).json({ success: false, error: error.message });
   }
 }

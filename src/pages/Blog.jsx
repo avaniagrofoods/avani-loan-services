@@ -58,7 +58,7 @@ export default function Blog() {
         <div className="container text-center">
           <h2>Have a Loan Question?</h2>
           <p style={{ color: 'var(--text-light)', marginBottom: 24 }}>Visit us: RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA — WhatsApp us now.</p>
-          <a href="https://wa.me/917249108474" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">💬 WhatsApp for Free Advice</a>
+          <a href="https://wa.me/919175635165" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">💬 WhatsApp for Free Advice</a>
         </div>
       </section>
     </div>

@@ -115,7 +115,7 @@ export default function Documents() {
         <div className="container">
           <div className="docs-tip glass-card">
             💡 <strong>Pro Tip:</strong> Start collecting these documents before applying. Our advisors will review your documents FREE and confirm your eligibility.
-            <a href="https://wa.me/917249108474" target="_blank" rel="noopener noreferrer" className="tip-link"> WhatsApp your docs →</a>
+            <a href="https://wa.me/919175635165" target="_blank" rel="noopener noreferrer" className="tip-link"> WhatsApp your docs →</a>
           </div>
           <div className="docs-list">
             {docs.map((d, i) => <DocAccordion key={i} item={d} />)}

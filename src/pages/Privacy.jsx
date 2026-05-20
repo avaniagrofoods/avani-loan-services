@@ -70,7 +70,7 @@ export default function Privacy() {
             <p>For any privacy-related inquiries, contact us at:</p>
             <ul>
               <li>📧 Email: <a href="mailto:enquiry@avanifinserv.com">enquiry@avanifinserv.com</a></li>
-              <li>📞 Phone: <a href="tel:+917249108474">+91-7249108474</a></li>
+              <li>📞 Phone: <a href="tel:+919175635165">+91-9175635165</a></li>
               <li>📍 Address: RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</li>
             </ul>
 

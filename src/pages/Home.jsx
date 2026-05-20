@@ -152,13 +152,13 @@ export default function Home() {
                 <div className="cibil-contact-details">
                   <p><strong>AVANI LOAN SERVICE – YOUR TRUSTED PARTNER</strong></p>
                   <p>Expert Credit Correction & Loan Consultation</p>
-                  <p>📞 7249108474 | 💬 Dedicated Support</p>
+                  <p>📞 9175635165 | 💬 Dedicated Support</p>
                 </div>
                 <div className="cibil-ctas">
                   <a href="https://b2c.creditsamadhaan.com/?refer_code=FY665935" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
                     Start CIBIL Correction with Avani
                   </a>
-                  <a href="https://wa.me/917249108474?text=I%20want%20to%20fix%20my%20CIBIL%20score%20with%20Avani%20Loan%20Service" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+                  <a href="https://wa.me/919175635165?text=I%20want%20to%20fix%20my%20CIBIL%20score%20with%20Avani%20Loan%20Service" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
                     Chat on WhatsApp
                   </a>
                 </div>
@@ -225,7 +225,7 @@ export default function Home() {
           <p>Our expert advisors in Latur will guide you through the best loan options available.</p>
           <div className="cta-buttons">
             <Link to="/contact" className="btn btn-secondary">Apply Now</Link>
-            <a href="https://wa.me/917249108474" target="_blank" rel="noopener noreferrer" className="btn btn-outline-white">
+            <a href="https://wa.me/919175635165" target="_blank" rel="noopener noreferrer" className="btn btn-outline-white">
               💬 WhatsApp Us
             </a>
           </div>

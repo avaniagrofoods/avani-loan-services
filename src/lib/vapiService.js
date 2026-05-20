@@ -4,7 +4,7 @@
 const VAPI_API_KEY = '006036f2-b1ee-44de-9abd-117cb4298681';
 const VAPI_API_URL = 'https://api.vapi.ai';
 const ASSISTANT_ID = '9f322737-3bb8-467a-95e3-7a66f9a93dc1';
-const PHONE_NUMBER = '+91 7249108474';
+const PHONE_NUMBER = '+91 9175635165';
 
 // AI Prompts for different loan products
 const LOAN_PROMPTS = {

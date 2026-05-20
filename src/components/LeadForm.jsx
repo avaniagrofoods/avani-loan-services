@@ -107,7 +107,7 @@ export default function LeadForm({ compact = false, loanType = '' }) {
       const waMsg = encodeURIComponent(
         `Hello! I'm ${form.name} from ${form.city || 'Maharashtra'}. I'm interested in a ${form.loanType} of ₹${form.amount}. Please contact me at ${form.phone}.`
       );
-      window.open(`https://wa.me/917249108474?text=${waMsg}`, '_blank', 'noopener noreferrer');
+      window.open(`https://wa.me/919175635165?text=${waMsg}`, '_blank', 'noopener noreferrer');
 
       setStatus('success');
     } catch (error) {

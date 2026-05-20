@@ -250,7 +250,7 @@ const AdminDashboard = () => {
       try {
         await vapiService.sendWhatsAppMessage(
           lead.phone,
-          `Hi ${lead.name}! This is a follow-up from Avani Loan Services regarding your ${lead.loanType} inquiry. We have a special offer for you. Call us at +91 7249108474 to know more!`,
+          `Hi ${lead.name}! This is a follow-up from Avani Loan Services regarding your ${lead.loanType} inquiry. We have a special offer for you. Call us at +91 9175635165 to know more!`,
           lead.loanType.split(' ')[0].toLowerCase()
         );
         alert('WhatsApp message sent!');

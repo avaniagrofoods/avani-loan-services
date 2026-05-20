@@ -37,7 +37,7 @@ export default function Contact() {
             <div className="contact-info-card glass-card">
               <h3>📍 Our Office</h3>
               <div className="info-row"><MapPin size={20} /><span>RAJIV GANDHI CHAUK, OPP BANK OF BARODA,<br />ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD,<br />LATUR-413512, MAHARASHTRA INDIA<br /><small>Service Area: All Maharashtra</small></span></div>
-              <div className="info-row"><Phone size={20} /><a href="tel:+917249108474">+91-7249108474</a></div>
+              <div className="info-row"><Phone size={20} /><a href="tel:+919175635165">+91-9175635165</a></div>
               <div className="info-row"><Mail size={20} /><a href="mailto:enquiry@avanifinserv.com">enquiry@avanifinserv.com</a></div>
             </div>
 
@@ -48,7 +48,7 @@ export default function Contact() {
               <div className="hours-row"><span>WhatsApp Support</span><span>24/7</span></div>
             </div>
 
-            <a href="https://wa.me/917249108474?text=Hello! I need help with a loan application. Please connect me." target="_blank" rel="noopener noreferrer" className="wa-contact-btn">
+            <a href="https://wa.me/919175635165?text=Hello! I need help with a loan application. Please connect me." target="_blank" rel="noopener noreferrer" className="wa-contact-btn">
               <MessageCircle size={24} />
               <div>
                 <strong>Chat on WhatsApp</strong>
