@@ -180,7 +180,7 @@ All prompts included in `src/lib/vapiService.js`:
    - Questions: Income, purpose, amount, existing EMI
    - Qualification: ₹15K+ monthly income
 
-2. **Business Loan Agent**
+2. **[[Business Loan](/services/business-loan)](/services/business-loan) Agent**
    - Questions: Business type, turnover, age, purpose
    - Qualification: ₹5L+ annual turnover, 2+ years old
 
@@ -188,11 +188,11 @@ All prompts included in `src/lib/vapiService.js`:
    - Questions: Specialty, income, practice type
    - Qualification: Special rates for medical professionals
 
-4. **Home Loan Agent**
+4. **[[Home Loan](/services/home-loan)](/services/home-loan) Agent**
    - Questions: Property value, desired loan, location
    - Qualification: ₹10L+ property value
 
-5. **Education Loan Agent**
+5. **[Education Loan](/services/education-loan) Agent**
    - Questions: Course, fees, location, parent income
    - Qualification: Moratorium during studies
 

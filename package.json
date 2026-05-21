@@ -6,15 +6,22 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "prebuild": "node scripts/inject-links-to-markdown.js && node scripts/generate-service-pages.js",
     "lint": "eslint .",
     "preview": "vite preview",
+    "generate:services": "node scripts/generate-service-pages.js",
+    "inject:links": "node scripts/inject-links-to-markdown.js",
+    "set-vercel-envs": "bash scripts/set-vercel-envs.sh",
+    "notify:search-engines": "node scripts/ping-sitemap.js",
     "deploy": "npm run build && npx vercel deploy --prod --yes"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "axios": "^1.16.1",
     "jspdf": "^4.2.1",
+    "libsodium-wrappers": "^0.8.4",
     "lucide-react": "^1.8.0",
+    "node-fetch": "^3.3.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.0",
@@ -29,6 +36,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "sharp": "^0.34.5",
     "vite": "^6.0.0"
   }
 }

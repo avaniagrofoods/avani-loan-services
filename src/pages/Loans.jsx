@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import brandLogo from '../assets/avani-brand-logo.png';
 import './Loans.css';
+import services from '../data/services.json';
 
 // Import Images
 import personalImg from '../assets/personal-loan.png';
@@ -122,6 +123,20 @@ export default function Loans() {
           </div>
           <h1>Find the Right Loan for You</h1>
           <p>Explore all loan products with transparent rates, eligibility, and terms</p>
+        </div>
+      </section>
+
+      {/* Quick Links to Service Landing Pages */}
+      <section className="section">
+        <div className="container">
+          <h3>Explore Our Services</h3>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            {services.map((s) => (
+              <Link key={s.slug} to={`/services/${s.slug}`} className="btn btn-outline">
+                {s.h1}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

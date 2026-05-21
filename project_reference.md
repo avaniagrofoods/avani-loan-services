@@ -117,7 +117,7 @@ AVANI LOAN SERVICE FY 26-27/
 | 💳 Loan Products | `/loans` | 6 detailed loan cards with rates, tenure, features |
 | 📊 Eligibility / EMI | `/eligibility` | Live EMI sliders, breakdown chart, qualify card |
 | 📋 Documents | `/documents` | Accordion: docs needed per loan type |
-| 📝 Blog | `/blog` | 10 SEO articles (CIBIL, home loan, education etc.) |
+| 📝 Blog | `/blog` | 10 SEO articles (CIBIL, [[Home Loan](/services/home-loan)](/services/home-loan), education etc.) |
 | 📞 Contact / Apply | `/contact` | Full lead form + WhatsApp + Google Map |
 | 🔒 Privacy Policy | `/privacy` | GDPR-style policy |
 
@@ -128,11 +128,11 @@ AVANI LOAN SERVICE FY 26-27/
 | # | Loan Type | Rate | Max Amount |
 |---|---|---|---|
 | 1 | Salary / Personal Loan | 10.5–18% p.a. | ₹50 Lakhs |
-| 2 | Business Loan | 12–24% p.a. | ₹2 Crores |
-| 3 | Education Loan (India) | 8.15–12% p.a. | ₹75 Lakhs |
+| 2 | [[Business Loan](/services/business-loan)](/services/business-loan) | 12–24% p.a. | ₹2 Crores |
+| 3 | [Education Loan](/services/education-loan) (India) | 8.15–12% p.a. | ₹75 Lakhs |
 | 4 | Education Loan (Abroad) | 9–14% p.a. | ₹1.5 Crores |
 | 5 | Home Loan | 8.5–12% p.a. | ₹5 Crores |
-| 6 | Mortgage / LAP | 9–14% p.a. | ₹10 Crores |
+| 6 | [Mortgage / LAP](/services/mortgage-lap) | 9–14% p.a. | ₹10 Crores |
 
 ---
 

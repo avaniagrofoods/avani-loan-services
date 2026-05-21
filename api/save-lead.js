@@ -9,9 +9,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const PABBLY_CONNECT_URL = "https://connect.pabbly.com/webhook-listener/webhook/IjU3NjIwNTY0MDYzMDA0M2Q1MjY4NTUzNCI_3D_pc/IjU3NjcwNTZlMDYzMDA0MzU1MjZhNTUzYzUxMzIi_pc";
-    const PICKY_ASSIST_URL = "https://app.pickyassist.com/url/5cb2564f744736ff1b4d09e1ebad26748625043e";
-    const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx_BiUDUesN9WC4OK-5eznfKOVqfHS-55enFvWni58dVHVUm08HjIqkFIcVUTnWCKxLXg/exec";
+    const PABBLY_CONNECT_URL = process.env.PABBLY_CONNECT_URL || "";
+    const PICKY_ASSIST_URL = process.env.PICKY_ASSIST_URL || "";
+    const GOOGLE_WEB_APP_URL = process.env.GOOGLE_WEB_APP_URL || "";
     
     const BUSINESS_DETAILS = {
       businessName: "AVANI LOAN SERVICE",
@@ -36,22 +36,28 @@ export default async function handler(req, res) {
     };
 
     // ── 1. Picky Assist (WhatsApp Automation) ──
-    try {
-      await axios.post(PICKY_ASSIST_URL, leadData, { timeout: 10000 });
-      syncResults.pickyAssist = true;
-    } catch (err) { console.error('Picky Assist Error:', err.message); }
+    if (PICKY_ASSIST_URL) {
+      try {
+        await axios.post(PICKY_ASSIST_URL, leadData, { timeout: 10000 });
+        syncResults.pickyAssist = true;
+      } catch (err) { console.error('Picky Assist Error:', err.message); }
+    }
 
     // ── 2. Google Web App (Lead Scorer) ──
-    try {
-      await axios.post(GOOGLE_WEB_APP_URL, leadData, { timeout: 10000 });
-      syncResults.googleWebApp = true;
-    } catch (err) { console.error('Google Web App Error:', err.message); }
+    if (GOOGLE_WEB_APP_URL) {
+      try {
+        await axios.post(GOOGLE_WEB_APP_URL, leadData, { timeout: 10000 });
+        syncResults.googleWebApp = true;
+      } catch (err) { console.error('Google Web App Error:', err.message); }
+    }
 
     // ── 3. Pabbly Connect ──
-    try {
-      await axios.post(PABBLY_CONNECT_URL, leadData, { timeout: 10000 });
-      syncResults.pabbly = true;
-    } catch (err) { console.error('Pabbly Connect Error:', err.message); }
+    if (PABBLY_CONNECT_URL) {
+      try {
+        await axios.post(PABBLY_CONNECT_URL, leadData, { timeout: 10000 });
+        syncResults.pabbly = true;
+      } catch (err) { console.error('Pabbly Connect Error:', err.message); }
+    }
 
     return res.status(200).json({ success: true, syncResults });
 

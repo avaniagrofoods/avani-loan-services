@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Shield, Clock, Award, TrendingUp, Star, Users, CheckCircle, ArrowRight } from 'lucide-react';
 import LeadForm from '../components/LeadForm';
+import services from '../data/services.json';
 import brandLogo from '../assets/avani-brand-logo.png';
 import './Home.css';
 
@@ -134,6 +135,19 @@ export default function Home() {
                 <Link to="/contact" className="btn btn-primary loan-cta">Apply for {loan.title} <ArrowRight size={16} /></Link>
               </div>
             ))}
+          </div>
+
+          {/* Popular Services Quick Links */}
+          <div className="popular-services" style={{ marginTop: 30 }}>
+            <h3>Popular Services</h3>
+            <div className="popular-links">
+              {services.slice(0, 5).map((s) => (
+                <Link key={s.slug} to={`/services/${s.slug}`} className="btn btn-outline" style={{ marginRight: 8 }}>
+                  {s.h1}
+                </Link>
+              ))}
+              <Link to="/services" className="btn btn-link">View all services</Link>
+            </div>
           </div>
 
           {/* CIBIL Correction Section */}

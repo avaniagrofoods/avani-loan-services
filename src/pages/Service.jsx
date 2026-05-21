@@ -1,0 +1,131 @@
+import React, { useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import services from '../data/services.json';
+import generateLongContent from '../utils/generateContent';
+
+export default function Service() {
+  const { slug } = useParams();
+  const service = services.find((s) => s.slug === slug);
+
+  useEffect(() => {
+    if (service) {
+      document.title = service.title;
+
+      const setMeta = (name, content) => {
+        let el = document.querySelector(`meta[name="${name}"]`);
+        if (!el) {
+          el = document.createElement('meta');
+          el.name = name;
+          document.head.appendChild(el);
+        }
+        el.content = content || '';
+      };
+
+      setMeta('description', service.metaDescription || '');
+
+      // Open Graph & Twitter
+      const setProperty = (prop, content) => {
+        let el = document.querySelector(`meta[property="${prop}"]`);
+        if (!el) {
+          el = document.createElement('meta');
+          el.setAttribute('property', prop);
+          document.head.appendChild(el);
+        }
+        el.content = content || '';
+      };
+
+      setProperty('og:title', service.title);
+      setProperty('og:description', service.metaDescription || '');
+      setProperty('og:type', 'website');
+      setProperty('og:url', `${window.location.origin}/services/${service.slug}`);
+      setProperty('og:image', `${window.location.origin}/logo.png`);
+
+      const setNameMeta = (name, content) => {
+        let el = document.querySelector(`meta[name="${name}"]`);
+        if (!el) {
+          el = document.createElement('meta');
+          el.name = name;
+          document.head.appendChild(el);
+        }
+        el.content = content || '';
+      };
+
+      setNameMeta('twitter:card', 'summary_large_image');
+      setNameMeta('twitter:title', service.title);
+      setNameMeta('twitter:description', service.metaDescription || '');
+      setNameMeta('twitter:image', `${window.location.origin}/logo.png`);
+
+      let linkCanonical = document.querySelector('link[rel="canonical"]');
+      if (!linkCanonical) {
+        linkCanonical = document.createElement('link');
+        linkCanonical.rel = 'canonical';
+        document.head.appendChild(linkCanonical);
+      }
+      linkCanonical.href = `${window.location.origin}/services/${service.slug}`;
+
+      // Add hreflang alternates for English and Marathi
+      const addAlternate = (hreflang, href) => {
+        let el = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`);
+        if (!el) {
+          el = document.createElement('link');
+          el.rel = 'alternate';
+          el.hreflang = hreflang;
+          document.head.appendChild(el);
+        }
+        el.href = href;
+      };
+      addAlternate('en', `${window.location.origin}/services/${service.slug}`);
+      addAlternate('mr', `${window.location.origin}/mr/services/${service.slug}`);
+
+      const existing = document.getElementById('service-json-ld');
+      if (existing) existing.remove();
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'service-json-ld';
+      script.text = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: service.h1,
+        description: service.metaDescription,
+        provider: {
+          "@type": "LocalBusiness",
+          name: 'Avani Loan Services',
+          telephone: '+91-9175635165',
+          url: window.location.origin,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: 'RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD',
+            addressLocality: 'Latur',
+            addressRegion: 'Maharashtra',
+            postalCode: '413512',
+            addressCountry: 'IN'
+          }
+        }
+      });
+      document.head.appendChild(script);
+    } else {
+      document.title = 'Service Not Found - Avani Loan Services';
+    }
+  }, [service]);
+
+  if (!service) {
+    return (
+      <div className="container">
+        <h2>Service not found</h2>
+        <p>The requested service does not exist.</p>
+        <Link to="/services">View all services</Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container service-page">
+      <nav style={{ marginBottom: 12 }}>
+        <Link to="/">Home</Link> &nbsp;›&nbsp; <Link to="/services">Services</Link> &nbsp;›&nbsp; <span>{service.h1}</span>
+      </nav>
+
+      <h1>{service.h1}</h1>
+      <div dangerouslySetInnerHTML={{ __html: (service.content && service.content.length > 200) ? service.content : generateLongContent(service) }} />
+    </div>
+  );
+}

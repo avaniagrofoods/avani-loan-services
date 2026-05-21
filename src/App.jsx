@@ -12,6 +12,8 @@ import Blog from './pages/Blog';
 import CibilCheck from './pages/CibilCheck';
 import AIAssistant from './pages/AIAssistant';
 import AdminDashboard from './pages/AdminDashboard';
+import ServicesList from './pages/ServicesList';
+import Service from './pages/Service';
 import WhatsAppButton from './components/WhatsAppButton';
 import './App.css';
 
@@ -30,6 +32,8 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/services" element={<ServicesList />} />
+          <Route path="/services/:slug" element={<Service />} />
           <Route path="/ai-assistant" element={<AIAssistant />} />
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>

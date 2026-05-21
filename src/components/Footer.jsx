@@ -44,11 +44,11 @@ export default function Footer() {
           <div className="footer-col">
             <h4 className="footer-heading">{t('loans')}</h4>
             <ul className="footer-links">
-              <li><Link to="/loans">{language === 'en' ? 'Salary Loan' : language === 'mr' ? 'पगार कर्ज' : 'वेतन ऋण'}</Link></li>
-              <li><Link to="/loans">{language === 'en' ? 'Business Loan' : language === 'mr' ? 'व्यवसाय कर्ज' : 'व्यवसाय ऋण'}</Link></li>
-              <li><Link to="/loans">{language === 'en' ? 'Education Loan' : language === 'mr' ? 'शिक्षण कर्ज' : 'शिक्षा ऋण'}</Link></li>
-              <li><Link to="/loans">{language === 'en' ? 'Home Loan' : language === 'mr' ? 'घर कर्ज' : 'घर ऋण'}</Link></li>
-              <li><Link to="/loans">{language === 'en' ? 'Mortgage / LAP' : language === 'mr' ? 'मॉर्टगेज कर्ज' : 'मॉर्टगेज ऋण'}</Link></li>
+              <li><Link to="/services/salary-loan">{language === 'en' ? 'Salary Loan' : language === 'mr' ? 'पगार कर्ज' : 'वेतन ऋण'}</Link></li>
+              <li><Link to="/services/business-loan">{language === 'en' ? 'Business Loan' : language === 'mr' ? 'व्यवसाय कर्ज' : 'व्यवसाय ऋण'}</Link></li>
+              <li><Link to="/services/education-loan">{language === 'en' ? 'Education Loan' : language === 'mr' ? 'शिक्षण कर्ज' : 'शिक्षा ऋण'}</Link></li>
+              <li><Link to="/services/home-loan">{language === 'en' ? 'Home Loan' : language === 'mr' ? 'घर कर्ज' : 'घर ऋण'}</Link></li>
+              <li><Link to="/services/mortgage-lap">{language === 'en' ? 'Mortgage / LAP' : language === 'mr' ? 'मॉर्टगेज कर्ज' : 'मॉर्टगेज ऋण'}</Link></li>
             </ul>
           </div>
 

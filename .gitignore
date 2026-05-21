@@ -28,3 +28,12 @@ dist-ssr
 .env.*
 !.env.example
 backend/.env
+
+# Ignore generated reference data folder
+Ref Data/
+# Environment files (contain secrets)
+.env
+.env.local
+# IDE / OS specific files
+.vscode/
+.DS_Store
