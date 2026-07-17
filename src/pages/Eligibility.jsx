@@ -1,11 +1,16 @@
 import useSEO from '../hooks/useSEO';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import { CheckCircle2, AlertCircle, ArrowRight, UserCheck, ShieldCheck, Clock, UploadCloud, Lock, Calculator, FileText, Trash2, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
 import { syncLeadData } from '../lib/syncLeads';
 import { saveEnquiry, getEnquiries, deleteEnquiry } from '../lib/db';
 import brandLogo from '../assets/avani-brand-logo.png';
 import './Eligibility.css';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 // ──────────────────────────────────────────────
 // ELIGIBILITY CONFIG PER PROFILE
@@ -128,25 +133,65 @@ export default function Eligibility() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      // Build FormData for multipart upload
-      const formData = new FormData();
-      formData.append('password', adminPassword || 'Samarth@1356');
-
-      // Convert base64 data URLs to Blob and append files
-      const fileAppendPromises = Object.entries(filesMap).flatMap(([docKey, filesArr]) =>
+      // Upload files to Supabase Storage directly
+      const fileUrls = [];
+      const uploadPromises = Object.entries(filesMap).flatMap(([docKey, filesArr]) =>
         filesArr.map(async (f) => {
-          // fetch the data URL to get Blob
           const res = await fetch(f.data);
           const blob = await res.blob();
-          // Append with field name 'files' (multer expects array)
-          formData.append('files', blob, f.name);
+          
+          if (!supabase) {
+            throw new Error('Supabase client is not configured.');
+          }
+
+          const fileExt = f.name.split('.').pop();
+          const uniqueName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+          
+          const { data, error } = await supabase.storage
+            .from('eligibility-docs')
+            .upload(uniqueName, blob, {
+              contentType: blob.type
+            });
+
+          if (error) {
+            console.error('Supabase upload error:', error);
+            throw new Error(`Failed to upload ${f.name}`);
+          }
+
+          const { data: publicUrlData } = supabase.storage
+            .from('eligibility-docs')
+            .getPublicUrl(uniqueName);
+
+          fileUrls.push({
+            originalName: f.name,
+            url: publicUrlData.publicUrl
+          });
         })
       );
-      await Promise.all(fileAppendPromises);
+      await Promise.all(uploadPromises);
 
-      // Send to backend
-      const response = await axios.post('/api/eligibility/process', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+      // Send to backend via JSON payload
+      const payload = {
+        password: adminPassword || 'Samarth@1356',
+        name,
+        phone,
+        email,
+        loanType,
+        subType: loanType === 'Doctor / Professional' ? subType : null,
+        profileKey,
+        monthlyIncome,
+        existingEmi,
+        rate,
+        tenure,
+        age,
+        city,
+        source: 'Website',
+        status: 'New',
+        files: fileUrls
+      };
+
+      const response = await axios.post('/api/eligibility/process', payload, {
+        headers: { 'Content-Type': 'application/json' }
       });
 
       // Save enquiry locally for admin view
