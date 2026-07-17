@@ -42,7 +42,10 @@ export default function SimpleLeadForm() {
         <CheckCircle2 size={64} color="#16a34a" style={{ margin: '0 auto 20px' }} />
         <h3 style={{ color: '#166534', marginBottom: '10px' }}>Application Received!</h3>
         <p style={{ color: '#15803d' }}>Thank you, {formData.name}. Our loan expert will call you on {formData.phone} within 5 minutes for your free consultation.</p>
-        <button onClick={() => setStatus('idle')} className="btn btn-primary" style={{ marginTop: '20px' }}>Send Another Inquiry</button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '20px', alignItems: 'center' }}>
+          <a href={`https://wa.me/919175635165?text=Hi, I submitted an inquiry on your website for a ${formData.loanType}. My name is ${formData.name} and my phone number is ${formData.phone}.`} target="_blank" rel="noopener noreferrer" className="btn" style={{ background: '#25D366', color: '#fff', width: '100%', justifyContent: 'center' }}>Chat on WhatsApp Now</a>
+          <button onClick={() => setStatus('idle')} className="btn" style={{ background: 'transparent', border: '1px solid #16a34a', color: '#16a34a', width: '100%', justifyContent: 'center' }}>Send Another Inquiry</button>
+        </div>
       </div>
     );
   }

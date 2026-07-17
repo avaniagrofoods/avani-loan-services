@@ -1,9 +1,12 @@
+import useSEO from '../hooks/useSEO';
 import SimpleLeadForm from '../components/SimpleLeadForm';
 import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
 import logo from '../assets/avani-brand-logo.png';
 import './Contact.css';
 
 export default function Contact() {
+  useSEO({ title: 'Contact - Avani Loan Services', description: 'Professional loan services in Maharashtra including Home, Business, Personal and Education loans.', keywords: 'Contact, Loan, Avani Finserv, Latur' });
+
   return (
     <div>
       <section className="page-header">
@@ -12,7 +15,7 @@ export default function Contact() {
             <img src={logo} alt="Avani Loan Services" className="page-header-logo" />
             <div>
               <span className="badge">Get in Touch</span>
-              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+              <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
             </div>
           </div>
           <h1>Contact Us — Get Free Loan Consultation</h1>
@@ -36,7 +39,7 @@ export default function Contact() {
           <div className="contact-info-col">
             <div className="contact-info-card glass-card">
               <h3>📍 Our Office</h3>
-              <div className="info-row"><MapPin size={20} /><span>RAJIV GANDHI CHAUK, OPP BANK OF BARODA,<br />ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD,<br />LATUR-413512, MAHARASHTRA INDIA<br /><small>Service Area: All Maharashtra</small></span></div>
+              <div className="info-row"><MapPin size={20} /><span>Old Barshi Road, 5 no Chauk, next to Sai School,<br />KulswaminiNagar, Latur-413531,<br />Maharashtra, India<br /><small>Service Area: All Maharashtra</small></span></div>
               <div className="info-row"><Phone size={20} /><a href="tel:+919175635165">+91-9175635165</a></div>
               <div className="info-row"><Mail size={20} /><a href="mailto:enquiry@avanifinserv.com">enquiry@avanifinserv.com</a></div>
             </div>

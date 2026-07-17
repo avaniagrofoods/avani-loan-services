@@ -24,9 +24,10 @@ const sendToMake = async (data) => {
 
 // Helper to send data to Google Sheets App Script
 const sendToGoogleSheets = async (data) => {
-  if (process.env.GOOGLE_SHEET_APP_SCRIPT_URL) {
+  const scriptUrl = process.env.GOOGLE_SHEET_APP_SCRIPT_URL || process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+  if (scriptUrl) {
     try {
-      await axios.post(process.env.GOOGLE_SHEET_APP_SCRIPT_URL, data);
+      await axios.post(scriptUrl, data);
       console.log('Data synced to Google Sheets');
     } catch (error) {
       console.error('Google Sheets sync error:', error.message);

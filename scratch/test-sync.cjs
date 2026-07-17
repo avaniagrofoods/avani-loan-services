@@ -48,7 +48,7 @@ async function runTest() {
   // 2. Test Google Sheets App Script Directly
   console.log('\nTesting Google Sheets App Script...');
   try {
-    const res = await post('https://script.google.com/macros/s/AKfycbwadPvvLiVgLOUbIcnQm7ZeLEOsh1bamEYVJKi11ub8fZc-EAVugAv2WvgfTc5Izg7A4w/exec', leadData);
+    const res = await post('https://script.google.com/macros/s/AKfycby-BeIa9P8-XoutWpBKRq3SnxG-EcWH9MoEDep1C3Gs9_6lJqA6ZFc5cO44mryIg4qOoQ/exec', leadData);
     console.log('✅ Google Sheets Response:', res.status);
   } catch (error) {
     console.error('❌ Google Sheets Failed:', error.message);

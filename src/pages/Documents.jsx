@@ -1,3 +1,4 @@
+import useSEO from '../hooks/useSEO';
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import brandLogo from '../assets/avani-brand-logo.png';
@@ -27,8 +28,8 @@ const docs = [
     title: 'Education Loan (India)',
     icon: '🎓',
     items: [
-      { category: 'Student Documents', list: ['Mark sheets (10th, 12th, Graduation)', 'Admission letter from college', 'Fee structure from institution', 'Student Aadhaar & PAN Card'] },
-      { category: 'Co-applicant Documents', list: ['PAN & Aadhaar of parent/guardian', 'Income proof of co-applicant', 'Bank statements (6 months)'] },
+      { category: 'Student Documents', list: ['Applicant KYC (Aadhaar & PAN Card)', 'Mark sheets (10th, 12th, Graduation)', 'Admission letter from college', 'Fee structure from institution'] },
+      { category: 'Co-applicant Documents', list: ['Co-applicant KYC (PAN & Aadhaar)', 'Income proof of co-applicant', 'Bank statements (6 months)'] },
       { category: 'Additional', list: ['GRE/GATE score (if applicable)', 'Scholarship proof (if any)', 'Entrance exam result'] },
     ]
   },
@@ -36,15 +37,15 @@ const docs = [
     title: 'Education Loan (Study Abroad)',
     icon: '✈️',
     items: [
-      { category: 'Student Documents', list: ['Offer/admission letter from foreign university', 'Valid passport', 'Test scores (IELTS, TOEFL, GRE, GMAT)', 'Visa (if already obtained)'] },
-      { category: 'Financial Documents', list: ['Co-applicant income proof', 'ITR (2 years)', 'Bank statements (1 year)', 'Property documents (if collateral loan)'] },
+      { category: 'Student Documents', list: ['Applicant KYC (Aadhaar & PAN Card)', 'Offer/admission letter from foreign university', 'Valid passport', 'Test scores (IELTS, TOEFL, GRE, GMAT)', 'Visa (if already obtained)'] },
+      { category: 'Financial Documents', list: ['Co-applicant KYC (PAN & Aadhaar)', 'Co-applicant income proof', 'ITR (2 years)', 'Bank statements (1 year)', 'Property documents (if collateral loan)'] },
     ]
   },
   {
     title: 'Home Loan',
     icon: '🏠',
     items: [
-      { category: 'Personal Documents', list: ['PAN Card', 'Aadhaar Card', 'Photograph'] },
+      { category: 'Personal Documents', list: ['PAN Card', 'Aadhaar Card', 'Photograph', 'Co-applicant KYC (PAN, Aadhaar, Photo)'] },
       { category: 'Income Documents', list: ['Salary slips / ITR (2 years)', 'Form 16 / CA certified accounts', 'Bank statements (6 months)'] },
       { category: 'Property Documents', list: ['Sale agreement / allotment letter', 'Property title deed', 'NOC from builder/society', 'Approved building plan', 'Property tax receipts'] },
     ]
@@ -53,18 +54,27 @@ const docs = [
     title: 'Mortgage / LAP',
     icon: '🏦',
     items: [
-      { category: 'Personal Documents', list: ['PAN Card', 'Aadhaar Card', 'Passport size photo'] },
+      { category: 'Personal Documents', list: ['PAN Card', 'Aadhaar Card', 'Passport size photo', 'Co-applicant KYC (PAN, Aadhaar, Photo)'] },
       { category: 'Income Documents', list: ['Last 3 years ITR', 'Last 6 months bank statements', 'Business financials (if self-employed)'] },
       { category: 'Property Documents', list: ['Original title deed', 'Encumbrance certificate', 'Property tax receipts', 'NOC from co-owners if applicable', 'Valuation report'] },
     ]
   },
   {
-    title: 'Doctor Loan',
+    title: 'Chartered Accountant Loan',
+    icon: '📊',
+    items: [
+      { category: 'Professional Documents', list: ['Certificate of Practice (COP)', 'ICAI Membership Certificate'] },
+      { category: 'Identity & Address Proof', list: ['PAN Card', 'Aadhaar Card', 'Passport size photo'] },
+      { category: 'Financial Documents', list: ['Last 2 years ITR', 'Last 6-12 months bank statements', 'Existing loan details (if any)'] },
+    ]
+  },
+  {
+    title: 'Doctor / Professional Loan',
     icon: '👨‍⚕️',
     items: [
-      { category: 'Professional Documents', list: ['Degree Certificate', 'Medical Registration Certificate (Old & New)', 'PG Certificate', 'Clinic/Hospital Registration'] },
+      { category: 'Professional Documents', list: ['Degree Certificate', 'Registration Certificate (Old & New)', 'Clinic/Hospital Registration'] },
       { category: 'Identity & Address Proof', list: ['PAN Card', 'Aadhaar Card', 'Passport size photo'] },
-      { category: 'Financial Documents', list: ['Last 2 years ITR', 'Last 6 months bank statements (Current & Savings)', 'Existing loan details (if any)'] },
+      { category: 'Financial Documents', list: ['Last 2 years ITR', 'Last 6-12 months bank statements (Current & Savings)', 'Existing loan details (if any)'] },
     ]
   },
 ];
@@ -95,6 +105,8 @@ function DocAccordion({ item }) {
 }
 
 export default function Documents() {
+  useSEO({ title: 'Documents - Avani Loan Services', description: 'Professional loan services in Maharashtra including Home, Business, Personal and Education loans.', keywords: 'Documents, Loan, Avani Finserv, Latur' });
+
   return (
     <div>
       <section className="page-header">
@@ -103,7 +115,7 @@ export default function Documents() {
             <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
             <div>
               <span className="badge">Documentation</span>
-              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+              <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
             </div>
           </div>
           <h1>Documents Required for Each Loan</h1>

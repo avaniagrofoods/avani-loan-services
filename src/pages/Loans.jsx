@@ -1,3 +1,4 @@
+import useSEO from '../hooks/useSEO';
 import { Link } from 'react-router-dom';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import brandLogo from '../assets/avani-brand-logo.png';
@@ -80,20 +81,37 @@ const loans = [
     features: ['Up to 70% of property value', 'Both residential & commercial', 'Minimal documentation', 'Income from all sources considered', 'Top-up loans available'],
   },
   {
-    id: 'doctor',
+    id: 'chartered-accountant',
+    image: businessImg,
+    title: 'Chartered Accountant Loan',
+    tagline: 'Exclusively for CAs',
+    description: 'Specialized professional loan for Chartered Accountants to expand their practice or meet personal needs.',
+    minAmount: '₹5 Lakhs', maxAmount: '₹1 Crore',
+    tenure: '12–60 months',
+    rate: '10.25% – 14.5% p.a.',
+    features: [
+      'Valid COP required',
+      'ICAI Membership active',
+      'No collateral required',
+      'Special rates for CAs',
+      'Quick approvals'
+    ],
+  },
+  {
+    id: 'doctor-professional',
     image: doctorImg,
-    title: 'Doctor Loan',
-    tagline: 'Exclusively for Medical Professionals',
-    description: 'Specialized loan for doctors, dentists, and veterinary professionals to expand their practice, clinics, or personal needs.',
+    title: 'Doctor / Professional Loan',
+    tagline: 'For Medical & Certified Professionals',
+    description: 'Specialized loan for doctors, architects, and certified professionals to expand their practice, clinics, or personal needs.',
     minAmount: '₹5 Lakhs', maxAmount: '₹1 Crore',
     tenure: '12–84 months',
     rate: '10.25% – 14.5% p.a.',
     features: [
-      'Degree Certificate required',
-      'Registration Certificate (Old & New)',
-      'PG Certificate required',
-      'No collateral for clinical equipment',
-      'Special rates for medical practitioners'
+      'Degree / Registration required',
+      'No collateral for equipment',
+      'Special rates for professionals',
+      'Flexible repayment options',
+      'Minimum practice experience'
     ],
   },
   {
@@ -110,6 +128,8 @@ const loans = [
 ];
 
 export default function Loans() {
+  useSEO({ title: 'Loans - Avani Loan Services', description: 'Professional loan services in Maharashtra including Home, Business, Personal and Education loans.', keywords: 'Loans, Loan, Avani Finserv, Latur' });
+
   return (
     <div className="loans-page">
       <section className="page-header">
@@ -118,7 +138,7 @@ export default function Loans() {
             <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
             <div>
               <span className="badge">All Loan Products</span>
-              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+              <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
             </div>
           </div>
           <h1>Find the Right Loan for You</h1>

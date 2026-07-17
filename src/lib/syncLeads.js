@@ -1,6 +1,6 @@
-import { logToGoogleSheets } from './googleSheets';
+import { logToGoogleSheets } from './googleSheets.js';
 
-const MAKE_WEBHOOK_URL = 'https://hook.eu1.make.com/n46s2vx5oil7ptwdhhgsnn9rpm6ck5j0';
+const MAKE_WEBHOOK_URL = process.env.VITE_MAKE_WEBHOOK_URL || process.env.MAKE_WEBHOOK_URL || "https://hook.eu1.make.com/n46s2vx5oil7ptwdhhgsnn9rpm6ck5j0";
 
 /**
  * Centralized function to sync lead data to all platforms in Auto Mode.
@@ -44,7 +44,21 @@ export const syncLeadData = async (data) => {
     console.error('❌ Make.com Sync: Failed', error.message);
   }
 
-  // 3. Backend Sync (for Twilio Notifications)
+  // 3. Google Form Sync (Google Apps Script endpoint)
+  const env = (typeof import.meta !== 'undefined' && import.meta.env) ? import.meta.env : {};
+  const GOOGLE_FORM_URL = env.VITE_GOOGLE_FORM_ENDPOINT || process.env.GOOGLE_FORM_URL || 'https://script.google.com/macros/s/AKfycby-BeIa9P8-XoutWpBKRq3SnxG-EcWH9MoEDep1C3Gs9_6lJqA6ZFc5cO44mryIg4qOoQ/exec';
+  try {
+    const gfResponse = await fetch(GOOGLE_FORM_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(enrichedData)
+    });
+    console.log(`✅ Google Form Sync: ${gfResponse.status} ${gfResponse.statusText}`);
+  } catch (gfError) {
+    console.error('❌ Google Form Sync: Failed', gfError.message);
+  }
+
+  // 4. Backend Sync (for Twilio Notifications)
   try {
     const response = await fetch('/api/save-lead', {
       method: 'POST',

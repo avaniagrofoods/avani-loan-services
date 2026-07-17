@@ -195,7 +195,7 @@ const AIAssistant = () => {
         <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
         <div>
           <h1>{t.title}</h1>
-          <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+          <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
         </div>
       </div>
       <div className="ai-assistant-header">

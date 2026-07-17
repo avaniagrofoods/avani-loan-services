@@ -1,3 +1,4 @@
+import useSEO from '../hooks/useSEO';
 import { Link } from 'react-router-dom';
 import { Shield, Clock, Award, TrendingUp, Star, Users, CheckCircle, ArrowRight } from 'lucide-react';
 import LeadForm from '../components/LeadForm';
@@ -20,6 +21,8 @@ const loanCards = [
   { image: educationImg, title: 'Education Loan', desc: 'Study in India or abroad with loans up to ₹1.5Cr', rate: '8.15% p.a.' },
   { image: homeImg, title: 'Home Loan', desc: 'Realize your dream home with low EMIs for 30 years', rate: '8.5% p.a.' },
   { image: mortgageImg, title: 'Mortgage / LAP', desc: 'Unlock your property value with Loan Against Property', rate: '9% p.a.' },
+  { image: businessImg, title: 'Chartered Accountant Loan', desc: 'Special professional loans for CAs without collateral', rate: '10.5% p.a.' },
+  { image: businessImg, title: 'Doctor / Professional Loan', desc: 'Customized funding for doctors and certified professionals', rate: '10.5% p.a.' },
 ];
 
 const trustBadges = [
@@ -38,6 +41,8 @@ const testimonials = [
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Home() {
+  useSEO({ title: 'Home - Avani Loan Services', description: 'Professional loan services in Maharashtra including Home, Business, Personal and Education loans.', keywords: 'Home, Loan, Avani Finserv, Latur' });
+
   const { t, language } = useLanguage();
 
   return (
@@ -51,7 +56,7 @@ export default function Home() {
             <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
             <div>
               <span className="badge">{t('hero_badge')}</span>
-              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+              <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
             </div>
           </div>
           <div className="hero-text animate-fade-in">

@@ -1,21 +1,33 @@
+import useSEO from '../hooks/useSEO';
 import { Link } from 'react-router-dom';
 import brandLogo from '../assets/avani-brand-logo.png';
+
+// Import local professional images
+import personalImg from '../assets/personal-loan.png';
+import businessImg from '../assets/business-loan.png';
+import educationImg from '../assets/education-loan.png';
+import homeImg from '../assets/home-loan.png';
+import mortgageImg from '../assets/mortgage-loan.png';
+import cibilBanner from '../assets/avani_cibil_banner.png';
+
 import './Blog.css';
 
 const posts = [
-  { id: 1, emoji: '📊', category: 'CIBIL', title: 'CIBIL Score Kaise Badhayein – 7 Proven Tips in 2025', date: 'March 20, 2025', readTime: '6 min read', desc: 'Your CIBIL score is the key to getting any loan in India. Here are 7 expert tips to improve your credit score from 600 to 750+ within 12 months.' },
-  { id: 2, emoji: '🏠', title: 'Complete Guide to Home Loans in Maharashtra 2025', category: 'Home Loan', date: 'March 10, 2025', readTime: '8 min read', desc: 'Everything you need to know about home loans in Maharashtra — eligibility, documents, EMI calculation, and how to get the best rates.' },
-  { id: 3, emoji: '✈️', title: 'How to Fund MBBS Abroad: Education Loans Explained', category: 'Education Loan', date: 'Feb 28, 2025', readTime: '7 min read', desc: 'Planning to study medicine abroad? Our complete guide covers education loans for MBBS in Russia, Philippines, Georgia, Ukraine and more.' },
-  { id: 4, emoji: '💼', title: 'Business Loan vs Working Capital Loan – What\'s Right for You?', category: 'Business Loan', date: 'Feb 15, 2025', readTime: '5 min read', desc: 'Confused between a business term loan and working capital facility? This guide explains both with real examples from Maharashtra businesses.' },
-  { id: 5, emoji: '🏦', title: 'LAP Loan in Latur: How to Get Best Loan Against Property', category: 'Mortgage', date: 'Feb 5, 2025', readTime: '6 min read', desc: 'Loan Against Property is one of the smartest ways to raise large funds at low interest. Here\'s a location-specific guide for Latur property owners.' },
-  { id: 6, emoji: '💳', title: 'Personal Loan Rejection Reasons & How to Avoid Them', category: 'Personal Loan', date: 'Jan 28, 2025', readTime: '5 min read', desc: 'Getting rejected for a personal loan is frustrating. Here are the top 8 reasons banks reject applications and how you can fix them.' },
-  { id: 7, emoji: '📋', title: 'PMAY Scheme for Home Loans: How to Get Government Subsidy', category: 'Home Loan', date: 'Jan 20, 2025', readTime: '7 min read', desc: 'The Pradhan Mantri Awas Yojana gives up to ₹2.67L subsidy on home loans. Complete guide to eligibility and how to apply in Maharashtra.' },
-  { id: 8, emoji: '🎓', title: 'Education Loan for Engineering in India: Top Colleges Guide', category: 'Education Loan', date: 'Jan 10, 2025', readTime: '6 min read', desc: 'A comprehensive guide to education loans for IIT, NIT, private engineering colleges — EMI, moratorium, tax benefits explained.' },
-  { id: 9, emoji: '📈', title: 'How to Calculate Your Loan Eligibility Before Applying', category: 'Tips', date: 'Dec 30, 2024', readTime: '4 min read', desc: 'Before you apply for any loan, calculate your eligibility. Banks allow max 50–60% of your income as EMI. Here\'s the full formula.' },
-  { id: 10, emoji: '🤝', title: 'DSA vs Bank Direct: Which Way to Apply for a Loan?', category: 'Tips', date: 'Dec 20, 2024', readTime: '5 min read', desc: 'Should you apply for a loan via a DSA agent or directly at the bank? We break down the advantages of both approaches honestly.' },
+  { id: 1, image: cibilBanner, category: 'CIBIL', title: 'CIBIL Score Kaise Badhayein – 7 Proven Tips in 2025', date: 'March 20, 2025', readTime: '6 min read', desc: 'Your CIBIL score is the key to getting any loan in India. Here are 7 expert tips to improve your credit score from 600 to 750+ within 12 months.' },
+  { id: 2, image: homeImg, title: 'Complete Guide to Home Loans in Maharashtra 2025', category: 'Home Loan', date: 'March 10, 2025', readTime: '8 min read', desc: 'Everything you need to know about home loans in Maharashtra — eligibility, documents, EMI calculation, and how to get the best rates.' },
+  { id: 3, image: educationImg, title: 'How to Fund MBBS Abroad: Education Loans Explained', category: 'Education Loan', date: 'Feb 28, 2025', readTime: '7 min read', desc: 'Planning to study medicine abroad? Our complete guide covers education loans for MBBS in Russia, Philippines, Georgia, Ukraine and more.' },
+  { id: 4, image: businessImg, title: 'Business Loan vs Working Capital Loan – What\'s Right for You?', category: 'Business Loan', date: 'Feb 15, 2025', readTime: '5 min read', desc: 'Confused between a business term loan and working capital facility? This guide explains both with real examples from Maharashtra businesses.' },
+  { id: 5, image: mortgageImg, title: 'LAP Loan in Latur: How to Get Best Loan Against Property', category: 'Mortgage', date: 'Feb 5, 2025', readTime: '6 min read', desc: 'Loan Against Property is one of the smartest ways to raise large funds at low interest. Here\'s a location-specific guide for Latur property owners.' },
+  { id: 6, image: personalImg, title: 'Personal Loan Rejection Reasons & How to Avoid Them', category: 'Personal Loan', date: 'Jan 28, 2025', readTime: '5 min read', desc: 'Getting rejected for a personal loan is frustrating. Here are the top 8 reasons banks reject applications and how you can fix them.' },
+  { id: 7, image: homeImg, title: 'PMAY Scheme for Home Loans: How to Get Government Subsidy', category: 'Home Loan', date: 'Jan 20, 2025', readTime: '7 min read', desc: 'The Pradhan Mantri Awas Yojana gives up to ₹2.67L subsidy on home loans. Complete guide to eligibility and how to apply in Maharashtra.' },
+  { id: 8, image: educationImg, title: 'Education Loan for Engineering in India: Top Colleges Guide', category: 'Education Loan', date: 'Jan 10, 2025', readTime: '6 min read', desc: 'A comprehensive guide to education loans for IIT, NIT, private engineering colleges — EMI, moratorium, tax benefits explained.' },
+  { id: 9, image: personalImg, title: 'How to Calculate Your Loan Eligibility Before Applying', category: 'Tips', date: 'Dec 30, 2024', readTime: '4 min read', desc: 'Before you apply for any loan, calculate your eligibility. Banks allow max 50–60% of your income as EMI. Here\'s the full formula.' },
+  { id: 10, image: businessImg, title: 'DSA vs Bank Direct: Which Way to Apply for a Loan?', category: 'Tips', date: 'Dec 20, 2024', readTime: '5 min read', desc: 'Should you apply for a loan via a DSA agent or directly at the bank? We break down the advantages of both approaches honestly.' },
 ];
 
 export default function Blog() {
+  useSEO({ title: 'Blog - Avani Loan Services', description: 'Professional loan services in Maharashtra including Home, Business, Personal and Education loans.', keywords: 'Blog, Loan, Avani Finserv, Latur' });
+
   return (
     <div>
       <section className="page-header">
@@ -24,7 +36,7 @@ export default function Blog() {
             <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
             <div>
               <span className="badge">Blog & Tips</span>
-              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+              <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
             </div>
           </div>
           <h1>Loan Tips, Guides & Financial Advice</h1>
@@ -37,7 +49,9 @@ export default function Blog() {
           <div className="blog-grid">
             {posts.map(post => (
               <article key={post.id} className="blog-card glass-card animate-fade-in">
-                <div className="blog-emoji">{post.emoji}</div>
+                <div className="blog-image" style={{ width: '100%', height: '200px', overflow: 'hidden', borderTopLeftRadius: '12px', borderTopRightRadius: '12px', marginBottom: '16px' }}>
+                  <img src={post.image} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
                 <div className="blog-meta">
                   <span className="blog-category">{post.category}</span>
                   <span className="blog-separator">•</span>
@@ -57,7 +71,7 @@ export default function Blog() {
       <section className="blog-cta-section section">
         <div className="container text-center">
           <h2>Have a Loan Question?</h2>
-          <p style={{ color: 'var(--text-light)', marginBottom: 24 }}>Visit us: RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA — WhatsApp us now.</p>
+          <p style={{ color: 'var(--text-light)', marginBottom: 24 }}>Visit us: Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India — WhatsApp us now.</p>
           <a href="https://wa.me/919175635165" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">💬 WhatsApp for Free Advice</a>
         </div>
       </section>

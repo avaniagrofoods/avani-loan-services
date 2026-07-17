@@ -1,3 +1,4 @@
+import useSEO from '../hooks/useSEO';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Award, Users, TrendingUp, ArrowRight } from 'lucide-react';
 import LeadForm from '../components/LeadForm';
@@ -13,6 +14,8 @@ const stats = [
 ];
 
 export default function About() {
+  useSEO({ title: 'About - Avani Loan Services', description: 'Professional loan services in Maharashtra including Home, Business, Personal and Education loans.', keywords: 'About, Loan, Avani Finserv, Latur' });
+
   return (
     <div className="about-page">
       {/* Page Header */}
@@ -22,7 +25,7 @@ export default function About() {
             <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
             <div>
               <span className="badge">About Us</span>
-              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+              <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
             </div>
           </div>
           <h1>Latur's Most Trusted Loan Advisor</h1>
@@ -37,7 +40,7 @@ export default function About() {
             <div className="about-image-block">
               <div className="about-logo-wrapper glass-card">
                 <img src={brandLogo} alt="Avani Loan Services" className="about-logo" />
-                <p className="img-location">📍 RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</p>
+                <p className="img-location">📍 Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</p>
               </div>
               <div className="certifications">
                 <div className="cert-badge"><Award size={18} /> Registered DSA Partner</div>
@@ -49,6 +52,7 @@ export default function About() {
               <h2>We Believe Everyone Deserves Financial Freedom</h2>
               <p><strong>🤝 AVANI LOAN SERVICE IS THE TRUSTED PARTNER OF STAR POWERZ DIGITAL TECHNOLOGIES PVT LTD</strong></p>
               <p><strong>Registered Office:</strong> 5-9-30/5, Level 2, Paigah Plaza, Basheerbagh, Hyderabad, Telangana, India - 500063</p>
+              <p><strong>Owner:</strong> Sachin Shinde</p>
               <p>Avani Loan Services is a Latur-based Direct Selling Agent (DSA) helping individuals, business owners, and students across Maharashtra acquire the right loan product at the right rates.</p>
               <p style={{ marginTop: 16 }}>Founded with a mission to simplify the loan process for common people, we have partnered with 10+ leading banks and NBFCs ensuring you get competitive interest rates without running from branch to branch.</p>
               <ul className="about-points">

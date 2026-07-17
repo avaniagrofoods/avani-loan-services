@@ -24,8 +24,8 @@ export default function Footer() {
               {t('footer_desc')}
             </p>
             <div className="social-links">
-              <a href="#" className="social-link"><FacebookIcon /></a>
-              <a href="#" className="social-link"><InstagramIcon /></a>
+              <a href="https://www.facebook.com/share/17udSqXNrJ/" target="_blank" rel="noopener noreferrer" className="social-link"><FacebookIcon /></a>
+              <a href="https://www.instagram.com/avanifinservlatur?igsh=aGE5aHdzazN0OTk2" target="_blank" rel="noopener noreferrer" className="social-link"><InstagramIcon /></a>
               <a href="#" className="social-link"><LinkedinIcon /></a>
             </div>
           </div>
@@ -48,7 +48,8 @@ export default function Footer() {
               <li><Link to="/services/business-loan">{language === 'en' ? 'Business Loan' : language === 'mr' ? 'व्यवसाय कर्ज' : 'व्यवसाय ऋण'}</Link></li>
               <li><Link to="/services/education-loan">{language === 'en' ? 'Education Loan' : language === 'mr' ? 'शिक्षण कर्ज' : 'शिक्षा ऋण'}</Link></li>
               <li><Link to="/services/home-loan">{language === 'en' ? 'Home Loan' : language === 'mr' ? 'घर कर्ज' : 'घर ऋण'}</Link></li>
-              <li><Link to="/services/mortgage-lap">{language === 'en' ? 'Mortgage / LAP' : language === 'mr' ? 'मॉर्टगेज कर्ज' : 'मॉर्टगेज ऋण'}</Link></li>
+              <li><Link to="/services/chartered-accountant-loan">Chartered Accountant Loan</Link></li>
+               <li><Link to="/services/doctor-professional-loan">Doctor / Professional Loan</Link></li>
             </ul>
           </div>
 
@@ -57,7 +58,7 @@ export default function Footer() {
             <ul className="footer-contact">
               <li>
                 <MapPin size={18} className="contact-icon" />
-                <span>RAJIV GANDHI CHAUK, OPP BANK OF BARODA,<br />ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD,<br />LATUR-413512, MAHARASHTRA INDIA<br /><small>{language === 'en' ? 'Service Area: All Maharashtra' : language === 'mr' ? 'सेवा क्षेत्र: संपूर्ण महाराष्ट्र' : 'सेवा क्षेत्र: पूरे महाराष्ट्र'}</small></span>
+                <span>Old Barshi Road, 5 no Chauk, next to Sai School,<br />KulswaminiNagar, Latur-413531,<br />Maharashtra, India<br /><small>{language === 'en' ? 'Service Area: All Maharashtra' : language === 'mr' ? 'सेवा क्षेत्र: संपूर्ण महाराष्ट्र' : 'सेवा क्षेत्र: पूरे महाराष्ट्र'}</small></span>
               </li>
               <li>
                 <Phone size={18} className="contact-icon" />

@@ -1,9 +1,12 @@
+import useSEO from '../hooks/useSEO';
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import services from '../data/services.json';
 import generateLongContent from '../utils/generateContent';
 
 export default function Service() {
+  useSEO({ title: 'Service - Avani Loan Services', description: 'Professional loan services in Maharashtra including Home, Business, Personal and Education loans.', keywords: 'Service, Loan, Avani Finserv, Latur' });
+
   const { slug } = useParams();
   const service = services.find((s) => s.slug === slug);
 
@@ -94,7 +97,7 @@ export default function Service() {
           url: window.location.origin,
           address: {
             "@type": "PostalAddress",
-            streetAddress: 'RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD',
+            streetAddress: 'Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India',
             addressLocality: 'Latur',
             addressRegion: 'Maharashtra',
             postalCode: '413512',

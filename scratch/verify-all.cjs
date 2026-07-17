@@ -1,5 +1,5 @@
 const CONFIG = {
-    GOOGLE_SHEETS_URL: 'https://script.google.com/macros/s/AKfycbwadPvvLiVgLOUbIcnQm7ZeLEOsh1bamEYVJKi11ub8fZc-EAVugAv2WvgfTc5Izg7A4w/exec',
+    GOOGLE_SHEETS_URL: 'https://script.google.com/macros/s/AKfycby-BeIa9P8-XoutWpBKRq3SnxG-EcWH9MoEDep1C3Gs9_6lJqA6ZFc5cO44mryIg4qOoQ/exec',
     MAKE_WEBHOOK_URL: 'https://hook.eu1.make.com/n46s2vx5oil7ptwdhhgsnn9rpm6ck5j0',
     BACKEND_LOCAL: 'http://localhost:5000/api/save-lead',
     BACKEND_LIVE: 'https://avani-loan-services.vercel.app/api/save-lead'

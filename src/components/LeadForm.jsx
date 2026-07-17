@@ -15,7 +15,7 @@ export default function LeadForm({ compact = false, loanType = '' }) {
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
   const [aiCallStatus, setAICallStatus] = useState('ready'); // ready | calling | connected | ended
 
-  const loanTypes = ['Salary Loan', 'Business Loan', 'Education Loan (India)', 'Education Loan (Abroad)', 'Home Loan', 'Mortgage / LAP'];
+  const loanTypes = ['Salary Loan', 'Business Loan', 'Education Loan (India)', 'Education Loan (Abroad)', 'Home Loan', 'Mortgage / LAP', 'Chartered Accountant Loan', 'Doctor / Professional Loan'];
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 

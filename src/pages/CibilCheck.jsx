@@ -1,3 +1,4 @@
+import useSEO from '../hooks/useSEO';
 import { useState } from 'react';
 import { ShieldCheck, Mail, Phone, User, FileText, Download, CheckCircle, ArrowRight, Lock, AlertTriangle, RefreshCw } from 'lucide-react';
 import { jsPDF } from 'jspdf';
@@ -6,6 +7,8 @@ import brandLogo from '../assets/avani-brand-logo.png';
 import './CibilCheck.css';
 
 export default function CibilCheck() {
+  useSEO({ title: 'CibilCheck - Avani Loan Services', description: 'Professional loan services in Maharashtra including Home, Business, Personal and Education loans.', keywords: 'CibilCheck, Loan, Avani Finserv, Latur' });
+
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -244,7 +247,7 @@ export default function CibilCheck() {
             <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
             <div>
               <span className="badge">Avani Credit Insights</span>
-              <div className="page-header-address">RAJIV GANDHI CHAUK, OPP BANK OF BARODA, ABOVE MONGINIOUS CAKE SHOP, AUSA ROAD, LATUR-413512, MAHARASHTRA INDIA</div>
+              <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
             </div>
           </div>
           <h1>Free CIBIL Score Check</h1>
@@ -260,6 +263,9 @@ export default function CibilCheck() {
               <div className="animate-fade-in">
                 <div className="step-header">
                   <h3>Check Your CIBIL Score</h3>
+                  <p style={{ color: '#64748b', fontSize: '0.9rem', marginTop: '5px', fontWeight: '500' }}>
+                    *Disclaimer: Cibil score should not be accurate it just for refence purpose only.
+                  </p>
                 </div>
 
                 <form onSubmit={handleSubmit}>
@@ -361,6 +367,10 @@ export default function CibilCheck() {
                   <Download size={24} />
                   Download Full CIBIL Report (PDF)
                 </button>
+                <a href={`https://wa.me/919175635165?text=Hi, my name is ${formData.name}. I checked my CIBIL score on your website and my estimated score is ${estimatedScore}. Can you guide me further?`} target="_blank" rel="noopener noreferrer" className="download-report-btn" style={{marginTop: '10px', background: '#25D366', color: 'white', textDecoration: 'none', display: 'flex', justifyContent: 'center'}}>
+                  <MessageCircle size={24} style={{ marginRight: '8px' }} />
+                  Discuss on WhatsApp
+                </a>
                 
                 <div style={{ textAlign: 'center', marginTop: '20px' }}>
                   <button onClick={() => setStep(1)} style={{ background: 'none', border: 'none', color: '#64748b', textDecoration: 'underline', cursor: 'pointer' }}>
