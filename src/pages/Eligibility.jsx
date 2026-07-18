@@ -231,7 +231,8 @@ export default function Eligibility() {
       setIsSuccess(true);
       setAdminOpen(true);
     } catch (err) {
-      alert('Error processing eligibility. Please ensure all files are valid and try again.');
+      const errorMsg = err.response?.data?.message || err.message || 'Unknown error';
+      alert(`Error processing eligibility: ${errorMsg}\n\nPlease ensure all files are valid and try again.`);
       console.error(err);
     } finally {
       setIsSubmitting(false);
