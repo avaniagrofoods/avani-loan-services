@@ -175,7 +175,7 @@ export default function Eligibility() {
         password: adminPassword || 'Samarth@1356',
         name,
         phone,
-        email,
+        email: '',
         loanType,
         subType: loanType === 'Doctor / Professional' ? subType : null,
         profileKey,
@@ -184,7 +184,7 @@ export default function Eligibility() {
         rate,
         tenure,
         age,
-        city,
+        city: '',
         source: 'Website',
         status: 'New',
         files: fileUrls
