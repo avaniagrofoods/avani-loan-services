@@ -74,6 +74,9 @@ export default function Eligibility() {
   const [subType, setSubType] = useState('Salaried');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [city, setCity] = useState('');
+  const [amount, setAmount] = useState('');
   const [monthlyIncome, setMonthlyIncome] = useState('');
   const [existingEmi, setExistingEmi] = useState('');
   const [rate, setRate] = useState('10.5');
@@ -133,96 +136,69 @@ export default function Eligibility() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      // Upload files to Supabase Storage directly
-      const fileUrls = [];
-      const uploadPromises = Object.entries(filesMap).flatMap(([docKey, filesArr]) =>
-        filesArr.map(async (f) => {
-          const res = await fetch(f.data);
-          const blob = await res.blob();
-          
-          if (!supabase) {
-            throw new Error('Supabase client is not configured.');
-          }
+      // ── Build multipart FormData ──────────────────────────────
+      const formData = new FormData();
 
-          const fileExt = f.name.split('.').pop();
-          const uniqueName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-          
-          const { data, error } = await supabase.storage
-            .from('eligibility-docs')
-            .upload(uniqueName, blob, {
-              contentType: blob.type
-            });
+      // Password (required by backend)
+      formData.append('password', adminPassword || 'Samarth@1356');
 
-          if (error) {
-            console.error('Supabase upload error:', error);
-            throw new Error(`Failed to upload ${f.name}`);
-          }
-
-          const { data: publicUrlData } = supabase.storage
-            .from('eligibility-docs')
-            .getPublicUrl(uniqueName);
-
-          fileUrls.push({
-            originalName: f.name,
-            url: publicUrlData.publicUrl
-          });
-        })
-      );
-      await Promise.all(uploadPromises);
-
-      // Send to backend via JSON payload
-      const payload = {
-        password: adminPassword || 'Samarth@1356',
+      // Metadata JSON
+      const meta = {
+        timestamp : new Date().toISOString(),
         name,
         phone,
-        email: '',
+        email,
         loanType,
-        subType: loanType === 'Doctor / Professional' ? subType : null,
-        profileKey,
-        monthlyIncome,
-        existingEmi,
-        rate,
-        tenure,
-        age,
-        city: '',
-        source: 'Website',
-        status: 'New',
-        files: fileUrls
+        amount    : amount || monthlyIncome || '0',
+        city,
+        source    : 'Website',
+        status    : 'Pending',
+        aiCallId  : ''
       };
+      formData.append('metadata', JSON.stringify(meta));
 
-      const response = await axios.post('/api/eligibility/process', payload, {
-        headers: { 'Content-Type': 'application/json' }
+      // Attach all files as actual File/Blob objects
+      for (const [, filesArr] of Object.entries(filesMap)) {
+        for (const f of filesArr) {
+          const res  = await fetch(f.data);
+          const blob = await res.blob();
+          formData.append('files', blob, f.name);
+        }
+      }
+
+      // ── POST to backend ──────────────────────────────────────
+      const response = await axios.post('/api/eligibility/process', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 120000  // 2 min for large files + OCR
       });
 
-      // Save enquiry locally for admin view
+      // ── Save enquiry locally for admin panel ─────────────────
       const income = parseFloat(monthlyIncome) || 0;
       const enquiry = {
         id: Date.now(),
-        name,
-        phone,
-        loanType,
+        name, phone, email, city, loanType,
         subType: loanType === 'Doctor / Professional' ? subType : null,
-        profileKey,
-        monthlyIncome,
-        existingEmi,
-        rate,
-        tenure,
-        age,
-        itrIncome1,
-        itrIncome2,
-        ackIncome,
-        propertyType,
-        files: [], // files are stored on server; include empty array for admin panel
+        profileKey, monthlyIncome, existingEmi, rate, tenure, age,
+        itrIncome1, itrIncome2, ackIncome, propertyType,
+        files: [],
         date: new Date().toISOString()
       };
       await saveEnquiry(enquiry);
-      syncLeadData({ name: name || 'Eligibility User', phone: phone || 'N/A', loanType, amount: 0, income, source: 'Eligibility_Upload', details: `Age: ${age}` });
+      syncLeadData({
+        name: name || 'Eligibility User',
+        phone: phone || 'N/A',
+        loanType,
+        amount: parseFloat(amount) || 0,
+        income,
+        source: 'Eligibility_Upload',
+        details: `City: ${city} | Age: ${age}`
+      });
 
-      // Trigger file download of generated Excel
+      // ── Auto‑download generated Excel ────────────────────────
       if (response.data && response.data.downloadUrl) {
         const link = document.createElement('a');
         link.href = response.data.downloadUrl;
-        link.download = '';
+        link.setAttribute('download', response.data.excelFile || 'Eligibility_Report.xlsx');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -232,8 +208,8 @@ export default function Eligibility() {
       setAdminOpen(true);
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.message || 'Unknown error';
-      alert(`Error processing eligibility: ${errorMsg}\n\nPlease ensure all files are valid and try again.`);
-      console.error(err);
+      alert(`Error processing eligibility: ${errorMsg}\n\nPlease ensure all files are valid (PDF/JPG/PNG, max 10 MB) and try again.`);
+      console.error('[Eligibility] Submit error:', err);
     } finally {
       setIsSubmitting(false);
     }
