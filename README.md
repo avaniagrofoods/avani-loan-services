@@ -1,16 +1,24 @@
-# React + Vite
+# Avani Loan Services - FY 2026-27
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Google Sheet Lead Synchronization
+- **Target Google Sheet URL**: [Avani Eligibility & Lead Database](https://docs.google.com/spreadsheets/d/1rtLbnT1jTv2U_nEbbNu8C9tn1kyKnEMfp1bY8noib2E/edit?gid=0#gid=0)
+- **Spreadsheet ID**: `1rtLbnT1jTv2U_nEbbNu8C9tn1kyKnEMfp1bY8noib2E`
 
-Currently, two official plugins are available:
+## Overview
+Avani Loan Services Eligibility Check Application with automated document OCR, financial statement parsing, Excel report generation, HubSpot CRM sync, Zapier Webhook trigger, and Google Sheets integration.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Getting Started
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+For production deployment details, see [DEPLOY.md](file:///C:/Users/ALPHA-1/Downloads/21MAY2026/SACHIN%20SHINDE%20DOCUMENTS/DEVELOPEMENT%20TOOLS/1-AVANI%20LOAN%20SERVICE%20FY%2026-27/DEPLOY.md).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Google Sheet "Avani Eligibility Data" Gdrive Account avaniloanservices@gmail.com
+Gmail Account/Gdrive Account avaniloanservices@gmail.com
+"https://docs.google.com/spreadsheets/d/1rtLbnT1jTv2U_nEbbNu8C9tn1kyKnEMfp1bY8noib2E/edit?gid=0#gid=0"
 
-## Expanding the ESLint configuration
+## Google Sheet "AVANI LOAN SERVICE FY26-27” GDrive Account avaniloanservicelatur@gmail.com  Gmail Account/Gdrive Account: avaniloanservicelatur@gmail.com 
+https://docs.google.com/spreadsheets/d/1iwWWEB3nJnboJv8nKteOni1bhNgdE-mLlhOhkNSg4Zw/edit?gid=464265849#gid=464265849
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
