@@ -237,32 +237,96 @@ export default function Eligibility() {
     setIsCalculating(true);
     setCalculation(null);
     setTimeout(() => {
-      const income = parseFloat(enq.monthlyIncome) || 0;
+      const declaredMonthly = parseFloat(enq.monthlyIncome) || 0;
       const emi = parseFloat(enq.existingEmi) || 0;
       const r = parseFloat(enq.rate) || 10.5;
       const n = parseFloat(enq.tenure) || 60;
+      const y1 = parseFloat(enq.itrIncome1) || 0;
+      const y2 = parseFloat(enq.itrIncome2) || 0;
 
-      // Profile-based income adjustments
-      let effectiveIncome = income;
-      if ((enq.profileKey === 'Business' || enq.profileKey === 'Doctor_SelfEmployed') && enq.itrIncome1 && enq.itrIncome2) {
-        const avg = (parseFloat(enq.itrIncome1) + parseFloat(enq.itrIncome2)) / 2;
-        effectiveIncome = avg / 12; // monthly from annual ITR avg
+      // ── 1. Calculate Monthly Income from ITR (Annual Avg / 12) ──
+      let itrMonthly = 0;
+      if (y1 > 0 && y2 > 0) {
+        itrMonthly = ((y1 + y2) / 2) / 12;
+      } else if (y1 > 0) {
+        itrMonthly = y1 / 12;
+      } else if (y2 > 0) {
+        itrMonthly = y2 / 12;
       }
 
-      const foir = 0.50;
+      // ── 2. Calculate Extracted Bank Statement Income ─────────────
+      let bankExtractedMonthly = 0;
+      if (enq.files && Array.isArray(enq.files)) {
+        enq.files.forEach(f => {
+          if (f.netIncome || f.salary) {
+            bankExtractedMonthly += (parseFloat(f.netIncome || f.salary) || 0);
+          }
+        });
+      }
+
+      // ── 3. Determine Effective Monthly Income ────────────────────
+      let effectiveIncome = declaredMonthly;
+      let incomeSource = 'Declared Monthly Net Income';
+
+      if (itrMonthly > 0) {
+        if (declaredMonthly > 0) {
+          effectiveIncome = Math.max(declaredMonthly, itrMonthly);
+          incomeSource = itrMonthly > declaredMonthly 
+            ? `ITR Annual Avg (₹${Math.round(itrMonthly).toLocaleString('en-IN')}/mo)` 
+            : `Declared Monthly Net Income (₹${Math.round(declaredMonthly).toLocaleString('en-IN')}/mo)`;
+        } else {
+          effectiveIncome = itrMonthly;
+          incomeSource = `ITR Annual Avg (₹${Math.round(itrMonthly).toLocaleString('en-IN')}/mo)`;
+        }
+      }
+
+      if (bankExtractedMonthly > 0 && bankExtractedMonthly > effectiveIncome) {
+        effectiveIncome = bankExtractedMonthly;
+        incomeSource = `Bank Statement Extracted Income (₹${Math.round(bankExtractedMonthly).toLocaleString('en-IN')}/mo)`;
+      }
+
+      // ── 4. Determine Dynamic FOIR (Fixed Obligation Ratio) ────────
+      let foir = 0.50; // 50% standard
+      if (effectiveIncome >= 100000) foir = 0.55; // 55% for HNI
+      if (effectiveIncome >= 500000 || enq.profileKey === 'Business' || enq.profileKey === 'CA') foir = 0.50; // 50% default for business
+
+      // ── 5. Compute Available EMI Capacity ───────────────────────
       const emiCapacity = effectiveIncome * foir;
       const availableEmi = emiCapacity - emi;
       const docsVerified = (enq.files?.length || 0) > 0;
 
+      // ── 6. Present Value Loan Amount Formula ─────────────────────
       if (availableEmi <= 0) {
-        setCalculation({ eligible: false, maxAmount: 0, availableEmi: 0, docsVerified, profile: enq.profileKey });
+        setCalculation({
+          eligible: false,
+          maxAmount: 0,
+          availableEmi: 0,
+          effectiveIncome: Math.round(effectiveIncome),
+          incomeSource,
+          foirPercent: Math.round(foir * 100),
+          existingEmi: emi,
+          docsVerified,
+          profile: enq.profileKey
+        });
       } else {
         const mRate = r / 100 / 12;
         const amount = availableEmi * (Math.pow(1 + mRate, n) - 1) / (mRate * Math.pow(1 + mRate, n));
-        setCalculation({ eligible: true, maxAmount: Math.round(amount), availableEmi: Math.round(availableEmi), docsVerified, profile: enq.profileKey });
+        setCalculation({
+          eligible: true,
+          maxAmount: Math.round(amount),
+          availableEmi: Math.round(availableEmi),
+          effectiveIncome: Math.round(effectiveIncome),
+          incomeSource,
+          foirPercent: Math.round(foir * 100),
+          existingEmi: emi,
+          rate: r,
+          tenure: n,
+          docsVerified,
+          profile: enq.profileKey
+        });
       }
       setIsCalculating(false);
-    }, 1200);
+    }, 800);
   };
 
   const fmt = n => '₹' + Math.max(0, n).toLocaleString('en-IN');
@@ -641,13 +705,14 @@ export default function Eligibility() {
                               </div>
                               <div className="result-amount">{fmt(calculation.maxAmount)}</div>
                               <p className="result-sub">Maximum Loan Amount Eligible</p>
-                              <div className="result-meta">
-                                <span>Available EMI Capacity: <strong>{fmt(calculation.availableEmi)}/month</strong></span>
-                                <span>Based on 50% FOIR of declared income</span>
+                              <div className="result-meta" style={{ flexDirection: 'column', gap: 6, alignItems: 'flex-start' }}>
+                                <span>Effective Income Used: <strong>{fmt(calculation.effectiveIncome)}/month</strong> ({calculation.incomeSource})</span>
+                                <span>Available EMI Capacity: <strong>{fmt(calculation.availableEmi)}/month</strong> (after deducting {fmt(calculation.existingEmi)} existing EMIs)</span>
+                                <span>Applied FOIR: <strong>{calculation.foirPercent}%</strong> · Rate: <strong>{calculation.rate}% p.a.</strong> · Tenure: <strong>{calculation.tenure} months</strong></span>
                               </div>
                               {!calculation.eligible && (
                                 <p style={{ marginTop: 12, color: '#fca5a5', fontSize: '0.9rem' }}>
-                                  Existing EMIs exceed 50% of income. Suggest debt consolidation or adding a co-applicant.
+                                  Existing EMIs ({fmt(calculation.existingEmi)}) exceed {calculation.foirPercent}% FOIR of effective monthly income ({fmt(calculation.effectiveIncome)}). Suggest debt consolidation or adding a co-applicant.
                                 </p>
                               )}
                             </div>
