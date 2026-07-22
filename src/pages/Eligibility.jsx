@@ -16,13 +16,6 @@ const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supa
 // ELIGIBILITY CONFIG PER PROFILE
 // ──────────────────────────────────────────────
 const PROFILE_DOCS = {
-  // Salary / Personal
-  Salary: [
-    { key: 'identity_proof', label: 'Identity Proof (Aadhaar, PAN, Passport or Voter ID)', hint: 'Any 1: Aadhaar Card, PAN Card, Passport, Voter ID', multiple: true },
-    { key: 'salary_slips', label: '3 Months Salary Slips (Latest)', hint: 'Last 3 months salary slips from employer — used to calculate average monthly net salary', multiple: true },
-    { key: 'bank_statements', label: '6 or 12 Months Bank Statements', hint: 'Last 6 months (minimum) or 12 months bank statements showing salary credits', multiple: true },
-    { key: 'form16', label: 'Form 16 (Last 2 Years)', hint: 'Form 16 Part A & B issued by employer for last 2 financial years', multiple: true },
-  ],
   Personal: [
     { key: 'identity_proof', label: 'Identity Proof (Aadhaar, PAN, Passport, or Voter\'s ID)', hint: 'Any 1: Aadhaar Card, PAN Card, Passport, Voter\'s ID', multiple: true },
     { key: 'address_proof', label: 'Address Proof (Aadhaar, Utility Bill, or Driving License)', hint: 'Any 1: Aadhaar Card, Utility Bill (last 3 months), Driving License', multiple: true },
@@ -33,12 +26,6 @@ const PROFILE_DOCS = {
     { key: 'identity_address', label: 'Identity & Address Proof (Individual + Business PAN, Aadhaar, GST)', hint: 'PAN Card (Individual & Business), Aadhaar Card, GST Registration Certificate', multiple: true },
     { key: 'business_docs', label: 'Business Documents (Udyam / Shop Act, Partnership Deed / MOA)', hint: 'Business Registration / Udyam Certificate, Shop & Establishment Certificate, Partnership Deed / MOA (if applicable)', multiple: true },
     { key: 'financial_docs', label: 'Financial Documents (Last 2 Years ITR, Bank Statements, Balance Sheet)', hint: 'Last 2 years ITR with CA stamp (Acknowledgement, Computation, P&L, Balance Sheet), Last 12 months bank statements, and Last 2 years audited balance sheet', multiple: true },
-  ],
-  // Mortgage / LAP
-  'Mortgage / LAP': [
-    { key: 'identity_address', label: 'Identity & Address Proof (PAN, Aadhaar)', hint: 'PAN Card, Aadhaar Card', multiple: true },
-    { key: 'income_docs', label: 'Income Documents (Salary Slips / ITR, Bank Statements)', hint: 'Last 3 months salary slips or Last 2 years ITR + 12 months bank statements', multiple: true },
-    { key: 'property_docs', label: 'Property Documents (Title Deed, Valuation Report, NOC)', hint: 'Title deed / Sale deed, Registered valuation report, NOC from existing lender (if any), Property tax receipts', multiple: true },
   ],
   Doctor_Professional_Salaried: [
     { key: 'identity_address', label: 'Identity & Address Proof (PAN, Aadhaar, Photo)', hint: 'PAN Card, Aadhaar Card, Passport size photo', multiple: true },
@@ -69,19 +56,6 @@ const PROFILE_DOCS = {
     { key: 'student_docs', label: 'Student Academic, Passport & KYC (Aadhaar, PAN, Admission, Test Scores, Visa)', hint: 'Student KYC, Admission letter, Valid Passport, Test scores (IELTS/TOEFL/GRE/GMAT), Visa (if obtained)', multiple: true },
     { key: 'coapp_docs', label: 'Co-applicant Financial Documents (KYC, Income Proof, ITR, Property)', hint: 'Co-applicant KYC, Income proof, 2 years ITR, 1 year bank statements, and Property documents (if collateral)', multiple: true },
   ],
-};
-
-// Product rules (mirrors server-side eligibilityEngine.cjs)
-const LOAN_PRODUCT_RULES = {
-  'Salary'                               : { foir: 0.50, foirHNI: 0.55, hni: 100000, roi: 10.5, maxTenure: 60,  maxLoan: 5000000 },
-  'Personal'                             : { foir: 0.50, foirHNI: 0.55, hni: 100000, roi: 10.5, maxTenure: 60,  maxLoan: 5000000 },
-  'Business'                             : { foir: 0.50, foirHNI: 0.50, hni: 500000, roi: 13.0, maxTenure: 84,  maxLoan: 50000000 },
-  'Mortgage / LAP'                       : { foir: 0.50, foirHNI: 0.55, hni: 100000, roi: 9.5,  maxTenure: 180, maxLoan: 100000000, ltv: 0.60 },
-  'Home'                                 : { foir: 0.50, foirHNI: 0.55, hni: 100000, roi: 8.5,  maxTenure: 300, maxLoan: 100000000, ltv: 0.80 },
-  'Education_India'                      : { foir: 0.40, foirHNI: 0.45, hni: 80000,  roi: 11.5, maxTenure: 120, maxLoan: 5000000 },
-  'Education_Global'                     : { foir: 0.40, foirHNI: 0.45, hni: 80000,  roi: 12.0, maxTenure: 180, maxLoan: 15000000 },
-  'Doctor / Professional'                : { foir: 0.55, foirHNI: 0.60, hni: 150000, roi: 10.0, maxTenure: 84,  maxLoan: 20000000 },
-  'CA'                                   : { foir: 0.55, foirHNI: 0.60, hni: 150000, roi: 10.0, maxTenure: 84,  maxLoan: 10000000 },
 };
 
 function getProfileKey(loanType, subType) {
@@ -263,102 +237,92 @@ export default function Eligibility() {
     setIsCalculating(true);
     setCalculation(null);
     setTimeout(() => {
-      const declaredMonthly  = parseFloat(enq.monthlyIncome)  || 0;
-      const emi              = parseFloat(enq.existingEmi)    || 0;
-      const y1               = parseFloat(enq.itrIncome1)     || 0;
-      const y2               = parseFloat(enq.itrIncome2)     || 0;
-      const salarySlipAvg    = parseFloat(enq.salarySlipAvg)  || 0;
-      const bankAvgIncome    = parseFloat(enq.bankAvgIncome)   || 0;
-      const propertyValue    = parseFloat(enq.propertyValue)  || 0;
+      const declaredMonthly = parseFloat(enq.monthlyIncome) || 0;
+      const emi = parseFloat(enq.existingEmi) || 0;
+      const r = parseFloat(enq.rate) || 10.5;
+      const n = parseFloat(enq.tenure) || 60;
+      const y1 = parseFloat(enq.itrIncome1) || 0;
+      const y2 = parseFloat(enq.itrIncome2) || 0;
 
-      // ── Product rules ─────────────────────────────────────────────
-      const rule = LOAN_PRODUCT_RULES[enq.loanType] || LOAN_PRODUCT_RULES['Personal'];
-      const r    = parseFloat(enq.rate)   || rule.roi;
-      const n    = parseFloat(enq.tenure) || rule.maxTenure;
-
-      // ── 1. Income Sources (pick highest, same as server engine) ──
-      const sources = [];
-      if (salarySlipAvg > 0)    sources.push({ v: salarySlipAvg,                      label: `Salary Slip 3-Month Avg (₹${Math.round(salarySlipAvg).toLocaleString('en-IN')}/mo)` });
-      if (declaredMonthly > 0)  sources.push({ v: declaredMonthly,                     label: `Declared Monthly Net Income (₹${Math.round(declaredMonthly).toLocaleString('en-IN')}/mo)` });
-
-      // ITR 2-year average
+      // ── 1. Calculate Monthly Income from ITR (Annual Avg / 12) ──
       let itrMonthly = 0;
-      if (y1 > 0 && y2 > 0)    { itrMonthly = ((y1 + y2) / 2) / 12; sources.push({ v: itrMonthly, label: `ITR 2-Year Avg (Y1=₹${y1.toLocaleString('en-IN')}, Y2=₹${y2.toLocaleString('en-IN')}) → ₹${Math.round(itrMonthly).toLocaleString('en-IN')}/mo` }); }
-      else if (y1 > 0)          { itrMonthly = y1 / 12; sources.push({ v: itrMonthly,  label: `ITR Year-1 Annual Avg → ₹${Math.round(itrMonthly).toLocaleString('en-IN')}/mo` }); }
-      else if (y2 > 0)          { itrMonthly = y2 / 12; sources.push({ v: itrMonthly,  label: `ITR Year-2 Annual Avg → ₹${Math.round(itrMonthly).toLocaleString('en-IN')}/mo` }); }
-
-      // Bank statement (70% of average credits — excludes non-income credits)
-      if (bankAvgIncome > 0)    sources.push({ v: Math.round(bankAvgIncome * 0.70),   label: `Bank Statement (70% of ₹${Math.round(bankAvgIncome).toLocaleString('en-IN')}/mo)` });
-
-      // Document-extracted income (from parsed PDFs)
-      let bankExtracted = 0;
-      if (enq.files && Array.isArray(enq.files)) {
-        enq.files.forEach(f => { bankExtracted += (parseFloat(f.netIncome || f.salary) || 0); });
+      if (y1 > 0 && y2 > 0) {
+        itrMonthly = ((y1 + y2) / 2) / 12;
+      } else if (y1 > 0) {
+        itrMonthly = y1 / 12;
+      } else if (y2 > 0) {
+        itrMonthly = y2 / 12;
       }
-      if (bankExtracted > 0)    sources.push({ v: bankExtracted, label: `Extracted from Uploaded Docs (₹${Math.round(bankExtracted).toLocaleString('en-IN')}/mo)` });
 
-      // Best (highest) income source
-      let best = { v: 0, label: 'No income provided' };
-      for (const s of sources) { if (s.v > best.v) best = s; }
-      const effectiveIncome = best.v;
+      // ── 2. Calculate Extracted Bank Statement Income ─────────────
+      let bankExtractedMonthly = 0;
+      if (enq.files && Array.isArray(enq.files)) {
+        enq.files.forEach(f => {
+          if (f.netIncome || f.salary) {
+            bankExtractedMonthly += (parseFloat(f.netIncome || f.salary) || 0);
+          }
+        });
+      }
 
-      // ── 2. FOIR (product-specific) ────────────────────────────────
-      const foir = effectiveIncome >= rule.hni ? rule.foirHNI : rule.foir;
+      // ── 3. Determine Effective Monthly Income ────────────────────
+      let effectiveIncome = declaredMonthly;
+      let incomeSource = 'Declared Monthly Net Income';
 
-      // ── 3. EMI capacity ───────────────────────────────────────────
-      const emiCapacity  = effectiveIncome * foir;
-      const availableEmi = Math.max(0, emiCapacity - emi);
+      if (itrMonthly > 0) {
+        if (declaredMonthly > 0) {
+          effectiveIncome = Math.max(declaredMonthly, itrMonthly);
+          incomeSource = itrMonthly > declaredMonthly 
+            ? `ITR Annual Avg (₹${Math.round(itrMonthly).toLocaleString('en-IN')}/mo)` 
+            : `Declared Monthly Net Income (₹${Math.round(declaredMonthly).toLocaleString('en-IN')}/mo)`;
+        } else {
+          effectiveIncome = itrMonthly;
+          incomeSource = `ITR Annual Avg (₹${Math.round(itrMonthly).toLocaleString('en-IN')}/mo)`;
+        }
+      }
+
+      if (bankExtractedMonthly > 0 && bankExtractedMonthly > effectiveIncome) {
+        effectiveIncome = bankExtractedMonthly;
+        incomeSource = `Bank Statement Extracted Income (₹${Math.round(bankExtractedMonthly).toLocaleString('en-IN')}/mo)`;
+      }
+
+      // ── 4. Determine Dynamic FOIR (Fixed Obligation Ratio) ────────
+      let foir = 0.50; // 50% standard
+      if (effectiveIncome >= 100000) foir = 0.55; // 55% for HNI
+      if (effectiveIncome >= 500000 || enq.profileKey === 'Business' || enq.profileKey === 'CA') foir = 0.50; // 50% default for business
+
+      // ── 5. Compute Available EMI Capacity ───────────────────────
+      const emiCapacity = effectiveIncome * foir;
+      const availableEmi = emiCapacity - emi;
       const docsVerified = (enq.files?.length || 0) > 0;
 
+      // ── 6. Present Value Loan Amount Formula ─────────────────────
       if (availableEmi <= 0) {
         setCalculation({
           eligible: false,
           maxAmount: 0,
           availableEmi: 0,
-          emiCapacity: Math.round(emiCapacity),
           effectiveIncome: Math.round(effectiveIncome),
-          incomeSource: best.label,
-          allSources: sources,
+          incomeSource,
           foirPercent: Math.round(foir * 100),
           existingEmi: emi,
-          itrMonthly: Math.round(itrMonthly),
           docsVerified,
-          profile: enq.loanType,
-          rate: r, tenure: n
+          profile: enq.profileKey
         });
       } else {
-        // PV formula: max loan from available EMI
         const mRate = r / 100 / 12;
-        let maxAmount = Math.round(availableEmi * (Math.pow(1 + mRate, n) - 1) / (mRate * Math.pow(1 + mRate, n)));
-
-        // LTV cap for secured loans
-        if (propertyValue > 0 && rule.ltv) {
-          maxAmount = Math.min(maxAmount, Math.round(propertyValue * rule.ltv));
-        }
-        maxAmount = Math.min(maxAmount, rule.maxLoan);
-
-        // EMI for this loan
-        const emiForLoan = Math.round(maxAmount * mRate * Math.pow(1 + mRate, n) / (Math.pow(1 + mRate, n) - 1));
-        const totalInterest = Math.round(emiForLoan * n - maxAmount);
-
+        const amount = availableEmi * (Math.pow(1 + mRate, n) - 1) / (mRate * Math.pow(1 + mRate, n));
         setCalculation({
           eligible: true,
-          maxAmount,
+          maxAmount: Math.round(amount),
           availableEmi: Math.round(availableEmi),
-          emiCapacity: Math.round(emiCapacity),
-          emiForLoan,
-          totalInterest,
           effectiveIncome: Math.round(effectiveIncome),
-          incomeSource: best.label,
-          allSources: sources,
+          incomeSource,
           foirPercent: Math.round(foir * 100),
           existingEmi: emi,
-          itrMonthly: Math.round(itrMonthly),
-          rate: r, tenure: n,
+          rate: r,
+          tenure: n,
           docsVerified,
-          profile: enq.loanType,
-          propertyValue: Math.round(propertyValue),
-          ltvCap: rule.ltv ? Math.round(propertyValue * rule.ltv) : null,
+          profile: enq.profileKey
         });
       }
       setIsCalculating(false);
@@ -391,22 +355,18 @@ export default function Eligibility() {
 
             {/* Profile Tabs */}
             <div className="calc-tabs">
-              {[
-                { key: 'Salary',              label: 'Salary Loan' },
-                { key: 'Business',            label: 'Business Loan' },
-                { key: 'Mortgage / LAP',      label: 'Mortgage / LAP' },
-                { key: 'Home',                label: 'Home Loan' },
-                { key: 'Education_India',     label: 'Education (India)' },
-                { key: 'Education_Global',    label: 'Education (Global)' },
-                { key: 'Doctor / Professional', label: 'Doctor / Professional' },
-                { key: 'CA',                  label: 'Chartered Accountant' },
-              ].map(({ key: t, label }) => (
+              {['Personal', 'Business', 'CA', 'Doctor / Professional', 'Home', 'Education_India', 'Education_Global'].map(t => (
                 <button
                   key={t}
                   className={loanType === t ? 'active' : ''}
                   onClick={() => { setLoanType(t); setFilesMap({}); }}
                 >
-                  {label}
+                  {t === 'Personal' ? 'Personal / Salary' :
+                   t === 'Home' ? 'Home / Mortgage' :
+                   t === 'Education_India' ? 'Education (India)' :
+                   t === 'Education_Global' ? 'Education (Global)' :
+                   t === 'CA' ? 'Chartered Accountant' :
+                   t}
                 </button>
               ))}
             </div>
@@ -739,53 +699,20 @@ export default function Eligibility() {
                                     {calculation.eligible ? '✅ ELIGIBLE' : '❌ NOT ELIGIBLE'}
                                   </h4>
                                   <span style={{ fontSize: '0.85rem', opacity: 0.7 }}>
-                                    Product: {calculation.profile} · Docs: {calculation.docsVerified ? '✅ Verified' : '⚠️ Not uploaded'}
+                                    Profile: {calculation.profile} · Docs Verified: {calculation.docsVerified ? 'Yes' : 'No'}
                                   </span>
                                 </div>
                               </div>
-
-                              {/* Max eligible amount */}
                               <div className="result-amount">{fmt(calculation.maxAmount)}</div>
-                              <p className="result-sub">Maximum Eligible Loan Amount</p>
-
-                              {/* Detailed breakdown */}
-                              <div className="result-meta" style={{ flexDirection: 'column', gap: 8, alignItems: 'flex-start', marginTop: 16 }}>
-                                <span>📊 <strong>Income Used:</strong> {fmt(calculation.effectiveIncome)}/month</span>
-                                <span style={{ fontSize: '0.82rem', color: '#94a3b8', paddingLeft: 20 }}>{calculation.incomeSource}</span>
-
-                                {calculation.itrMonthly > 0 && (
-                                  <span>📋 <strong>ITR Monthly Avg:</strong> {fmt(calculation.itrMonthly)}/month</span>
-                                )}
-
-                                <span>📌 <strong>FOIR Applied:</strong> {calculation.foirPercent}% → EMI capacity {fmt(calculation.emiCapacity)}/month</span>
-                                <span>💳 <strong>Existing EMIs:</strong> {fmt(calculation.existingEmi)}/month → Available: {fmt(calculation.availableEmi)}/month</span>
-                                <span>📅 <strong>Rate:</strong> {calculation.rate}% p.a. · <strong>Tenure:</strong> {calculation.tenure} months ({Math.round(calculation.tenure/12)} yrs)</span>
-
-                                {calculation.emiForLoan > 0 && (
-                                  <span>💰 <strong>EMI for this loan:</strong> {fmt(calculation.emiForLoan)}/month · <strong>Total Interest:</strong> {fmt(calculation.totalInterest)}</span>
-                                )}
-
-                                {calculation.ltvCap && calculation.propertyValue > 0 && (
-                                  <span>🏠 <strong>Property Value:</strong> {fmt(calculation.propertyValue)} → LTV Cap: {fmt(calculation.ltvCap)}</span>
-                                )}
-
-                                {/* All income sources compared */}
-                                {calculation.allSources?.length > 1 && (
-                                  <div style={{ marginTop: 8, background: '#1e293b', borderRadius: 6, padding: '10px 14px', width: '100%' }}>
-                                    <strong style={{ fontSize: '0.82rem', color: '#94a3b8' }}>All Income Sources Compared:</strong>
-                                    {calculation.allSources.map((s, i) => (
-                                      <div key={i} style={{ fontSize: '0.8rem', color: '#64748b', marginTop: 4 }}>
-                                        {s.label}
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
+                              <p className="result-sub">Maximum Loan Amount Eligible</p>
+                              <div className="result-meta" style={{ flexDirection: 'column', gap: 6, alignItems: 'flex-start' }}>
+                                <span>Effective Income Used: <strong>{fmt(calculation.effectiveIncome)}/month</strong> ({calculation.incomeSource})</span>
+                                <span>Available EMI Capacity: <strong>{fmt(calculation.availableEmi)}/month</strong> (after deducting {fmt(calculation.existingEmi)} existing EMIs)</span>
+                                <span>Applied FOIR: <strong>{calculation.foirPercent}%</strong> · Rate: <strong>{calculation.rate}% p.a.</strong> · Tenure: <strong>{calculation.tenure} months</strong></span>
                               </div>
-
                               {!calculation.eligible && (
-                                <p style={{ marginTop: 12, color: '#fca5a5', fontSize: '0.9rem', background: 'rgba(239,68,68,0.1)', borderRadius: 6, padding: '10px 14px' }}>
-                                  ⚠️ Existing EMIs ({fmt(calculation.existingEmi)}) exceed {calculation.foirPercent}% FOIR on effective income ({fmt(calculation.effectiveIncome)}/mo).
-                                  Suggestions: add a co-applicant, reduce existing debt, or increase income proof.
+                                <p style={{ marginTop: 12, color: '#fca5a5', fontSize: '0.9rem' }}>
+                                  Existing EMIs ({fmt(calculation.existingEmi)}) exceed {calculation.foirPercent}% FOIR of effective monthly income ({fmt(calculation.effectiveIncome)}). Suggest debt consolidation or adding a co-applicant.
                                 </p>
                               )}
                             </div>
