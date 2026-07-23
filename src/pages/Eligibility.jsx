@@ -82,10 +82,6 @@ export default function Eligibility() {
   const [rate, setRate] = useState('10.5');
   const [tenure, setTenure] = useState('60');
   const [age, setAge] = useState('30');
-  const [cibilScore, setCibilScore] = useState('750');
-  const [dpdCount, setDpdCount] = useState('0');
-  const [hasDefaults, setHasDefaults] = useState(false);
-  const [propertyValue, setPropertyValue] = useState('');
   const [itrIncome1, setItrIncome1] = useState('');
   const [itrIncome2, setItrIncome2] = useState('');
   const [ackIncome, setAckIncome] = useState('');
@@ -688,7 +684,7 @@ export default function Eligibility() {
                             disabled={isCalculating}
                           >
                             <Calculator size={22} />
-                            {isCalculating ? 'Analysing Documents & Calculating...' : '⚡ Master Eligibility Calculator'}
+                            {isCalculating ? 'Analysing Documents & Calculating...' : '⚡ Eligibility Calculator'}
                           </button>
 
                           {/* ── RESULT ── */}
@@ -700,54 +696,25 @@ export default function Eligibility() {
                                   : <AlertCircle size={32} color="#ef4444" />}
                                 <div>
                                   <h4 style={{ margin: '0 0 2px' }}>
-                                    {calculation.eligible ? '✅ PRE-SANCTION ELIGIBLE' : '❌ NOT ELIGIBLE'}
+                                    {calculation.eligible ? '✅ ELIGIBLE' : '❌ NOT ELIGIBLE'}
                                   </h4>
                                   <span style={{ fontSize: '0.85rem', opacity: 0.7 }}>
-                                    Profile: {calculation.profile} · Approval Probability: <strong>{calculation.approvalChance || 'High'}</strong>
+                                    Profile: {calculation.profile} · Docs Verified: {calculation.docsVerified ? 'Yes' : 'No'}
                                   </span>
                                 </div>
                               </div>
                               <div className="result-amount">{fmt(calculation.maxAmount)}</div>
-                              <p className="result-sub">Maximum Eligible Loan Amount</p>
-
-                              {/* ── Underwriting Key Metrics ── */}
-                              <div className="result-meta" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, margin: '16px 0', background: 'rgba(255,255,255,0.05)', padding: 14, borderRadius: 8 }}>
-                                <div><span style={{ opacity: 0.7, fontSize: '0.8rem' }}>Effective Monthly Income:</span><br/><strong>{fmt(calculation.effectiveIncome)}/mo</strong></div>
-                                <div><span style={{ opacity: 0.7, fontSize: '0.8rem' }}>Applied FOIR Cap:</span><br/><strong>{calculation.foirPercent}%</strong></div>
-                                <div><span style={{ opacity: 0.7, fontSize: '0.8rem' }}>Net Disposable Income (NDI):</span><br/><strong>{fmt(calculation.ndi || 0)}/mo</strong></div>
-                                <div><span style={{ opacity: 0.7, fontSize: '0.8rem' }}>Credit Risk Level:</span><br/><strong style={{ color: calculation.riskLevel === 'High' ? '#f87171' : '#4ade80' }}>{calculation.riskLevel || 'Low'} Risk</strong></div>
+                              <p className="result-sub">Maximum Loan Amount Eligible</p>
+                              <div className="result-meta" style={{ flexDirection: 'column', gap: 6, alignItems: 'flex-start' }}>
+                                <span>Effective Income Used: <strong>{fmt(calculation.effectiveIncome)}/month</strong> ({calculation.incomeSource})</span>
+                                <span>Available EMI Capacity: <strong>{fmt(calculation.availableEmi)}/month</strong> (after deducting {fmt(calculation.existingEmi)} existing EMIs)</span>
+                                <span>Applied FOIR: <strong>{calculation.foirPercent}%</strong> · Rate: <strong>{calculation.rate}% p.a.</strong> · Tenure: <strong>{calculation.tenure} months</strong></span>
                               </div>
-
-                              {/* ── Recommended Banks ── */}
-                              {calculation.recommendedLenders?.length > 0 && (
-                                <div style={{ marginTop: 16, background: 'rgba(255,255,255,0.03)', padding: 12, borderRadius: 8, textAlign: 'left' }}>
-                                  <h5 style={{ color: '#c9a84c', margin: '0 0 8px', fontSize: '0.9rem' }}>🏛️ Recommended Lenders & NBFC Partners:</h5>
-                                  <ul style={{ margin: 0, paddingLeft: 18, fontSize: '0.85rem', color: '#cbd5e1' }}>
-                                    {calculation.recommendedLenders.map((l, i) => (
-                                      <li key={i}><strong>{l.name}</strong> — {l.note}</li>
-                                    ))}
-                                  </ul>
-                                </div>
+                              {!calculation.eligible && (
+                                <p style={{ marginTop: 12, color: '#fca5a5', fontSize: '0.9rem' }}>
+                                  Existing EMIs ({fmt(calculation.existingEmi)}) exceed {calculation.foirPercent}% FOIR of effective monthly income ({fmt(calculation.effectiveIncome)}). Suggest debt consolidation or adding a co-applicant.
+                                </p>
                               )}
-
-                              {/* ── Risk & Positives ── */}
-                              <div style={{ marginTop: 14, fontSize: '0.85rem', textAlign: 'left' }}>
-                                {calculation.riskFactors?.length > 0 && (
-                                  <div style={{ color: '#fca5a5', marginBottom: 6 }}>
-                                    ⚠️ <strong>Risk Factors:</strong> {calculation.riskFactors.join(' | ')}
-                                  </div>
-                                )}
-                                {calculation.positiveFactors?.length > 0 && (
-                                  <div style={{ color: '#86efac' }}>
-                                    ✨ <strong>Strengths:</strong> {calculation.positiveFactors.join(' | ')}
-                                  </div>
-                                )}
-                              </div>
-
-                              {/* ── RBI Disclaimer ── */}
-                              <p style={{ marginTop: 16, fontSize: '0.75rem', opacity: 0.6, fontStyle: 'italic', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 10 }}>
-                                📌 {calculation.disclaimer || 'This is a preliminary eligibility assessment based on RBI lending guidelines. Final approval depends upon lender underwriting, document verification, legal title search, and property valuation.'}
-                              </p>
                             </div>
                           )}
                         </>
