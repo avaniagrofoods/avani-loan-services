@@ -1,10 +1,4 @@
 {
-  "functions": {
-    "api/eligibilityWorker.cjs": {
-      "maxDuration": 10,
-      "cron": "* * * * *"
-    },
-  },
   "rewrites": [
     { "source": "/api/eligibility/(.*)", "destination": "/api/index.js" },
     { "source": "/api/auth/(.*)", "destination": "/api/index.js" },

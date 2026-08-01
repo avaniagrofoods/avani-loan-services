@@ -14,20 +14,13 @@ export default defineConfig({
     }
   },
   build: {
-    // Increase the warning limit so the current bundle size (≈800KB) does not raise a warning
-    chunkSizeWarningLimit: 1000, // in KB
-    // Manual chunking to split large vendor libraries into separate files
+    chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
         manualChunks: {
-          // Split core React libs
           reactVendor: ['react', 'react-dom', 'react-router-dom'],
-          // UI icons and utilities
           uiVendor: ['lucide-react'],
-          // Crypto & auth
-          authVendor: ['jsonwebtoken'],
-          // HTTP & other helpers
-          utilsVendor: ['axios', 'lodash']
+          utilsVendor: ['axios']
         }
       }
     }

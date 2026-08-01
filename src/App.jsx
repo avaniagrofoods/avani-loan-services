@@ -17,7 +17,8 @@ import AdminEligibility from './pages/AdminEligibility';
 import ServicesList from './pages/ServicesList';
 import Service from './pages/Service';
 import Catalog from './pages/Catalog';
-import WhatsAppButton from './components/WhatsAppButton';
+import FloatingWhatsApp from './components/FloatingWhatsApp';
+import FloatingAIAssistant from './components/FloatingAIAssistant';
 import './App.css';
 
 export default function App() {
@@ -45,7 +46,8 @@ export default function App() {
       </main>
       <Footer />
       <BottomNavbar />
-      <WhatsAppButton />
+      <FloatingWhatsApp />
+      <FloatingAIAssistant />
     </div>
   );
 }
