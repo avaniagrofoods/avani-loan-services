@@ -15,6 +15,28 @@ import doctorImg from '../assets/business-loan.png'; // Reusing business icon if
 
 const loans = [
   {
+    id: 'school-funding',
+    image: educationImg,
+    title: 'School Funding & Infrastructure Loan',
+    tagline: 'Empowering Educational Institutions in Maharashtra',
+    description: 'Comprehensive financial solutions for school trusts, private schools, and educational institutions for infrastructure expansion, Smart Classrooms, buses, and operational working capital.',
+    minAmount: '₹5 Lakhs', maxAmount: '₹5 Crores',
+    tenure: '12–120 months',
+    rate: '9.5% – 14% p.a.',
+    features: ['Trust / Society registration accepted', 'Smart Classroom & EdTech equipment funding', 'School bus & transport fleet finance', 'Working capital for staff salary & expansion', 'Attractive interest rates for rural & urban schools'],
+  },
+  {
+    id: 'college-funding',
+    image: educationImg,
+    title: 'College & Higher Education Funding',
+    tagline: 'Supporting Colleges, Universities & Professional Degree Students',
+    description: 'Tailored funding for degree colleges, engineering/medical institutes, as well as high-value education loans for undergraduate and postgraduate students.',
+    minAmount: '₹2 Lakhs', maxAmount: '₹10 Crores',
+    tenure: 'Up to 15 years',
+    rate: '8.5% – 13.5% p.a.',
+    features: ['Institutional expansion funding', '100% tuition & hostel fee coverage for students', 'Special grants & subvention support', 'No collateral up to ₹7.5 Lakhs for students', 'Fast clearance for NAAC/UGC recognized colleges'],
+  },
+  {
     id: 'salary',
     image: personalImg,
     title: 'Salary / Personal Loan',
@@ -164,7 +186,7 @@ export default function Loans() {
         <div className="container">
           <div className="loans-detail-grid">
             {loans.map((loan) => (
-              <div key={loan.id} className="loan-detail-card glass-card animate-fade-in">
+              <div key={loan.id} id={loan.id} className="loan-detail-card glass-card animate-fade-in">
                 <div className="ldc-image-wrapper">
                   <img src={loan.image} alt={loan.title} className="ldc-image" />
                 </div>
@@ -198,6 +220,121 @@ export default function Loans() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Property Documents Guide */}
+      <section className="section document-guide-section bg-light">
+        <div className="container">
+          <div className="text-center" style={{ marginBottom: 40 }}>
+            <span className="badge">Documentation Guide</span>
+            <h2 className="section-title">Mandatory Property Documents</h2>
+            <p className="section-subtitle">Property documents required for Home Loans and Mortgage Loans (LAP) vary across geographies in India. Lenders require location-specific approvals from local governing bodies.</p>
+          </div>
+
+          <div className="doc-section-block">
+            <h3>1. Core Property Documents (Common to All Locations)</h3>
+            <p style={{ color: 'var(--text-light)', marginBottom: 20 }}>These baseline documents are mandatory across all rural, urban, and metro regions:</p>
+            <ul className="doc-list">
+              <li><CheckCircle size={18} color="var(--primary)" /> <strong>Primary Title Deed:</strong> Original Sale Deed, Gift Deed, or Allotment Letter establishing current ownership.</li>
+              <li><CheckCircle size={18} color="var(--primary)" /> <strong>Chain of Deeds:</strong> Historical link documents tracking property ownership for the past 13 to 30 years.</li>
+              <li><CheckCircle size={18} color="var(--primary)" /> <strong>Encumbrance Certificate (EC):</strong> Certificate for the past 12–30 years proving the property is free of legal disputes or existing liens.</li>
+              <li><CheckCircle size={18} color="var(--primary)" /> <strong>Tax Paid Receipts:</strong> Latest property, municipal, or land tax receipts showing no outstanding dues.</li>
+              <li><CheckCircle size={18} color="var(--primary)" /> <strong>Detailed Cost Estimate:</strong> Required specifically for self-construction or home renovation loans, verified by a certified architect.</li>
+            </ul>
+          </div>
+
+          <div className="doc-grid-3">
+            <div className="doc-card">
+              <div className="doc-card-icon">🌾</div>
+              <h4>Rural Areas (Villages)</h4>
+              <p className="doc-gov">Gov: Gram Panchayat</p>
+              <ul className="doc-list sm">
+                <li><strong>7/12 Extract / Khata:</strong> Official land registry record.</li>
+                <li><strong>Form 8 / 8A Extract:</strong> Assessment register document displaying tax.</li>
+                <li><strong>NA Permission:</strong> Mandatory order if agricultural land was converted.</li>
+                <li><strong>Gram Panchayat NOC:</strong> Official clearance from the village head.</li>
+                <li><strong>Certified Layout Sketch:</strong> Map drawn by local revenue authorities.</li>
+              </ul>
+            </div>
+            
+            <div className="doc-card">
+              <div className="doc-card-icon">🏡</div>
+              <h4>Semi-Urban Areas (Towns)</h4>
+              <p className="doc-gov">Gov: Municipal Councils</p>
+              <ul className="doc-list sm">
+                <li><strong>Khata Certificate:</strong> Identifies owner in municipal records.</li>
+                <li><strong>Sanctioned Building Plan:</strong> Structural blueprint approved by council.</li>
+                <li><strong>Commencement Certificate:</strong> Document permitting construction past plinth.</li>
+                <li><strong>Conversion Order:</strong> Valid land conversion documentation.</li>
+              </ul>
+            </div>
+
+            <div className="doc-card">
+              <div className="doc-card-icon">🏙️</div>
+              <h4>Urban & Metro Cities</h4>
+              <p className="doc-gov">Gov: Municipal Corporations</p>
+              <ul className="doc-list sm">
+                <li><strong>Approved Building Blueprint:</strong> Sanctioned layout plan from BMC/MCD etc.</li>
+                <li><strong>Occupancy Certificate (OC):</strong> Mandatory for ready-to-move properties.</li>
+                <li><strong>Builder-Buyer Agreement:</strong> Registered Agreement for Sale.</li>
+                <li><strong>Society Share Certificate & NOC:</strong> Original share certificate and official NOC.</li>
+                <li><strong>ULC Clearance:</strong> NOC under the Urban Land Ceiling Act.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="doc-section-block" style={{ marginTop: 60 }}>
+            <h3>2. Documents by Property Type</h3>
+            <div className="doc-grid-3" style={{ marginTop: 24 }}>
+              <div className="doc-card alt">
+                <h4>🧱 Under-Construction</h4>
+                <ul className="doc-list sm no-icon">
+                  <li>RERA Registration Certificate</li>
+                  <li>Allotment Letter</li>
+                  <li>Registered Agreement for Sale</li>
+                  <li>Sanctioned Building Plan & Layout</li>
+                  <li>Commencement Certificate (CC)</li>
+                  <li>NOC from Builder</li>
+                  <li>Tripartite Agreement</li>
+                  <li>Demand Letters & Payment Receipts</li>
+                </ul>
+              </div>
+              <div className="doc-card alt">
+                <h4>🔄 Resale Property</h4>
+                <ul className="doc-list sm no-icon">
+                  <li>Original Sale Deed</li>
+                  <li>Chain of Title Deeds</li>
+                  <li>NOC from Housing Society</li>
+                  <li>Share Certificate</li>
+                  <li>Occupancy Certificate (OC)</li>
+                  <li>Encumbrance Certificate (EC)</li>
+                  <li>Latest Possession Letter</li>
+                </ul>
+              </div>
+              <div className="doc-card alt">
+                <h4>📐 Vacant Plot / Land</h4>
+                <ul className="doc-list sm no-icon">
+                  <li>Original Parent Deed / Allotment</li>
+                  <li>Mutation Certificate (Khata/7/12)</li>
+                  <li>Non-Agricultural (NA) Conversion</li>
+                  <li>Layout Approval Plan</li>
+                  <li>Fencing/Demarcation Certificate</li>
+                  <li>Land Tax Receipts</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="doc-section-block doc-kyc-card">
+            <h3>👤 Non-Property Documents (Borrower KYC & Income)</h3>
+            <p>Lenders require these identity and income verifications irrespective of property location:</p>
+            <ul className="doc-list white">
+              <li><strong>Identity & Address:</strong> Valid PAN Card (mandatory) alongside Aadhaar, Passport, or Voter ID.</li>
+              <li><strong>For Salaried Applicants:</strong> Past 3 months' salary slips, Form 16 (last 2 years), and 6 months' bank statements.</li>
+              <li><strong>For Self-Employed Applicants:</strong> Past 2–3 years' Audited P&L statements, Balance Sheet, and ITR files with income calculations.</li>
+            </ul>
           </div>
         </div>
       </section>

@@ -881,3 +881,209 @@
   to   { opacity: 1; }
 }
 
+/* =========================================================
+   NEW MULTI-STEP ELIGIBILITY UI STYLES 
+   ========================================================= */
+
+.eligibility-page {
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.eligibility-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.eligibility-header h1 {
+  font-size: 2.2rem;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.eligibility-header p {
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+/* Progress Bar */
+.progress-container {
+  max-width: 800px;
+  margin: 0 auto 40px;
+}
+
+.progress-bar {
+  background: var(--border);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.4s ease;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* Form Steps */
+.form-step {
+  animation: fadeIn 0.4s ease forwards;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-step h2 {
+  font-size: 1.6rem;
+  color: var(--primary);
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 10px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(10, 79, 139, 0.1);
+}
+
+.file-upload-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .file-upload-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.file-upload {
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  background-color: #f8fafc;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.file-upload:hover {
+  border-color: var(--primary);
+}
+
+.file-upload .upload-icon {
+  margin-bottom: 12px;
+  color: var(--text-light);
+}
+
+.file-upload span {
+  display: block;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+/* Buttons */
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.btn-back {
+  background-color: #f1f5f9;
+  color: var(--text-dark);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-back:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-next {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-next:hover {
+  background-color: var(--primary-dark, #083c6b);
+}
+
+.btn-next:active {
+  transform: translateY(2px);
+}
+
+/* Result Card */
+.result-card {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border-top: 5px solid var(--primary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.result-card h3 {
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.result-card p {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+

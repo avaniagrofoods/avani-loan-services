@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { CheckCircle, Loader, Phone } from 'lucide-react';
 import './LeadForm.css';
 import vapiService from '../lib/vapiService';
-import { logToGoogleSheets } from '../lib/googleSheets';
 
 // Integration Endpoints (Manual Update Required in .env or here)
 const MAKE_WEBHOOK_URL = import.meta.env.VITE_MAKE_WEBHOOK_URL || 'https://hook.eu1.make.com/your_unique_webhook_id_here';
@@ -32,14 +31,9 @@ export default function LeadForm({ compact = false, loanType = '' }) {
       }));
     } catch (e) { console.error('Make.com error:', e); }
 
-    // 2. Sync to Google Sheets
+    // 2. Sync to Backend (which handles CRM sync, including Google Sheets)
     try {
-      results.push(logToGoogleSheets(data));
-    } catch (e) { console.error('Google Sheets error:', e); }
-
-    // 3. Sync to Backend (which handles Twilio/WhatsApp)
-    try {
-      results.push(fetch(`${BACKEND_URL}/save-lead`, {
+      results.push(fetch(`${BACKEND_URL}/crm/sync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)

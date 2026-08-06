@@ -14,6 +14,8 @@ export default function Navbar() {
     { name: t('home'), path: '/' },
     { name: t('about'), path: '/about' },
     { name: t('loans'), path: '/loans' },
+    { name: 'School Funding', path: '/loans#school-funding' },
+    { name: 'College Funding', path: '/loans#college-funding' },
     { name: t('eligibility'), path: '/eligibility' },
     { name: t('cibil_check'), path: '/cibil-check' },
     { name: t('documents'), path: '/documents' },
@@ -62,7 +64,6 @@ export default function Navbar() {
                 ) : (
                   <Link 
                     to={link.path} 
-                    target="_blank"
                     className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
                   >
                     {link.name}
@@ -72,7 +73,7 @@ export default function Navbar() {
             ))}
 
           </ul>
-          <Link to="/contact" target="_blank" className="btn btn-primary nav-cta">{t('apply_now')}</Link>
+          <Link to="/contact" className="btn btn-primary nav-cta">{t('apply_now')}</Link>
         </nav>
 
         {/* Mobile Menu Toggle */}
@@ -98,7 +99,6 @@ export default function Navbar() {
                   ) : (
                     <Link 
                       to={link.path} 
-                      target="_blank"
                       className={`mobile-nav-link ${location.pathname === link.path ? 'active' : ''}`}
                       onClick={() => setIsOpen(false)}
                     >
@@ -108,7 +108,7 @@ export default function Navbar() {
                 </li>
               ))}
               <li>
-                <Link to="/contact" target="_blank" className="btn btn-primary mobile-cta" onClick={() => setIsOpen(false)}>
+                <Link to="/contact" className="btn btn-primary mobile-cta" onClick={() => setIsOpen(false)}>
                   {t('apply_now')}
                 </Link>
               </li>
