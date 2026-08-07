@@ -141,4 +141,63 @@ router.post('/send-sms', async (req, res) => {
   }
 });
 
+const {
+  processIncomingWhatsAppMessage,
+  sendMetaWhatsAppMessage,
+  handleCallOutcomeAndTriggerWhatsApp,
+  getChecklistText,
+  syncAllIntegrations
+} = require('../../src/services/whatsappQualificationEngine.cjs');
+
+// POST: Direct WhatsApp qualification checklist dispatch
+router.post('/whatsapp/qualify', async (req, res) => {
+  try {
+    const { name, phone, email, city, employmentType, profession, loanType, amount } = req.body;
+    if (!phone) return res.status(400).json({ error: 'Phone is required' });
+
+    const checklist = getChecklistText(loanType, employmentType, profession, name || 'Valued Customer');
+    const dispatchResult = await sendMetaWhatsAppMessage(phone, checklist);
+
+    await syncAllIntegrations({
+      timestamp: new Date().toISOString(),
+      name: name || 'Valued Customer',
+      phone,
+      email: email || '',
+      city: city || 'Latur',
+      source: 'WhatsApp_Qualification_API',
+      status: 'Checklist_Dispatched',
+      loanType: loanType || 'Personal',
+      amount: amount || '500000'
+    });
+
+    return res.json({ success: true, dispatchResult, checklistText: checklist });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST & GET: WhatsApp Webhook
+router.get('/whatsapp-webhook', (req, res) => {
+  const verifyToken = process.env.META_WHATSAPP_VERIFY_TOKEN || 'avani_loan_verify_token_1356';
+  if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === verifyToken) {
+    return res.status(200).send(req.query['hub.challenge']);
+  }
+  return res.sendStatus(403);
+});
+
+router.post('/whatsapp-webhook', async (req, res) => {
+  try {
+    const body = req.body;
+    const phone = body.phone || body.from || body.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.from;
+    const msg = body.message || body.text || body.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.text?.body || 'Hi';
+
+    if (phone) {
+      await processIncomingWhatsAppMessage(phone, msg);
+    }
+    return res.status(200).send('OK');
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
