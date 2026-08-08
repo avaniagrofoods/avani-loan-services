@@ -15,6 +15,7 @@ import AIAssistant from './pages/AIAssistant';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminEligibility from './pages/AdminEligibility';
 import DocumentPortal from './pages/DocumentPortal';
+import PasswordGate from './components/PasswordGate';
 import ServicesList from './pages/ServicesList';
 import Service from './pages/Service';
 import Catalog from './pages/Catalog';
@@ -31,8 +32,8 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/loans" element={<Loans />} />
-          <Route path="/eligibility" element={<Eligibility />} />
-          <Route path="/documents" element={<Documents />} />
+          <Route path="/eligibility" element={<PasswordGate pageTitle="AI Loan Eligibility Engine"><Eligibility /></PasswordGate>} />
+          <Route path="/documents" element={<PasswordGate pageTitle="Document Vault & Calculator"><Documents /></PasswordGate>} />
           <Route path="/loan-documents/:token" element={<DocumentPortal />} />
           <Route path="/cibil-check" element={<CibilCheck />} />
           <Route path="/contact" element={<Contact />} />
@@ -41,8 +42,8 @@ export default function App() {
           <Route path="/services" element={<ServicesList />} />
           <Route path="/services/:slug" element={<Service />} />
           <Route path="/ai-assistant" element={<AIAssistant />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin-eligibility" element={<AdminEligibility />} />
+          <Route path="/admin" element={<PasswordGate pageTitle="Executive Operations Dashboard"><AdminDashboard /></PasswordGate>} />
+          <Route path="/admin-eligibility" element={<PasswordGate pageTitle="Eligibility Admin Panel"><AdminEligibility /></PasswordGate>} />
           <Route path="/catalog" element={<Catalog />} />
         </Routes>
       </main>
