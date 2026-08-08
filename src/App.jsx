@@ -14,6 +14,7 @@ import CibilCheck from './pages/CibilCheck';
 import AIAssistant from './pages/AIAssistant';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminEligibility from './pages/AdminEligibility';
+import DocumentPortal from './pages/DocumentPortal';
 import ServicesList from './pages/ServicesList';
 import Service from './pages/Service';
 import Catalog from './pages/Catalog';
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/loans" element={<Loans />} />
           <Route path="/eligibility" element={<Eligibility />} />
           <Route path="/documents" element={<Documents />} />
+          <Route path="/loan-documents/:token" element={<DocumentPortal />} />
           <Route path="/cibil-check" element={<CibilCheck />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
