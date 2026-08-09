@@ -1,6 +1,20 @@
 import { logToGoogleSheets } from './googleSheets.js';
 
-const MAKE_WEBHOOK_URL = process.env.VITE_MAKE_WEBHOOK_URL || process.env.MAKE_WEBHOOK_URL || "https://hook.eu1.make.com/n46s2vx5oil7ptwdhhgsnn9rpm6ck5j0";
+const getEnvVar = (key, fallback = '') => {
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
+      return import.meta.env[key];
+    }
+  } catch (e) {}
+  try {
+    if (typeof process !== 'undefined' && process.env && process.env[key]) {
+      return process.env[key];
+    }
+  } catch (e) {}
+  return fallback;
+};
+
+const MAKE_WEBHOOK_URL = getEnvVar('VITE_MAKE_WEBHOOK_URL', getEnvVar('MAKE_WEBHOOK_URL', "https://hook.eu1.make.com/n46s2vx5oil7ptwdhhgsnn9rpm6ck5j0"));
 
 /**
  * Centralized function to sync lead data to all platforms in Auto Mode.
@@ -45,8 +59,7 @@ export const syncLeadData = async (data) => {
   }
 
   // 3. Google Form Sync (Google Apps Script endpoint)
-  const env = (typeof import.meta !== 'undefined' && import.meta.env) ? import.meta.env : {};
-  const GOOGLE_FORM_URL = env.VITE_GOOGLE_FORM_ENDPOINT || process.env.GOOGLE_FORM_URL || 'https://script.google.com/macros/s/AKfycby-BeIa9P8-XoutWpBKRq3SnxG-EcWH9MoEDep1C3Gs9_6lJqA6ZFc5cO44mryIg4qOoQ/exec';
+  const GOOGLE_FORM_URL = getEnvVar('VITE_GOOGLE_FORM_ENDPOINT', getEnvVar('GOOGLE_FORM_URL', 'https://script.google.com/macros/s/AKfycby-BeIa9P8-XoutWpBKRq3SnxG-EcWH9MoEDep1C3Gs9_6lJqA6ZFc5cO44mryIg4qOoQ/exec'));
   try {
     const gfResponse = await fetch(GOOGLE_FORM_URL, {
       method: 'POST',

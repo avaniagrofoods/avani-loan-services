@@ -21,6 +21,7 @@ import Service from './pages/Service';
 import Catalog from './pages/Catalog';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import FloatingAIAssistant from './components/FloatingAIAssistant';
+import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
 export default function App() {
@@ -28,24 +29,26 @@ export default function App() {
     <div className="app">
       <Navbar />
       <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/loans" element={<Loans />} />
-          <Route path="/eligibility" element={<PasswordGate pageTitle="AI Loan Eligibility Engine"><Eligibility /></PasswordGate>} />
-          <Route path="/documents" element={<PasswordGate pageTitle="Document Vault & Calculator"><Documents /></PasswordGate>} />
-          <Route path="/loan-documents/:token" element={<DocumentPortal />} />
-          <Route path="/cibil-check" element={<CibilCheck />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/services" element={<ServicesList />} />
-          <Route path="/services/:slug" element={<Service />} />
-          <Route path="/ai-assistant" element={<AIAssistant />} />
-          <Route path="/admin" element={<PasswordGate pageTitle="Executive Operations Dashboard"><AdminDashboard /></PasswordGate>} />
-          <Route path="/admin-eligibility" element={<PasswordGate pageTitle="Eligibility Admin Panel"><AdminEligibility /></PasswordGate>} />
-          <Route path="/catalog" element={<Catalog />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/loans" element={<Loans />} />
+            <Route path="/eligibility" element={<PasswordGate pageTitle="AI Loan Eligibility Engine"><Eligibility /></PasswordGate>} />
+            <Route path="/documents" element={<PasswordGate pageTitle="Document Vault & Calculator"><Documents /></PasswordGate>} />
+            <Route path="/loan-documents/:token" element={<DocumentPortal />} />
+            <Route path="/cibil-check" element={<CibilCheck />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/services" element={<ServicesList />} />
+            <Route path="/services/:slug" element={<Service />} />
+            <Route path="/ai-assistant" element={<AIAssistant />} />
+            <Route path="/admin" element={<PasswordGate pageTitle="Executive Operations Dashboard"><AdminDashboard /></PasswordGate>} />
+            <Route path="/admin-eligibility" element={<PasswordGate pageTitle="Eligibility Admin Panel"><AdminEligibility /></PasswordGate>} />
+            <Route path="/catalog" element={<Catalog />} />
+          </Routes>
+        </ErrorBoundary>
       </main>
       <Footer />
       <BottomNavbar />
