@@ -4,6 +4,7 @@ import { Shield, Clock, Award, TrendingUp, Star, Users, CheckCircle, ArrowRight 
 import LeadForm from '../components/LeadForm';
 import services from '../data/services.json';
 import brandLogo from '../assets/avani-brand-logo.png';
+import { generateWhatsAppDocumentLink, PHONE_NUMBER, DISPLAY_PHONE } from '../utils/whatsappHelper';
 import './Home.css';
 
 // Import Images
@@ -171,14 +172,35 @@ export default function Home() {
                 <div className="cibil-contact-details">
                   <p><strong>AVANI LOAN SERVICE – YOUR TRUSTED PARTNER</strong></p>
                   <p>Expert Credit Correction & Loan Consultation</p>
-                  <p>📞 9175635165 | 💬 Dedicated Support</p>
+                  <p>
+                    <a 
+                      href={PHONE_NUMBER} 
+                      className="cibil-phone-link"
+                      aria-label="Call Avani Loan Services at 9175635165"
+                      style={{ color: '#1B3A6B', fontWeight: 'bold', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                    >
+                      📞 {DISPLAY_PHONE}
+                    </a>
+                    {' | '}💬 Dedicated Support
+                  </p>
                 </div>
-                <div className="cibil-ctas">
-                  <a href="https://b2c.creditsamadhaan.com/?refer_code=FY665935" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                <div className="cibil-ctas" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '16px' }}>
+                  <a 
+                    href="https://b2c.creditsamadhaan.com/?refer_code=FY665935" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="btn btn-secondary"
+                  >
                     Start CIBIL Correction with Avani
                   </a>
-                  <a href="https://wa.me/919175635165?text=I%20want%20to%20fix%20my%20CIBIL%20score%20with%20Avani%20Loan%20Service" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
-                    Chat on WhatsApp
+                  <a 
+                    href={generateWhatsAppDocumentLink('CIBIL Improvement')} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="btn btn-outline"
+                    aria-label="Get CIBIL document checklist on WhatsApp"
+                  >
+                    📲 Get Document List on WhatsApp
                   </a>
                 </div>
               </div>

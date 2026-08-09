@@ -1,6 +1,7 @@
 import useSEO from '../hooks/useSEO';
 import { Link } from 'react-router-dom';
-import { CheckCircle, ArrowRight } from 'lucide-react';
+import { CheckCircle, ArrowRight, MessageCircle, Phone, FileText, Globe, GraduationCap, Building2 } from 'lucide-react';
+import { generateWhatsAppDocumentLink, PHONE_NUMBER, DISPLAY_PHONE } from '../utils/whatsappHelper';
 import brandLogo from '../assets/avani-brand-logo.png';
 import './Loans.css';
 import services from '../data/services.json';
@@ -212,11 +213,30 @@ export default function Loans() {
                   ))}
                 </ul>
 
-                <div className="ldc-actions">
-                  <Link to="/contact" state={{ loanType: loan.title }} className="btn btn-primary">
+                <div className="ldc-actions" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '20px' }}>
+                  <Link to="/contact" state={{ loanType: loan.title }} className="btn btn-primary" style={{ flex: '1 1 auto', justifyContent: 'center' }}>
                     Apply for {loan.title} <ArrowRight size={16} />
                   </Link>
-                  <Link to="/documents" className="btn btn-outline">Documents Needed</Link>
+                  <a 
+                    href={generateWhatsAppDocumentLink(loan.title)} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="btn" 
+                    style={{ background: '#25D366', color: '#fff', border: 'none', flex: '1 1 auto', justifyContent: 'center' }}
+                    aria-label={`Get ${loan.title} document checklist on WhatsApp`}
+                  >
+                    <MessageCircle size={16} style={{ marginRight: '6px' }} />
+                    📲 Get Document List on WhatsApp
+                  </a>
+                  <a 
+                    href={PHONE_NUMBER} 
+                    className="btn btn-outline" 
+                    style={{ flex: '1 1 auto', justifyContent: 'center' }}
+                    aria-label={`Call Avani Loan Services at 9175635165 for ${loan.title}`}
+                  >
+                    <Phone size={16} style={{ marginRight: '6px' }} />
+                    📞 Call {DISPLAY_PHONE}
+                  </a>
                 </div>
               </div>
             ))}
@@ -224,80 +244,77 @@ export default function Loans() {
         </div>
       </section>
 
-      {/* Property Documents Guide */}
+      {/* Property & Comprehensive Documentation Guide */}
       <section className="section document-guide-section bg-light">
         <div className="container">
+          
+          {/* 1. PROPERTY DOCUMENTS GUIDE */}
           <div className="text-center" style={{ marginBottom: 40 }}>
-            <span className="badge">Documentation Guide</span>
-            <h2 className="section-title">Mandatory Property Documents</h2>
-            <p className="section-subtitle">Property documents required for Home Loans and Mortgage Loans (LAP) vary across geographies in India. Lenders require location-specific approvals from local governing bodies.</p>
+            <span className="badge">Documentation Architecture</span>
+            <h2 className="section-title">Home Loan & Mortgage Property Documents</h2>
+            <p className="section-subtitle">Property documents required for Home Loans and Mortgage Loans / LAP vary across geographies and property types. Final requirement is confirmed after eligibility assessment.</p>
           </div>
 
           <div className="doc-section-block">
-            <h3>1. Core Property Documents (Common to All Locations)</h3>
-            <p style={{ color: 'var(--text-light)', marginBottom: 20 }}>These baseline documents are mandatory across all rural, urban, and metro regions:</p>
-            <ul className="doc-list">
-              <li><CheckCircle size={18} color="var(--primary)" /> <strong>Primary Title Deed:</strong> Original Sale Deed, Gift Deed, or Allotment Letter establishing current ownership.</li>
-              <li><CheckCircle size={18} color="var(--primary)" /> <strong>Chain of Deeds:</strong> Historical link documents tracking property ownership for the past 13 to 30 years.</li>
-              <li><CheckCircle size={18} color="var(--primary)" /> <strong>Encumbrance Certificate (EC):</strong> Certificate for the past 12–30 years proving the property is free of legal disputes or existing liens.</li>
-              <li><CheckCircle size={18} color="var(--primary)" /> <strong>Tax Paid Receipts:</strong> Latest property, municipal, or land tax receipts showing no outstanding dues.</li>
-              <li><CheckCircle size={18} color="var(--primary)" /> <strong>Detailed Cost Estimate:</strong> Required specifically for self-construction or home renovation loans, verified by a certified architect.</li>
-            </ul>
+            <h3>A. Property Documents by Location</h3>
+            <p style={{ color: 'var(--text-light)', marginBottom: 20 }}>Governing authorities issue location-specific title and clearance documents:</p>
+            <div className="doc-grid-3">
+              <div className="doc-card">
+                <div className="doc-card-icon">🌾</div>
+                <h4>Rural Areas (Villages)</h4>
+                <p className="doc-gov">Gov: Gram Panchayat / Revenue Dept</p>
+                <ul className="doc-list sm">
+                  <li><strong>7/12 Extract / Khata:</strong> Official land registry record.</li>
+                  <li><strong>Form 8 / 8A Extract:</strong> Assessment register document.</li>
+                  <li><strong>NA Permission:</strong> Required where agricultural land converted.</li>
+                  <li><strong>Gram Panchayat NOC:</strong> Applicable official clearance.</li>
+                  <li><strong>Certified Layout Sketch:</strong> Map certified by revenue authority.</li>
+                </ul>
+              </div>
+              
+              <div className="doc-card">
+                <div className="doc-card-icon">🏡</div>
+                <h4>Semi-Urban Areas (Towns)</h4>
+                <p className="doc-gov">Gov: Municipal Councils</p>
+                <ul className="doc-list sm">
+                  <li><strong>Khata Certificate:</strong> Identifies owner in municipal records.</li>
+                  <li><strong>Sanctioned Building Plan:</strong> Approved structural blueprint.</li>
+                  <li><strong>Commencement Certificate:</strong> Construction permission (where applicable).</li>
+                  <li><strong>Conversion Order:</strong> Valid land conversion documentation.</li>
+                </ul>
+              </div>
+
+              <div className="doc-card">
+                <div className="doc-card-icon">🏙️</div>
+                <h4>Urban & Metro Cities</h4>
+                <p className="doc-gov">Gov: Municipal Corporations</p>
+                <ul className="doc-list sm">
+                  <li><strong>Approved Building Blueprint:</strong> Sanctioned municipal layout plan.</li>
+                  <li><strong>Occupancy Certificate (OC):</strong> Applicable for ready properties.</li>
+                  <li><strong>Builder-Buyer Agreement:</strong> Registered Agreement for Sale.</li>
+                  <li><strong>Society Share Certificate & NOC:</strong> Original share certificate & NOC.</li>
+                  <li><strong>ULC Clearance:</strong> Applicable where required under land laws.</li>
+                </ul>
+              </div>
+            </div>
+            <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '12px' }}>
+              *Note: Exact requirements may vary by state, local authority, property type, and lender.
+            </p>
           </div>
 
-          <div className="doc-grid-3">
-            <div className="doc-card">
-              <div className="doc-card-icon">🌾</div>
-              <h4>Rural Areas (Villages)</h4>
-              <p className="doc-gov">Gov: Gram Panchayat</p>
-              <ul className="doc-list sm">
-                <li><strong>7/12 Extract / Khata:</strong> Official land registry record.</li>
-                <li><strong>Form 8 / 8A Extract:</strong> Assessment register document displaying tax.</li>
-                <li><strong>NA Permission:</strong> Mandatory order if agricultural land was converted.</li>
-                <li><strong>Gram Panchayat NOC:</strong> Official clearance from the village head.</li>
-                <li><strong>Certified Layout Sketch:</strong> Map drawn by local revenue authorities.</li>
-              </ul>
-            </div>
-            
-            <div className="doc-card">
-              <div className="doc-card-icon">🏡</div>
-              <h4>Semi-Urban Areas (Towns)</h4>
-              <p className="doc-gov">Gov: Municipal Councils</p>
-              <ul className="doc-list sm">
-                <li><strong>Khata Certificate:</strong> Identifies owner in municipal records.</li>
-                <li><strong>Sanctioned Building Plan:</strong> Structural blueprint approved by council.</li>
-                <li><strong>Commencement Certificate:</strong> Document permitting construction past plinth.</li>
-                <li><strong>Conversion Order:</strong> Valid land conversion documentation.</li>
-              </ul>
-            </div>
-
-            <div className="doc-card">
-              <div className="doc-card-icon">🏙️</div>
-              <h4>Urban & Metro Cities</h4>
-              <p className="doc-gov">Gov: Municipal Corporations</p>
-              <ul className="doc-list sm">
-                <li><strong>Approved Building Blueprint:</strong> Sanctioned layout plan from BMC/MCD etc.</li>
-                <li><strong>Occupancy Certificate (OC):</strong> Mandatory for ready-to-move properties.</li>
-                <li><strong>Builder-Buyer Agreement:</strong> Registered Agreement for Sale.</li>
-                <li><strong>Society Share Certificate & NOC:</strong> Original share certificate and official NOC.</li>
-                <li><strong>ULC Clearance:</strong> NOC under the Urban Land Ceiling Act.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="doc-section-block" style={{ marginTop: 60 }}>
-            <h3>2. Documents by Property Type</h3>
-            <div className="doc-grid-3" style={{ marginTop: 24 }}>
+          <div className="doc-section-block" style={{ marginTop: 40 }}>
+            <h3>B. Documents by Property Type</h3>
+            <div className="doc-grid-3" style={{ marginTop: 20 }}>
               <div className="doc-card alt">
-                <h4>🧱 Under-Construction</h4>
+                <h4>🧱 Under-Construction Property</h4>
                 <ul className="doc-list sm no-icon">
                   <li>RERA Registration Certificate</li>
                   <li>Allotment Letter</li>
                   <li>Registered Agreement for Sale</li>
                   <li>Sanctioned Building Plan & Layout</li>
                   <li>Commencement Certificate (CC)</li>
-                  <li>NOC from Builder</li>
-                  <li>Tripartite Agreement</li>
+                  <li>Builder NOC</li>
+                  <li>Tripartite Agreement (where applicable)</li>
                   <li>Demand Letters & Payment Receipts</li>
                 </ul>
               </div>
@@ -308,34 +325,177 @@ export default function Loans() {
                   <li>Chain of Title Deeds</li>
                   <li>NOC from Housing Society</li>
                   <li>Share Certificate</li>
-                  <li>Occupancy Certificate (OC)</li>
-                  <li>Encumbrance Certificate (EC)</li>
+                  <li>Occupancy Certificate (OC, where applicable)</li>
+                  <li>Encumbrance Certificate (EC, where applicable)</li>
                   <li>Latest Possession Letter</li>
                 </ul>
               </div>
               <div className="doc-card alt">
                 <h4>📐 Vacant Plot / Land</h4>
                 <ul className="doc-list sm no-icon">
-                  <li>Original Parent Deed / Allotment</li>
-                  <li>Mutation Certificate (Khata/7/12)</li>
-                  <li>Non-Agricultural (NA) Conversion</li>
+                  <li>Original Parent Deed / Allotment Document</li>
+                  <li>Mutation Certificate (Khata / 7/12)</li>
+                  <li>Non-Agricultural (NA) Conversion (where applicable)</li>
                   <li>Layout Approval Plan</li>
-                  <li>Fencing/Demarcation Certificate</li>
+                  <li>Fencing / Demarcation Certificate (where applicable)</li>
                   <li>Land Tax Receipts</li>
                 </ul>
               </div>
             </div>
+            
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '20px' }}>
+              <a 
+                href={generateWhatsAppDocumentLink('Home Loan')} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn"
+                style={{ background: '#25D366', color: '#fff' }}
+                aria-label="Get Home Loan document checklist on WhatsApp"
+              >
+                <MessageCircle size={18} style={{ marginRight: '6px' }} /> 📲 Get Home Loan Document List on WhatsApp
+              </a>
+              <a 
+                href={generateWhatsAppDocumentLink('Mortgage Loan / LAP')} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn"
+                style={{ background: '#0052CC', color: '#fff' }}
+                aria-label="Get Mortgage Loan document checklist on WhatsApp"
+              >
+                <MessageCircle size={18} style={{ marginRight: '6px' }} /> 📲 Get Mortgage / LAP Document List on WhatsApp
+              </a>
+            </div>
           </div>
 
-          <div className="doc-section-block doc-kyc-card">
-            <h3>👤 Non-Property Documents (Borrower KYC & Income)</h3>
-            <p>Lenders require these identity and income verifications irrespective of property location:</p>
-            <ul className="doc-list white">
-              <li><strong>Identity & Address:</strong> Valid PAN Card (mandatory) alongside Aadhaar, Passport, or Voter ID.</li>
-              <li><strong>For Salaried Applicants:</strong> Past 3 months' salary slips, Form 16 (last 2 years), and 6 months' bank statements.</li>
-              <li><strong>For Self-Employed Applicants:</strong> Past 2–3 years' Audited P&L statements, Balance Sheet, and ITR files with income calculations.</li>
-            </ul>
+          {/* 2. EDUCATION LOAN (INDIA) SECTION */}
+          <div className="doc-section-block" style={{ marginTop: 60, background: '#fff', padding: '30px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+              <GraduationCap size={28} color="#0052CC" />
+              <h3 style={{ margin: 0, color: '#1E293B' }}>Education Loan — India Document Checklist</h3>
+            </div>
+            <p style={{ color: '#64748b', marginBottom: '20px' }}>Comprehensive checklist for higher education studies in India (Engineering, Medical, MBA, etc.):</p>
+            
+            <div className="doc-grid-3">
+              <div className="doc-card alt">
+                <h4>A. Student Documents</h4>
+                <ul className="doc-list sm no-icon">
+                  <li>Aadhaar Card & PAN Card</li>
+                  <li>Passport-size photographs</li>
+                  <li>10th & 12th Standard Marksheets</li>
+                  <li>Graduation Marksheets (if applicable)</li>
+                  <li>Entrance Exam Scorecard (JEE, NEET, CAT, etc.)</li>
+                  <li>Admission / Offer Letter from College</li>
+                  <li>Official Course Fee Structure</li>
+                  <li>Scholarship Letter (if applicable)</li>
+                </ul>
+              </div>
+
+              <div className="doc-card alt">
+                <h4>B. Parent / Co-Applicant Documents</h4>
+                <ul className="doc-list sm no-icon">
+                  <li>Parent / Co-Applicant Aadhaar & PAN Card</li>
+                  <li>Passport-size photographs & Address Proof</li>
+                  <li>Last 3 Months Salary Slips (for salaried)</li>
+                  <li>Last 6 Months Bank Statements</li>
+                  <li>Form 16 / Income Tax Returns (last 2 yrs)</li>
+                  <li>Business Registration & Financials (for self-employed)</li>
+                </ul>
+              </div>
+
+              <div className="doc-card alt">
+                <h4>C. Institution Documents</h4>
+                <ul className="doc-list sm no-icon">
+                  <li>College Admission / Offer Letter</li>
+                  <li>Detailed Fee Structure & Payment Schedule</li>
+                  <li>Course Duration & Recognition Proof (UGC/AICTE)</li>
+                  <li>Hostel & Miscellaneous Expense Estimate</li>
+                  <li>Approved Education Expenses breakdown</li>
+                </ul>
+              </div>
+            </div>
+
+            <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '16px', background: '#F8FAFC', padding: '10px 14px', borderRadius: '6px', borderLeft: '3px solid #0052CC' }}>
+              *Note: Document requirements may vary by lender, applicant profile, course, institution, and loan structure. Final requirements will be confirmed after eligibility assessment.
+            </p>
+
+            <div style={{ marginTop: '20px' }}>
+              <a 
+                href={generateWhatsAppDocumentLink('Education Loan India')} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn"
+                style={{ background: '#25D366', color: '#fff' }}
+                aria-label="Get India Education Loan document checklist on WhatsApp"
+              >
+                <MessageCircle size={18} style={{ marginRight: '6px' }} /> 📲 Get India Education Loan Document List on WhatsApp
+              </a>
+            </div>
           </div>
+
+          {/* 3. EDUCATION LOAN (GLOBAL STUDIES) SECTION */}
+          <div className="doc-section-block" style={{ marginTop: 40, background: '#fff', padding: '30px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+              <Globe size={28} color="#0052CC" />
+              <h3 style={{ margin: 0, color: '#1E293B' }}>Education Loan — Global Studies (Study Abroad)</h3>
+            </div>
+            <p style={{ color: '#0052CC', fontWeight: 'bold', marginBottom: '15px' }}>
+              Supported Countries: USA | Canada | UK | Australia | Germany & More
+            </p>
+            <p style={{ color: '#64748b', marginBottom: '20px' }}>Comprehensive documentation required for foreign university education loans:</p>
+
+            <div className="doc-grid-3">
+              <div className="doc-card alt">
+                <h4>A. Student KYC & Academic</h4>
+                <ul className="doc-list sm no-icon">
+                  <li>Valid Passport (mandatory)</li>
+                  <li>Aadhaar Card & PAN Card</li>
+                  <li>10th, 12th & Degree Marksheets</li>
+                  <li>English Test Score (IELTS / TOEFL / PTE)</li>
+                  <li>Standardized Test Scores (GRE / GMAT)</li>
+                </ul>
+              </div>
+
+              <div className="doc-card alt">
+                <h4>B. Foreign University Admission</h4>
+                <ul className="doc-list sm no-icon">
+                  <li>University Offer / Admission Letter</li>
+                  <li>I-20 (USA) / CAS (UK) / COE (Australia)</li>
+                  <li>Tuition Fee Breakdown & Schedule</li>
+                  <li>Estimated Living Expense Document</li>
+                  <li>Scholarship / Grant Letter (if applicable)</li>
+                </ul>
+              </div>
+
+              <div className="doc-card alt">
+                <h4>C. Co-Applicant & Financials</h4>
+                <ul className="doc-list sm no-icon">
+                  <li>Parent / Co-applicant KYC (PAN & Aadhaar)</li>
+                  <li>Income Proof (Salary Slips / ITR 2 yrs)</li>
+                  <li>Parent Bank Statements (6–12 months)</li>
+                  <li>Property Documents (if collateral loan)</li>
+                  <li>Asset & Property Valuation Report</li>
+                </ul>
+              </div>
+            </div>
+
+            <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '16px', background: '#F8FAFC', padding: '10px 14px', borderRadius: '6px', borderLeft: '3px solid #0052CC' }}>
+              *Disclaimer: Global education loan document requirements vary by country, university, lender, course, collateral structure, and applicant profile. Final documentation will be confirmed after assessment.
+            </p>
+
+            <div style={{ marginTop: '20px' }}>
+              <a 
+                href={generateWhatsAppDocumentLink('Education Loan Global')} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn"
+                style={{ background: '#25D366', color: '#fff' }}
+                aria-label="Get Global Education Loan document checklist on WhatsApp"
+              >
+                <MessageCircle size={18} style={{ marginRight: '6px' }} /> 📲 Get Global Education Loan Document List on WhatsApp
+              </a>
+            </div>
+          </div>
+
         </div>
       </section>
     </div>

@@ -1,6 +1,7 @@
 import useSEO from '../hooks/useSEO';
 import { useState } from 'react';
-import { ShieldCheck, Mail, Phone, User, FileText, Download, CheckCircle, ArrowRight, Lock, AlertTriangle, RefreshCw } from 'lucide-react';
+import { ShieldCheck, Mail, Phone, User, FileText, Download, CheckCircle, ArrowRight, Lock, AlertTriangle, RefreshCw, MessageCircle, ExternalLink } from 'lucide-react';
+import { generateWhatsAppDocumentLink, PHONE_NUMBER, DISPLAY_PHONE } from '../utils/whatsappHelper';
 import { jsPDF } from 'jspdf';
 import { syncLeadData } from '../lib/syncLeads';
 import brandLogo from '../assets/avani-brand-logo.png';
@@ -363,15 +364,45 @@ export default function CibilCheck() {
                   </div>
                 </div>
 
-                <button onClick={downloadReport} className="download-report-btn">
-                  <Download size={24} />
-                  Download Full CIBIL Report (PDF)
-                </button>
-                <a href={`https://wa.me/919175635165?text=Hi, my name is ${formData.name}. I checked my CIBIL score on your website and my estimated score is ${estimatedScore}. Can you guide me further?`} target="_blank" rel="noopener noreferrer" className="download-report-btn" style={{marginTop: '10px', background: '#25D366', color: 'white', textDecoration: 'none', display: 'flex', justifyContent: 'center'}}>
-                  <MessageCircle size={24} style={{ marginRight: '8px' }} />
-                  Discuss on WhatsApp
-                </a>
-                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
+                  <button onClick={downloadReport} className="download-report-btn">
+                    <Download size={20} style={{ marginRight: '8px' }} />
+                    Download Full CIBIL Report (PDF)
+                  </button>
+                  <a 
+                    href="https://b2c.creditsamadhaan.com/?refer_code=FY665935" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="download-report-btn" 
+                    style={{ background: '#0052CC', color: 'white', textDecoration: 'none', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                  >
+                    <ExternalLink size={20} style={{ marginRight: '8px' }} />
+                    Start CIBIL Correction with Avani
+                  </a>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <a 
+                      href={generateWhatsAppDocumentLink('CIBIL Improvement')} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="download-report-btn" 
+                      style={{ background: '#25D366', color: 'white', textDecoration: 'none', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '0.9rem' }}
+                      aria-label="Get CIBIL document checklist on WhatsApp"
+                    >
+                      <MessageCircle size={18} style={{ marginRight: '6px' }} />
+                      WhatsApp Document List
+                    </a>
+                    <a 
+                      href={PHONE_NUMBER} 
+                      className="download-report-btn" 
+                      style={{ background: '#1B3A6B', color: 'white', textDecoration: 'none', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '0.9rem' }}
+                      aria-label="Call Avani Loan Services at 9175635165"
+                    >
+                      <Phone size={18} style={{ marginRight: '6px' }} />
+                      Call {DISPLAY_PHONE}
+                    </a>
+                  </div>
+                </div>
+
                 <div style={{ textAlign: 'center', marginTop: '20px' }}>
                   <button onClick={() => setStep(1)} style={{ background: 'none', border: 'none', color: '#64748b', textDecoration: 'underline', cursor: 'pointer' }}>
                     Check another score

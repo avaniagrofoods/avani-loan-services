@@ -1,6 +1,7 @@
 import useSEO from '../hooks/useSEO';
 import { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, MessageCircle, Phone } from 'lucide-react';
+import { generateWhatsAppDocumentLink, PHONE_NUMBER, DISPLAY_PHONE } from '../utils/whatsappHelper';
 import brandLogo from '../assets/avani-brand-logo.png';
 import PasswordGate from '../components/PasswordGate';
 import './Documents.css';
@@ -116,6 +117,29 @@ function DocAccordion({ item }) {
               </ul>
             </div>
           ))}
+
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '20px', paddingTop: '15px', borderTop: '1px solid #E2E8F0' }}>
+            <a 
+              href={generateWhatsAppDocumentLink(item.title)} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn" 
+              style={{ background: '#25D366', color: '#fff', border: 'none', fontSize: '0.85rem' }}
+              aria-label={`Get ${item.title} document checklist on WhatsApp`}
+            >
+              <MessageCircle size={16} style={{ marginRight: '6px' }} />
+              📲 Get Document List on WhatsApp
+            </a>
+            <a 
+              href={PHONE_NUMBER} 
+              className="btn btn-outline"
+              style={{ fontSize: '0.85rem' }}
+              aria-label={`Call Avani Loan Services at 9175635165 for ${item.title}`}
+            >
+              <Phone size={16} style={{ marginRight: '6px' }} />
+              📞 Call {DISPLAY_PHONE}
+            </a>
+          </div>
         </div>
       )}
     </div>
