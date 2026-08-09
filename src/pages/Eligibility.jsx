@@ -223,7 +223,22 @@ export default function Eligibility() {
                   <p className="recommendation-text">{result.recommendation}</p>
                 </div>
 
-                <button className="primary-btn mt-6" onClick={() => window.location.reload()}>Start New Application</button>
+                <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '16px', background: '#F8FAFC', padding: '12px', borderRadius: '6px', borderLeft: '4px solid #0052CC' }}>
+                  ⚠️ <strong>Indicative Eligibility Assessment:</strong> Final sanction depends on lender policy, complete document verification, credit profile, and formal bank approval.
+                </p>
+
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '20px' }}>
+                  <a 
+                    href={`https://wa.me/919175635165?text=${encodeURIComponent(`Hello AVANI LOAN SERVICES, I checked my eligibility for ${formData.loanType} Loan on your website. Estimated Eligible Amount: ₹${result.maxPrincipal.toLocaleString()}. Please assist me.`)}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="primary-btn"
+                    style={{ background: '#25D366', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    📲 Connect on WhatsApp for Quick Processing
+                  </a>
+                  <button className="secondary-btn" onClick={() => window.location.reload()}>Start New Application</button>
+                </div>
               </div>
             )}
           </form>
