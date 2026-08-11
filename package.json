@@ -15,7 +15,8 @@
     "set-vercel-envs": "bash scripts/set-vercel-envs.sh",
     "notify:search-engines": "node scripts/ping-sitemap.js",
     "deploy": "npm run build && npx vercel deploy --prod --yes",
-    "worker": "node src/api/eligibilityWorker.cjs"
+    "worker": "node src/api/eligibilityWorker.cjs",
+    "forensic:test": "node scripts/runForensicValidation.cjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -38,6 +39,7 @@
     "jspdf": "^4.2.1",
     "libsodium-wrappers": "^0.8.4",
     "lucide-react": "^1.8.0",
+    "mongoose": "^9.9.2",
     "multer": "^2.2.0",
     "node-cron": "^4.2.1",
     "node-fetch": "^3.3.2",
