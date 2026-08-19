@@ -19,6 +19,7 @@ export default function Navbar() {
     { name: t('eligibility'), path: '/eligibility' },
     { name: t('cibil_check'), path: '/cibil-check' },
     { name: t('documents'), path: '/documents' },
+    { name: t('calculators'), path: '/calculators' },
     { name: t('blog'), path: '/blog' },
     // Catalog opens in a new window
     { name: 'Catalog', path: 'https://www.avanifinserv.com/catalog', external: true },
