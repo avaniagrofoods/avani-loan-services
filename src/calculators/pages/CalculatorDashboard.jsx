@@ -8,6 +8,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import CalculatorLayout from '../layouts/CalculatorLayout';
+import ExploreServices from '../components/ExploreServices';
 import {
   Calculator,
   Percent,
@@ -40,7 +41,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'loan',
     name: 'EMI Calculator',
     description: 'Calculate monthly installment, total interest breakdown, and amortized repayment schedules.',
-    path: '/calculators/loan/emi',
+    path: '/financial-tools/loan/emi',
     icon: <Calculator size={22} />,
     tags: ['loan', 'emi', 'interest', 'monthly', 'amortization'],
   },
@@ -50,7 +51,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'loan',
     name: 'Eligibility Calculator (FOIR)',
     description: 'Estimate maximum borrowing capacity based on fixed obligation to income ratio guidelines.',
-    path: '/calculators/loan/foir-eligibility',
+    path: '/financial-tools/loan/foir-eligibility',
     icon: <Scale size={22} />,
     tags: ['eligibility', 'foir', 'income', 'borrowing capacity'],
   },
@@ -60,7 +61,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'loan',
     name: 'Eligibility (Multiplier Method)',
     description: 'Quick salary/income multiplier evaluation with existing EMI capacity adjustment.',
-    path: '/calculators/loan/multiplier-eligibility',
+    path: '/financial-tools/loan/multiplier-eligibility',
     icon: <TrendingUp size={22} />,
     tags: ['multiplier', 'salary', 'eligibility', 'capacity'],
   },
@@ -70,7 +71,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'loan',
     name: 'Outstanding Loan Calculator',
     description: 'Track exact principal balance, total principal & interest paid after k installments.',
-    path: '/calculators/loan/outstanding',
+    path: '/financial-tools/loan/outstanding',
     icon: <FileSpreadsheet size={22} />,
     tags: ['outstanding', 'balance', 'principal', 'emis paid'],
   },
@@ -80,7 +81,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'loan',
     name: 'Foreclosure Calculator',
     description: 'Compute full loan settlement amount including lender foreclosure fees, GST, and extras.',
-    path: '/calculators/loan/foreclosure',
+    path: '/financial-tools/loan/foreclosure',
     icon: <CheckCircle2 size={22} />,
     tags: ['foreclosure', 'pre-closure', 'settlement', 'penalty'],
   },
@@ -90,7 +91,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'loan',
     name: 'Overdraft (OD) Calculator',
     description: 'Estimate interest on utilized credit limit based on daily/monthly tenure and rates.',
-    path: '/calculators/loan/overdraft',
+    path: '/financial-tools/loan/overdraft',
     icon: <CreditCard size={22} />,
     tags: ['overdraft', 'od', 'credit limit', 'utilized'],
   },
@@ -100,7 +101,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'loan',
     name: 'Loan Comparison Calculator',
     description: 'Side-by-side analysis of two loan offers comparing EMI, processing fees, and overall cost.',
-    path: '/calculators/loan/comparison',
+    path: '/financial-tools/loan/comparison',
     icon: <Sliders size={22} />,
     tags: ['compare', 'loans', 'cheapest', 'side by side'],
   },
@@ -110,7 +111,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'loan',
     name: 'Prepayment Calculator',
     description: 'Simulate lump-sum part-payment benefits: Choose between tenure reduction or EMI reduction.',
-    path: '/calculators/loan/prepayment',
+    path: '/financial-tools/loan/prepayment',
     icon: <Coins size={22} />,
     tags: ['prepayment', 'part payment', 'save interest', 'tenure reduction'],
   },
@@ -120,7 +121,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'loan',
     name: 'Rate Change Calculator',
     description: 'Evaluate impact of interest rate hike or reduction on monthly EMI and loan duration.',
-    path: '/calculators/loan/rate-change',
+    path: '/financial-tools/loan/rate-change',
     icon: <RefreshCw size={22} />,
     tags: ['rate change', 'repo rate', 'emi increase', 'floating rate'],
   },
@@ -130,7 +131,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'loan',
     name: 'GST on Interest & Charges',
     description: 'Calculate applicable GST (CGST + SGST) on processing fees, late charges, and loan services.',
-    path: '/calculators/loan/gst-interest',
+    path: '/financial-tools/loan/gst-interest',
     icon: <Receipt size={22} />,
     tags: ['gst', 'charges', 'processing fee', 'tax'],
   },
@@ -142,7 +143,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'investment',
     name: 'Fixed Deposit (FD) Calculator',
     description: 'Determine FD maturity amount & interest earned with monthly, quarterly, or yearly compounding.',
-    path: '/calculators/investment/fd',
+    path: '/financial-tools/investment/fd',
     icon: <Building size={22} />,
     tags: ['fd', 'fixed deposit', 'compounding', 'bank'],
   },
@@ -152,7 +153,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'investment',
     name: 'Recurring Deposit (RD) Calculator',
     description: 'Calculate maturity value for recurring monthly savings with quarterly bank compounding.',
-    path: '/calculators/investment/rd',
+    path: '/financial-tools/investment/rd',
     icon: <PiggyBank size={22} />,
     tags: ['rd', 'recurring deposit', 'monthly deposit'],
   },
@@ -162,7 +163,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'investment',
     name: 'SIP Calculator',
     description: 'Project wealth accumulation and estimated returns from systematic monthly mutual fund investments.',
-    path: '/calculators/investment/sip',
+    path: '/financial-tools/investment/sip',
     icon: <TrendingUp size={22} />,
     tags: ['sip', 'mutual fund', 'wealth', 'systematic investment'],
   },
@@ -172,7 +173,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'investment',
     name: 'Interest Calculator (SI & CI)',
     description: 'Dual-mode Simple & Compound Interest calculator with transparent formula displays.',
-    path: '/calculators/investment/interest',
+    path: '/financial-tools/investment/interest',
     icon: <Percent size={22} />,
     tags: ['interest', 'simple interest', 'compound interest', 'si', 'ci'],
   },
@@ -182,7 +183,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'investment',
     name: 'PPF Calculator',
     description: 'Calculate Public Provident Fund growth, annual tax-free interest, and 15-year maturity schedule.',
-    path: '/calculators/investment/ppf',
+    path: '/financial-tools/investment/ppf',
     icon: <Briefcase size={22} />,
     tags: ['ppf', 'provident fund', 'tax saving', '15 years'],
   },
@@ -194,7 +195,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'other',
     name: 'GST Calculator',
     description: 'Add or remove GST from gross or net amounts with standard 5%, 12%, 18%, 28% and custom rates.',
-    path: '/calculators/other/gst',
+    path: '/financial-tools/other/gst',
     icon: <Receipt size={22} />,
     tags: ['gst', 'tax', 'cgst', 'sgst', 'reverse gst'],
   },
@@ -204,7 +205,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'other',
     name: 'Profit & Margin Calculator',
     description: 'Compute profit/loss amount and understand key difference between Profit % and Margin %.',
-    path: '/calculators/other/profit-margin',
+    path: '/financial-tools/other/profit-margin',
     icon: <DollarSign size={22} />,
     tags: ['profit', 'loss', 'margin', 'cost price', 'selling price'],
   },
@@ -214,7 +215,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'other',
     name: 'Discount Calculator',
     description: 'Calculate final billing price after percentage discount or flat cash deduction.',
-    path: '/calculators/other/discount',
+    path: '/financial-tools/other/discount',
     icon: <Tag size={22} />,
     tags: ['discount', 'sale', 'savings', 'percentage off'],
   },
@@ -224,7 +225,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'other',
     name: 'Cash Note Counter',
     description: 'Real-time currency denomination counter for Indian notes & coins with instant print view.',
-    path: '/calculators/other/cash-counter',
+    path: '/financial-tools/other/cash-counter',
     icon: <Banknote size={22} />,
     tags: ['cash', 'currency', 'notes', 'denomination', 'counter'],
   },
@@ -234,7 +235,7 @@ export const CALCULATOR_REGISTRY = [
     categoryKey: 'other',
     name: 'Amount to Words Converter',
     description: 'Convert numeric ₹ values to formal Indian words (Lakhs, Crores, Rupees and Paise).',
-    path: '/calculators/other/amount-to-words',
+    path: '/financial-tools/other/amount-to-words',
     icon: <HelpCircle size={22} />,
     tags: ['words', 'amount in words', 'cheque writing', 'indian numbering'],
   },
@@ -262,16 +263,16 @@ export default function CalculatorDashboard() {
   ];
 
   return (
-    <CalculatorLayout currentTitle="Calculator Dashboard">
+    <CalculatorLayout currentTitle="Financial Tools Dashboard">
       {/* Hero Banner */}
       <section className="calc-hero animate-fade-in">
         <div className="calc-hero-badge">
           <Calculator size={16} />
-          <span>AVANI LOAN SERVICES • FINANCIAL TOOLS</span>
+          <span>AVANI LOAN SERVICES • FINANCIAL INTELLIGENCE</span>
         </div>
-        <h2 className="calc-hero-title">Financial Calculator Suite</h2>
+        <h2 className="calc-hero-title">AVANI FINANCIAL TOOLS</h2>
         <p className="calc-hero-desc">
-          Professional calculators for loan underwriting, interest amortization, investment planning, and tax calculations.
+          Loan, Investment & Financial Calculators — Professional underwriting tools, interest amortization schedules, and indicative eligibility assessment.
         </p>
 
         <div className="calc-search-box">
@@ -339,6 +340,9 @@ export default function CalculatorDashboard() {
           </button>
         </div>
       )}
+
+      {/* Contextual Explore Services Integration */}
+      <ExploreServices heading="Explore Our Specialized Loan Products" />
     </CalculatorLayout>
   );
 }

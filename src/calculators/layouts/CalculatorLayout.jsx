@@ -1,6 +1,7 @@
 // src/calculators/layouts/CalculatorLayout.jsx
 // ─────────────────────────────────────────────────────────────────
-// Main Suite Layout with Topbar, Brand Header, Breadcrumbs & Logout
+// Main Suite Layout with Topbar, Brand Header, Breadcrumbs & Actions
+// Supports Public Navigation and Protected Admin Access
 // ─────────────────────────────────────────────────────────────────
 
 import React from 'react';
@@ -12,17 +13,19 @@ import {
   LayoutDashboard,
   Printer,
   ShieldCheck,
+  FileDown,
+  Lock
 } from 'lucide-react';
 import logo from '../../assets/avani-brand-logo.png';
 import '../styles/calculators.css';
 
 export default function CalculatorLayout({ children }) {
-  const { logout } = useCalculatorAuth();
+  const { isAuthenticated, logout } = useCalculatorAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout();
-    navigate('/calculators/login', { replace: true });
+    navigate('/calculators', { replace: true });
   };
 
   const handlePrint = () => {
@@ -42,9 +45,19 @@ export default function CalculatorLayout({ children }) {
         </Link>
 
         <div className="calc-topbar-actions">
-          <Link to="/calculators" className="calc-btn calc-btn-secondary calc-btn-sm">
+          <Link to="/financial-tools" className="calc-btn calc-btn-secondary calc-btn-sm" title="Financial Tools Hub">
             <LayoutDashboard size={16} />
-            <span>All Calculators</span>
+            <span>Dashboard</span>
+          </Link>
+
+          <Link to="/financial-tools/eligibility" className="calc-btn calc-btn-primary calc-btn-sm" title="AI Loan Eligibility Assessment">
+            <ShieldCheck size={16} />
+            <span>Check Eligibility</span>
+          </Link>
+
+          <Link to="/download-application" className="calc-btn calc-btn-secondary calc-btn-sm" title="Download Official Application Forms & Kits">
+            <FileDown size={16} />
+            <span>Application Kits</span>
           </Link>
 
           <button
@@ -56,19 +69,33 @@ export default function CalculatorLayout({ children }) {
             <span>Print</span>
           </button>
 
-          <span className="calc-badge-auth" title="Authenticated Session Active">
-            <ShieldCheck size={14} />
-            <span>Authorized</span>
-          </span>
+          {isAuthenticated ? (
+            <>
+              <Link to="/financial-tools/admin" className="calc-btn calc-btn-secondary calc-btn-sm" title="Open Admin Operations">
+                <ShieldCheck size={16} />
+                <span>Admin</span>
+              </Link>
 
-          <button
-            onClick={handleLogout}
-            className="calc-btn calc-btn-outline calc-btn-sm"
-            title="Logout of Financial Calculator Suite"
-          >
-            <LogOut size={16} />
-            <span>Logout</span>
-          </button>
+              <button
+                onClick={handleLogout}
+                className="calc-btn calc-btn-outline calc-btn-sm"
+                title="Logout of Session"
+              >
+                <LogOut size={16} />
+                <span>Logout</span>
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/financial-tools/login"
+              className="calc-btn calc-btn-ghost calc-btn-sm"
+              title="Login with Security Password"
+              style={{ color: '#64748b' }}
+            >
+              <Lock size={14} />
+              <span>Login</span>
+            </Link>
+          )}
         </div>
       </header>
 

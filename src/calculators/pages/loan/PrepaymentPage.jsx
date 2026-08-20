@@ -238,6 +238,7 @@ export default function PrepaymentPage() {
         formulaCode="New Principal = Outstanding Balance - Prepayment Lump Sum"
         formulaDescription="Prepayments directly reduce the principal balance, permanently eliminating compounding interest over the remaining loan period."
         disclaimerText="Check your loan agreement for minimum part-payment thresholds (e.g., minimum 1 EMI or ₹10,000) and frequency limits."
+        calcTag="prepayment"
         onReset={handleReset}
       />
     </CalculatorLayout>

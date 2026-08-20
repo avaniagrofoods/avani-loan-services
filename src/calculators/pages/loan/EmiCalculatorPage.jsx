@@ -256,6 +256,7 @@ export default function EmiCalculatorPage() {
         formulaCode="EMI = P × r × (1 + r)^n / ((1 + r)^n - 1)"
         formulaDescription="Where P = Principal Loan Amount, r = Monthly interest rate (Annual rate / 12 / 100), and n = Total number of monthly installments."
         disclaimerText="This calculator provides an indicative estimate. Actual EMI and repayment schedules may vary based on lender terms, interest rate type (fixed vs floating), processing fees, and documentation."
+        calcTag="emi"
         onReset={handleReset}
       >
         <AmortizationTable monthly={schedule.monthly} yearly={schedule.yearly} />

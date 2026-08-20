@@ -225,6 +225,7 @@ export default function OverdraftPage() {
         formulaCode="Interest = Utilized Amount × (Annual Rate / 100) × (Days / 365)"
         formulaDescription="Interest is applied only on the amount withdrawn from your credit line for the specific number of days utilized."
         disclaimerText="Actual overdraft interest calculation depends on daily closing balance methodology, monthly capitalization, and specific bank/NBFC ledger calculation rules."
+        calcTag="overdraft"
         onReset={handleReset}
       />
     </CalculatorLayout>

@@ -229,6 +229,7 @@ export default function LoanComparisonPage() {
         formulaCode="Total Cost = Total Repayment (Principal + Interest) + Processing Fee + Incidental Charges"
         formulaDescription="A lower interest rate does not always guarantee the lowest cost if the lender charges high upfront administrative fees."
         disclaimerText="Comparison is indicative. Verify all loan sanction letters for additional hidden fees, insurance premiums, stamp duty, or documentation charges."
+        calcTag="comparison"
         onReset={handleReset}
       />
     </CalculatorLayout>

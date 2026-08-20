@@ -20,7 +20,7 @@ export default function CalculatorLogin() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/calculators';
+  const from = location.state?.from?.pathname || '/financial-tools';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,12 +52,12 @@ export default function CalculatorLogin() {
           </div>
           <div className="calc-login-badge">
             <Calculator size={16} />
-            <span>Professional Suite</span>
+            <span>Authorized Security Protocol</span>
           </div>
-          <h1 className="calc-login-title">AVANI LOAN SERVICES</h1>
-          <h2 className="calc-login-subtitle">Financial Calculator Suite</h2>
+          <h1 className="calc-login-title">AVANI FINANCIAL TOOLS</h1>
+          <h2 className="calc-login-subtitle">Loan, Investment & Financial Calculators</h2>
           <p className="calc-login-caption">
-            Professional Loan, Investment & Financial Planning Tools
+            Underwriting Tools, Intelligence Engines & Document Assessment Portal
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export default function CalculatorLogin() {
             ) : (
               <>
                 <KeyRound size={18} />
-                <span>Access Calculator Suite</span>
+                <span>Access Admin Center</span>
                 <ArrowRight size={16} />
               </>
             )}

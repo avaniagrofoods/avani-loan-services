@@ -145,16 +145,19 @@ export function numberToIndianWords(amount) {
   }
 
   words = words.trim();
-  let result = words ? `${words} Rupees` : '';
+  const rupeeUnit = (integerPart === 1 && words === 'One') ? 'Rupee' : 'Rupees';
+  let result = words ? `${words} ${rupeeUnit}` : '';
 
   if (paisePart > 0) {
     const paiseWords = convertBelowThousand(paisePart);
+    const paiseUnit = paisePart === 1 ? 'Paise' : 'Paise';
     if (result) {
-      result += ` and ${paiseWords} Paise`;
+      result += ` and ${paiseWords} ${paiseUnit}`;
     } else {
-      result = `${paiseWords} Paise`;
+      result = `${paiseWords} ${paiseUnit}`;
     }
   }
 
   return `${result} Only`.trim();
 }
+

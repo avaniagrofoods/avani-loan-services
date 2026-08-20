@@ -146,6 +146,7 @@ export default function GstOnInterestPage() {
         formulaCode="Total = Base + (Base × GST Rate %); CGST = SGST = (GST Amount / 2)"
         formulaDescription="Standard Indian banking and NBFC services generally attract 18% GST (9% CGST + 9% SGST for intra-state supply)."
         disclaimerText="GST applicability depends on the nature of the charge/service and applicable tax rules. Pure interest on standard loans/advances is typically exempt from GST, whereas processing fees, prepayment fees, documentation fees, and penal interest attract standard GST. Verify lender tax invoices."
+        calcTag="gst-interest"
         onReset={handleReset}
       />
     </CalculatorLayout>

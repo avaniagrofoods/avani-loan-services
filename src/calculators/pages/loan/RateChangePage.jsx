@@ -200,6 +200,7 @@ export default function RateChangePage() {
         formulaCode="Δ EMI = EMI(New Rate, n, P) - EMI(Current Rate, n, P)"
         formulaDescription="When interest rates adjust, lenders generally increase tenure by default. Borrowers can choose between paying higher monthly EMIs or extending repayment duration."
         disclaimerText="Actual loan adjustments depend on whether your lender automatically updates EMI or extends loan maturity tenor."
+        calcTag="rate-change"
         onReset={handleReset}
       />
     </CalculatorLayout>

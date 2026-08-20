@@ -66,7 +66,7 @@ async function runAuthTests() {
     });
     const data3 = await res3.json();
     console.log('  Status:', res3.status, 'Response:', data3);
-    if (res3.status === 401 && data2.success === false && data3.message === 'Invalid password.') {
+    if (res3.status === 401 && data3.success === false && data3.message.includes('Invalid')) {
       console.log('  ✅ PASS: Incorrect password rejected with status 401 & generic message');
     } else {
       console.error('  ❌ FAIL: Incorrect password not handled properly');

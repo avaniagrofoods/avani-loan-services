@@ -839,8 +839,9 @@ export function calculateProfitLoss({
   const isProfit = diff >= 0;
   const amount = Math.abs(diff);
 
-  const profitLossPercent = cp > 0 ? (diff / cp) * 100 : 0;
-  const marginPercent = sp > 0 ? (diff / sp) * 100 : 0;
+  const profitLossPercent = cp > 0 ? Math.abs((diff / cp) * 100) : 0;
+  const marginPercent = sp > 0 ? Math.abs((diff / sp) * 100) : 0;
+  const signedProfitPercent = cp > 0 ? (diff / cp) * 100 : 0;
 
   return {
     costPrice: cp,
@@ -850,6 +851,7 @@ export function calculateProfitLoss({
     amount,
     profitLossPercent,
     marginPercent,
+    signedProfitPercent,
   };
 }
 
@@ -860,18 +862,21 @@ export function calculateDiscount({
   originalPrice = 0,
   discountPercent = 0,
   discountAmount = 0,
-  mode = 'percent', // 'percent' or 'amount'
+  flatDiscount = 0,
+  mode = 'percent', // 'percent', 'amount', or 'flat'
 }) {
   const price = Math.max(0, parseNumber(originalPrice));
 
   let discAmt = 0;
   let discPct = 0;
 
+  const rawFlat = parseNumber(flatDiscount) || parseNumber(discountAmount);
+
   if (mode === 'percent') {
     discPct = Math.min(100, Math.max(0, parseNumber(discountPercent)));
     discAmt = (price * discPct) / 100;
   } else {
-    discAmt = Math.min(price, Math.max(0, parseNumber(discountAmount)));
+    discAmt = Math.min(price, Math.max(0, rawFlat));
     discPct = price > 0 ? (discAmt / price) * 100 : 0;
   }
 
@@ -881,6 +886,7 @@ export function calculateDiscount({
     originalPrice: price,
     discountPercent: discPct,
     discountAmount: discAmt,
+    flatDiscount: discAmt,
     finalPrice,
     amountSaved: discAmt,
     mode,

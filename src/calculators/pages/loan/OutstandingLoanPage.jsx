@@ -211,6 +211,7 @@ export default function OutstandingLoanPage() {
         formulaCode="Outstanding Principal = Balance(k) = P(1+r)^k - (EMI/r)[(1+r)^k - 1]"
         formulaDescription="Standard reducing balance tracking where each monthly installment is split between accrued monthly interest and principal reduction."
         disclaimerText="This calculation provides an indicative estimate assuming regular on-time EMI repayments. Exact outstanding balance on lender statement may include accrued broken-period interest or unpaid charges."
+        calcTag="outstanding"
         onReset={handleReset}
       />
     </CalculatorLayout>

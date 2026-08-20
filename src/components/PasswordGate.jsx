@@ -1,36 +1,71 @@
 // src/components/PasswordGate.jsx
 // ─────────────────────────────────────────────────────────────────
-// Password Gate Security Layer for Sensitive Pages
-// Password: Samarth@1356
+// Password Gate Security Layer for Sensitive Operations
+// Enforced via Server-Side Session Authentication
 // ─────────────────────────────────────────────────────────────────
 
-import { useState } from 'react';
-import { Lock, Eye, EyeOff, ShieldAlert, KeyRound } from 'lucide-react';
-
-const CORRECT_PASSWORD = 'Samarth@1356';
+import { useState, useEffect } from 'react';
+import { Lock, Eye, EyeOff, ShieldAlert, KeyRound, Loader2 } from 'lucide-react';
 
 export default function PasswordGate({ children, pageTitle = 'Protected Access Area' }) {
-  const [authenticated, setAuthenticated] = useState(() => {
-    return sessionStorage.getItem('avani_auth_token') === 'authenticated_samarth1356';
-  });
-
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [passwordInput, setPasswordInput] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleUnlock = (e) => {
+  useEffect(() => {
+    // Verify server session
+    fetch('/api/calculator-auth/verify', {
+      headers: { 'Accept': 'application/json' },
+      credentials: 'same-origin'
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.authenticated) {
+          setAuthenticated(true);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleUnlock = async (e) => {
     e.preventDefault();
-    if (passwordInput === CORRECT_PASSWORD) {
-      sessionStorage.setItem('avani_auth_token', 'authenticated_samarth1356');
-      setAuthenticated(true);
-      setErrorMsg('');
-    } else {
-      setErrorMsg('Incorrect Password! Please enter valid security password.');
+    if (!passwordInput.trim()) {
+      setErrorMsg('Please enter security password.');
+      return;
+    }
+    setSubmitting(true);
+    setErrorMsg('');
+
+    try {
+      const res = await fetch('/api/calculator-auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ password: passwordInput })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        setAuthenticated(true);
+      } else {
+        setErrorMsg(data.message || 'Incorrect Password! Please enter valid security password.');
+      }
+    } catch {
+      setErrorMsg('Network error during authentication. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  if (authenticated) {
-    return children;
+  if (loading) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0A4F8B' }}>
+        <p style={{ fontWeight: 600 }}>Verifying access authorization...</p>
+      </div>
+    );
   }
 
   return (

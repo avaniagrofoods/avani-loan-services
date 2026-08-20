@@ -187,6 +187,7 @@ export default function ForeclosurePage() {
         formulaCode="Settlement = Principal + (Principal × Fee%) + GST_on_Fee + Other_Charges"
         formulaDescription="Under RBI guidelines, floating rate individual term loans generally carry zero foreclosure charges, while fixed-rate and non-individual business loans may attract prepayment penalties."
         disclaimerText="Actual foreclosure charges depend on lender, product type, individual vs non-individual borrower status, loan agreement, and applicable RBI/regulatory guidelines. Verify with lender foreclosure quote."
+        calcTag="foreclosure"
         onReset={handleReset}
       />
     </CalculatorLayout>

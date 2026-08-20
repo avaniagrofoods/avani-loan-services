@@ -114,11 +114,14 @@ Include:
   }
 
   const timestamp = new Date().toISOString();
+  const applicationId = 'ALS-ELG-' + new Date().getFullYear() + '-' + String(Math.floor(100000 + Math.random() * 900000));
+  const estimatedMultiplier = numMonthlyNet > 0 ? Number((maxPrincipal / (numMonthlyNet * 12)).toFixed(1)) : 5.0;
 
   // --- Store request in Google Sheet (fire & forget / safe catch) ---------------------
   try {
     await appendRowToGoogleSheet({
       timestamp,
+      applicationId,
       name: applicantName,
       phone: payload.phone || '',
       email: payload.email || '',
@@ -135,17 +138,27 @@ Include:
 
   // Return structured result
   return {
+    applicationId,
     timestamp,
     loanType,
     applicantName,
+    employmentType: payload.employmentType || 'Salaried',
+    monthlyIncome: numMonthlyNet,
+    existingEmi: numExistingEmi,
     maxPrincipal: Number(maxPrincipal.toFixed(2)),
     emi: Number(emi.toFixed(2)),
+    rate: monthlyRate,
+    tenureMonths: numTenure,
     foir: foirPct,
     dti: dtiPct,
+    multiplier: estimatedMultiplier,
+    eligibilityMethod: avgIncome > 0 ? 'FOIR & Income Multiplier Combined Underwriting' : 'FOIR Capacity Assessment',
+    disclaimer: 'These calculations are indicative and are not a sanction, approval, commitment or guarantee of loan approval. Final eligibility, interest rate, loan amount and approval are subject to lender policies, credit assessment, documentation, verification, property/security assessment where applicable, and applicable regulatory requirements.',
     recommendation,
     uploadedFiles: files,
   };
 }
 
 module.exports = { processEligibility };
+
 

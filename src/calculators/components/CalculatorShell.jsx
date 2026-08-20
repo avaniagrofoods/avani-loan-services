@@ -15,6 +15,7 @@ import {
   AlertTriangle,
   Code2
 } from 'lucide-react';
+import ExploreServices from './ExploreServices';
 import '../styles/calculators.css';
 
 export default function CalculatorShell({
@@ -27,6 +28,7 @@ export default function CalculatorShell({
   formulaCode,
   formulaDescription,
   disclaimerText,
+  calcTag,
   onCalculate,
   onReset,
   children,
@@ -145,6 +147,9 @@ export default function CalculatorShell({
 
       {/* Extra Full Width Children (e.g., Amortization Schedules) */}
       {children}
+
+      {/* Contextual Explore Services Integration */}
+      <ExploreServices currentCalcTag={calcTag} />
     </div>
   );
 }

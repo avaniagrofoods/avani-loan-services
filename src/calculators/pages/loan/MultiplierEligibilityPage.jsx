@@ -206,6 +206,7 @@ export default function MultiplierEligibilityPage() {
         formulaCode="Eligible Loan = (Monthly Income × Multiplier) - Existing Obligation Load"
         formulaDescription="Standard home and personal loan policies often allow between 40x and 80x monthly salary based on employer category and applicant credit standing."
         disclaimerText="This calculation is an indicative estimation for planning purposes. Final sanctioned amount depends on credit scoring, property/asset valuation, and internal lender underwriting."
+        calcTag="multiplier"
         onReset={handleReset}
       />
     </CalculatorLayout>

@@ -45,8 +45,10 @@ export default function CalculatorProtectedRoute({ children }) {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/calculators/login" state={{ from: location }} replace />;
+    const loginTarget = location.pathname.startsWith('/financial-tools') ? '/financial-tools/login' : '/calculators/login';
+    return <Navigate to={loginTarget} state={{ from: location }} replace />;
   }
 
   return children;
 }
+

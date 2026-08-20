@@ -37,6 +37,7 @@ export default function Footer() {
               <li><Link to="/loans">{t('all_loans')}</Link></li>
               <li><Link to="/eligibility">{t('eligibility')}</Link></li>
               <li><Link to="/documents">{t('documents')}</Link></li>
+              <li><Link to="/download-application">{t('download_app')}</Link></li>
               <li><Link to="/calculators">Financial Calculators</Link></li>
               <li><Link to="/blog">{t('blog')}</Link></li>
             </ul>
