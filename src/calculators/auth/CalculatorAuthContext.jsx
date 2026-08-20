@@ -1,9 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 // src/calculators/auth/CalculatorAuthContext.jsx
-// ─────────────────────────────────────────────────────────────────
 // Context Provider for Calculator Suite Authentication State
 // Communicates with Server-Side HttpOnly Session API
-// ─────────────────────────────────────────────────────────────────
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
@@ -13,12 +11,11 @@ export function CalculatorAuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check active server-side session
   const verifySession = useCallback(async () => {
     try {
       const response = await fetch('/api/calculator-auth/verify', {
         method: 'GET',
-        headers: { 'Accept': 'application/json' },
+        headers: { Accept: 'application/json' },
         credentials: 'same-origin',
       });
       if (response.ok) {
@@ -38,7 +35,6 @@ export function CalculatorAuthProvider({ children }) {
     verifySession();
   }, [verifySession]);
 
-  // Login handler
   const login = async (password) => {
     try {
       const response = await fetch('/api/calculator-auth/login', {
@@ -47,26 +43,17 @@ export function CalculatorAuthProvider({ children }) {
         credentials: 'same-origin',
         body: JSON.stringify({ password }),
       });
-
       const data = await response.json().catch(() => ({}));
       if (response.ok && data.success) {
         setIsAuthenticated(true);
         return { success: true };
-      } else {
-        return {
-          success: false,
-          message: data.message || 'Invalid password.',
-        };
       }
+      return { success: false, message: data.message || 'Invalid password.' };
     } catch {
-      return {
-        success: false,
-        message: 'Network error during authentication. Please try again.',
-      };
+      return { success: false, message: 'Network error during authentication. Please try again.' };
     }
   };
 
-  // Logout handler
   const logout = async () => {
     try {
       await fetch('/api/calculator-auth/logout', {
@@ -74,7 +61,7 @@ export function CalculatorAuthProvider({ children }) {
         credentials: 'same-origin',
       });
     } catch {
-      // ignore
+      // ignore network failure during logout
     } finally {
       setIsAuthenticated(false);
     }
