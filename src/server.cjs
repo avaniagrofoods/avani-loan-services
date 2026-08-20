@@ -5,25 +5,21 @@ const path     = require('path');
 const cors     = require('cors');
 const app      = express();
 
-// ── Startup Environment Guard ──────────────────────────────────
 const { validateEnvironmentIsolation } = require('./config/envValidator.cjs');
 const { connectDB } = require('./models/database.cjs');
 
 validateEnvironmentIsolation();
 connectDB().catch(err => console.warn('[Database] Initial connection warning:', err.message));
 
-// ── Middleware ──────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '../dist')));
 
-// ── Master Forensic Webhook Route ───────────────────────────────
 const { router: whatsappWebhookRouter } = require('./routes/whatsappWebhookController.cjs');
 app.use('/api/whatsapp-webhook', whatsappWebhookRouter);
 
-// ── API Routes ──────────────────────────────────────────────────
 const eligibilityRouter = require('./routes/eligibility.cjs');
 app.use('/api/eligibility', eligibilityRouter);
 
@@ -49,24 +45,19 @@ app.use('/api/documents', documentPortalRoutes);
 const metaWebhooks = require('./routes/metaWebhooks.cjs');
 app.use('/api/meta', metaWebhooks);
 
-const calculatorAuthRouter = require('./routes/calculatorAuth.cjs');
+// Calculator authentication now exports both its Express router and the
+// session verifier used by the protected FOIR assessment endpoint.
+const { router: calculatorAuthRouter } = require('./routes/calculatorAuth.cjs');
 app.use('/api/calculator-auth', calculatorAuthRouter);
 
-// ── SPA Fallback ────────────────────────────────────────────────
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
-// ── Start (not on Vercel) ───────────────────────────────────────
 if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`✅ Server running on http://localhost:${PORT}`);
-  });
-
-  // Load retention cron (dedicated module)
+  app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
   require('./cron/retention.cjs');
 }
 
 module.exports = app;
-
