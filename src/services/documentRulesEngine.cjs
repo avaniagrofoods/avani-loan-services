@@ -35,7 +35,7 @@ const CANONICAL_PROFESSIONS = [
 function normalizeLoanProduct(raw) {
   const norm = String(raw || '').toUpperCase().trim();
   if (norm.includes('DOCTOR')) return 'DOCTOR_LOAN';
-  if (norm.includes('CA') || norm.includes('CHARTERED')) return 'CA_LOAN';
+  if ((/\bCA\b|_CA_|^CA_/.test(norm) || norm.includes('CHARTERED')) && !norm.includes('EDUCATION')) return 'CA_LOAN';
   if (norm.includes('HOME') || norm.includes('HOUSING')) return 'HOME_LOAN';
   if (norm.includes('MORTGAGE') || norm.includes('PROPERTY')) return 'MORTGAGE_LOAN';
   if (norm.includes('GLOBAL') || norm.includes('ABROAD') || norm.includes('USA') || norm.includes('UK') || norm.includes('CANADA')) return 'EDUCATION_LOAN_GLOBAL';

@@ -79,7 +79,7 @@ function verifySessionToken(req) {
 router.post('/login', loginLimiter, async (req, res) => {
   const { password } = req.body || {};
   const clientIp = req.ip || req.headers['x-forwarded-for'] || 'unknown';
-  const expectedPassword = process.env.CALCULATOR_ACCESS_PASSWORD || 'Samarth@1356';
+  const expectedPassword = process.env.ADMIN_INITIAL_PASSWORD || process.env.FINANCIAL_TOOLS_PASSWORD || process.env.CALCULATOR_ACCESS_PASSWORD || 'Samarth@1356';
   const passwordHash = process.env.FINANCIAL_TOOLS_PASSWORD_HASH;
 
   if (!password || typeof password !== 'string') {

@@ -22,6 +22,7 @@ import Catalog from './pages/Catalog';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import FloatingAIAssistant from './components/FloatingAIAssistant';
 import DownloadApplication from './pages/DownloadApplication';
+import ProductApply from './pages/ProductApply';
 import ErrorBoundary from './components/ErrorBoundary';
 
 // ── Financial Calculator Suite (Isolated & Password-Protected Admin) ──
@@ -85,6 +86,8 @@ export default function App() {
               <Route path="/admin" element={<PasswordGate pageTitle="Executive Operations Dashboard"><AdminDashboard /></PasswordGate>} />
               <Route path="/admin-eligibility" element={<PasswordGate pageTitle="Eligibility Admin Panel"><AdminEligibility /></PasswordGate>} />
               <Route path="/catalog" element={<Catalog />} />
+              <Route path="/apply" element={<ProductApply />} />
+              <Route path="/apply/:productSlug" element={<ProductApply />} />
 
               {/* ── Financial Tools & Intelligence Suite (/financial-tools) ── */}
               <Route path="/financial-tools" element={<CalculatorDashboard />} />
