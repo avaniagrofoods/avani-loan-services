@@ -29,7 +29,7 @@ I have created the cron job script (`/api/cron/drip`) which checks your database
 
 ## 4. Meta Tokens & Credentials
 Regarding your question about the Meta Token:
-`EAAdIUij5eSEBR1tjZASBLA9WFpRZAZCEI7ShLfEvwC2ZBECvMNPbZAL2Erkd5LJbP6mVK2ZB9tpkS2PFxSwTpSL0uNBd1onmthi1eiZCDkE0XWPYx6W8dikLOLMbxPq1KimnaT4nV9E2JzxUFkNyS9xBiKUZB248NS5gUcQWk7GLTsQZBUWF4SzkpOazCo3XIBAZDZD.`
+`[REDACTED_META_ACCESS_TOKEN].`
 
 Yes, this token looks entirely **valid**. It is a standard long-lived System User Access Token required for Meta Graph API v19.0. 
 Make sure you update the `WHATSAPP_API_TOKEN` environment variable in your Render settings for **both** the CRM Backend and the Loan Agents webhook server with this new token, then redeploy them.

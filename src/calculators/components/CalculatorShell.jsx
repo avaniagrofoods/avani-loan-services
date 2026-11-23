@@ -16,6 +16,7 @@ import {
   Code2
 } from 'lucide-react';
 import ExploreServices from './ExploreServices';
+import useSEO from '../../hooks/useSEO';
 import '../styles/calculators.css';
 
 export default function CalculatorShell({
@@ -33,6 +34,12 @@ export default function CalculatorShell({
   onReset,
   children,
 }) {
+  useSEO({
+    title: `${title} | Avani Loan Services`,
+    description: description || `${title} — Indicative financial planning calculator by AVANI LOAN SERVICES, Latur.`,
+    keywords: `${title}, ${category || 'Financial Calculator'}, Avani Loan Services Latur`
+  });
+
   const handlePrint = () => {
     window.print();
   };
@@ -45,7 +52,7 @@ export default function CalculatorShell({
       {/* Workspace Header */}
       <section className="calc-workspace-header">
         <nav className="calc-breadcrumbs" aria-label="Calculator Breadcrumb">
-          <Link to="/calculators" className="calc-breadcrumb-link">Calculators</Link>
+          <Link to="/financial-tools" className="calc-breadcrumb-link">Calculators</Link>
           <ChevronRight size={14} />
           {category && (
             <>
@@ -58,7 +65,7 @@ export default function CalculatorShell({
 
         <div className="calc-workspace-title-row">
           <div>
-            <h2 className="calc-workspace-title">{title}</h2>
+            <h1 className="calc-workspace-title">{title}</h1>
             <p className="calc-workspace-desc">{description}</p>
           </div>
 

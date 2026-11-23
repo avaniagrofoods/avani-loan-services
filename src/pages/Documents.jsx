@@ -1,9 +1,9 @@
 import useSEO from '../hooks/useSEO';
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, MessageCircle, Phone } from 'lucide-react';
-import { generateWhatsAppDocumentLink, PHONE_NUMBER, DISPLAY_PHONE } from '../utils/whatsappHelper';
-import brandLogo from '../assets/avani-brand-logo.png';
-import PasswordGate from '../components/PasswordGate';
+import { generateWhatsAppDocumentLink, TEL_HREF, DISPLAY_PHONE } from '../utils/whatsappHelper';
+import { OFFICIAL_BUSINESS } from '../config/officialBusiness';
+import brandLogo from '../assets/optimized/avani-brand-logo.webp';
 import './Documents.css';
 
 const docs = [
@@ -131,13 +131,13 @@ function DocAccordion({ item }) {
               📲 Get Document List on WhatsApp
             </a>
             <a 
-              href={PHONE_NUMBER} 
+              href={TEL_HREF} 
               className="btn btn-outline"
               style={{ fontSize: '0.85rem' }}
-              aria-label={`Call Avani Loan Services at 9175635165 for ${item.title}`}
+              aria-label={`Call ${OFFICIAL_BUSINESS.name} at ${DISPLAY_PHONE} for ${item.title}`}
             >
-              <Phone size={16} style={{ marginRight: '6px' }} />
-              📞 Call {DISPLAY_PHONE}
+              <Phone size={16} style={{ marginRight: '6px' }} aria-hidden="true" />
+              Call {DISPLAY_PHONE}
             </a>
           </div>
         </div>
@@ -147,38 +147,36 @@ function DocAccordion({ item }) {
 }
 
 export default function Documents() {
-  useSEO({ title: 'Documents Vault - Password Protected - Avani Loan Services', description: 'Mandatory documentation checklist for Home, Business, School Funding, and Education loans.', keywords: 'Documents, Loan, Avani Finserv, School Funding, Latur' });
+  useSEO({ title: 'Loan Documentation Checklist | Avani Loan Services', description: 'Mandatory documentation checklist for Home, Business, School Funding, and Education loans.', keywords: 'Documents, Loan, Avani Finserv, School Funding, Latur' });
 
   return (
-    <PasswordGate title="Documents Vault - Authorized Access">
-      <div>
-        <section className="page-header">
-          <div className="container">
-            <div className="page-header-top">
-              <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
-              <div>
-                <span className="badge">Documentation</span>
-                <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
-              </div>
+    <div>
+      <section className="page-header">
+        <div className="container">
+          <div className="page-header-top">
+            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <div>
+              <span className="badge">Documentation</span>
+              <div className="page-header-address">{OFFICIAL_BUSINESS.shortAddress}</div>
             </div>
-            <h1>Documents Required for Each Loan</h1>
-            <p>Click on any loan type to see the exact documents you need to prepare</p>
           </div>
-        </section>
+          <h1>Indicative Document Checklists</h1>
+          <p>Select a loan category to review typical KYC, income, and property documents requested by partner lenders</p>
+        </div>
+      </section>
 
-        <section className="section">
-          <div className="container">
-            <div className="docs-tip glass-card">
-              💡 <strong>Pro Tip:</strong> Start collecting these documents before applying. Our advisors will review your documents FREE and confirm your eligibility.
-              <a href="https://wa.me/919175635165" target="_blank" rel="noopener noreferrer" className="tip-link"> WhatsApp your docs →</a>
-            </div>
-            <div className="docs-list">
-              {docs.map((d, i) => <DocAccordion key={i} item={d} />)}
-            </div>
+      <section className="section">
+        <div className="container">
+          <div className="docs-tip glass-card">
+            <strong>Advisory Tip:</strong> Review typical documentation before applying. Exact document lists vary by lender policy — {OFFICIAL_BUSINESS.advisoryDisclosure}
+            <a href={`${OFFICIAL_BUSINESS.whatsappUrl}?text=${encodeURIComponent('Hello AVANI LOAN SERVICES, please share the indicative document checklist.')}`} target="_blank" rel="noopener noreferrer" className="tip-link"> Request checklist on WhatsApp →</a>
           </div>
-        </section>
-      </div>
-    </PasswordGate>
+          <div className="docs-list">
+            {docs.map((d, i) => <DocAccordion key={i} item={d} />)}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 

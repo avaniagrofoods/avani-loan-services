@@ -1,86 +1,92 @@
 import useSEO from '../hooks/useSEO';
-import brandLogo from '../assets/avani-brand-logo.png';
+import { OFFICIAL_BUSINESS } from '../config/officialBusiness';
+import brandLogo from '../assets/optimized/avani-brand-logo.webp';
 import './Privacy.css';
 
 export default function Privacy() {
-  useSEO({ title: 'Privacy - Avani Loan Services', description: 'Professional loan services in Maharashtra including Home, Business, Personal and Education loans.', keywords: 'Privacy, Loan, Avani Finserv, Latur' });
+  useSEO({
+    title: 'Privacy Policy | Avani Loan Services',
+    description:
+      'Privacy Policy and data-minimization standards for AVANI LOAN SERVICES in Latur, Maharashtra, India.',
+    keywords: 'Privacy Policy, DPDP consent, data minimization, Avani Loan Services Latur'
+  });
 
   return (
-    <div>
+    <div className="privacy-page">
       <section className="page-header">
         <div className="container">
           <div className="page-header-top">
-            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <img src={brandLogo} alt="Avani Loan Services Logo" className="page-header-logo" width="56" height="56" />
             <div>
-              <span className="badge">Legal</span>
-              <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
+              <span className="badge">Legal &amp; Privacy</span>
+              <div className="page-header-address">{OFFICIAL_BUSINESS.shortAddress}</div>
             </div>
           </div>
           <h1>Privacy Policy</h1>
-          <p>Last updated: April 10, 2025</p>
+          <p>Last updated: November 22, 2026</p>
         </div>
       </section>
 
       <section className="section">
         <div className="container">
           <div className="privacy-body glass-card">
-
-            <p>Avani Loan Services ("we", "us", or "our") operates this website. This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our service.</p>
+            <p>
+              <strong>{OFFICIAL_BUSINESS.name}</strong> (“we”, “us”, or “our”), founded by {OFFICIAL_BUSINESS.owner} and operating in the category of {OFFICIAL_BUSINESS.category} ({OFFICIAL_BUSINESS.model}), respects your privacy and processes personal information strictly on a data-minimization and explicit-consent basis.
+            </p>
 
             <h2>1. Information We Collect</h2>
-            <p>We collect information you voluntarily provide through our loan enquiry forms including:</p>
+            <p>When you voluntarily submit a consented loan advisory enquiry on {OFFICIAL_BUSINESS.websiteUrl}, we collect only minimal contact and requirement metadata:</p>
             <ul>
               <li>Full Name</li>
-              <li>Mobile Number</li>
-              <li>Email Address</li>
-              <li>Loan Requirements (type, amount)</li>
-              <li>City / Location</li>
+              <li>Mobile / WhatsApp Number</li>
+              <li>Email Address (optional)</li>
+              <li>City and General Loan Category / Approximate Requirement</li>
+              <li>Your Explicit Consent Timestamp and Preferred Contact Channel</li>
             </ul>
+            <p>
+              <strong>Sensitive Financial Documents Policy:</strong> We do <strong>not</strong> collect PAN numbers on our public Credit Readiness Guide and do <strong>not</strong> accept public unauthenticated uploads of ITRs, Aadhaar copies, or bank statements through open web forms.
+            </p>
 
-            <h2>2. How We Use Your Information</h2>
-            <p>The information we collect is used exclusively to:</p>
+            <h2>2. Purpose of Processing</h2>
+            <p>Your enquiry details are used strictly to:</p>
             <ul>
-              <li>Process your loan enquiry and connect you with our advisors</li>
-              <li>Contact you for loan consultation services</li>
-              <li>Send relevant loan offers (with your explicit consent)</li>
-              <li>Improve our services and website experience</li>
+              <li>Respond to your requested loan advisory consultation via your chosen contact method</li>
+              <li>Share indicative documentation checklists and general lender criteria</li>
+              <li>Coordinate formal loan applications with partner banks or NBFCs solely upon your explicit request</li>
             </ul>
 
-            <h2>3. Data Sharing</h2>
-            <p>Your personal data may be shared with:</p>
+            <h2>3. Data Sharing &amp; Storage</h2>
+            <p>We do <strong>not</strong> sell, rent, or trade personal data to data brokers or unauthorized third parties. Information may be shared only with:</p>
             <ul>
-              <li>Banking partners and NBFCs to process your loan application</li>
-              <li>Our CRM provider (Zoho CRM) for lead management</li>
+              <li>Partner banks and RBI-regulated NBFCs when you explicitly choose to proceed with a formal loan application</li>
+              <li>Authorized internal operational records managed exclusively by {OFFICIAL_BUSINESS.name} for enquiry follow-up and statutory compliance</li>
             </ul>
-            <p>We <strong>do not sell</strong> your data to third-party advertisers or data brokers.</p>
 
-            <h2>4. Data Security</h2>
-            <p>We implement reasonable security measures to protect your personal information. All form submissions are transmitted over HTTPS (SSL encrypted) connections.</p>
+            <h2>4. Data Security &amp; Retention</h2>
+            <p>
+              We apply technical and organizational safeguards including HTTPS transport encryption, explicit consent tracking, and restricted internal access. Personal enquiry records are retained only for as long as necessary to fulfill your consultation request or satisfy applicable Indian legal obligations.
+            </p>
 
-            <h2>5. Cookies</h2>
-            <p>This website uses cookies to enhance your browsing experience. You can disable cookies in your browser settings, though this may affect some website functionality.</p>
-
-            <h2>6. Your Rights</h2>
-            <p>You have the right to:</p>
+            <h2>5. Your Privacy Rights &amp; Opt-Out</h2>
+            <p>You may contact us at any time to:</p>
             <ul>
-              <li>Request access to your personal data we hold</li>
-              <li>Request correction of inaccurate data</li>
-              <li>Request deletion of your personal data</li>
-              <li>Opt out of marketing communications at any time</li>
+              <li>Request access to or correction of your submitted enquiry details</li>
+              <li>Withdraw consent and opt out of phone, WhatsApp, or email follow-ups</li>
+              <li>Request deletion of your enquiry record where not required by law</li>
             </ul>
 
-            <h2>7. Contact Us Regarding Privacy</h2>
-            <p>For any privacy-related inquiries, contact us at:</p>
+            <h2>6. Privacy Contact</h2>
             <ul>
-              <li>📧 Email: <a href="mailto:enquiry@avanifinserv.com">enquiry@avanifinserv.com</a></li>
-              <li>📞 Phone: <a href="tel:+919175635165">+91-9175635165</a></li>
-              <li>📍 Address: Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</li>
+              <li><strong>Business Name:</strong> {OFFICIAL_BUSINESS.name}</li>
+              <li><strong>Owner &amp; Founder:</strong> {OFFICIAL_BUSINESS.owner}</li>
+              <li><strong>Email:</strong> <a href={OFFICIAL_BUSINESS.emailHref}>{OFFICIAL_BUSINESS.email}</a></li>
+              <li><strong>Phone / WhatsApp:</strong> <a href={OFFICIAL_BUSINESS.telHref}>{OFFICIAL_BUSINESS.phoneDisplay}</a></li>
+              <li><strong>Address:</strong> {OFFICIAL_BUSINESS.fullAddress}</li>
             </ul>
 
-            <h2>8. Changes to This Policy</h2>
-            <p>We may update this policy periodically. Continued use of our website constitutes acceptance of the updated policy.</p>
-
-            <p className="privacy-footer">© 2025 Avani Loan Services. All rights reserved. Registered DSA — serving Maharashtra.</p>
+            <p className="privacy-footer">
+              &copy; {new Date().getFullYear()} {OFFICIAL_BUSINESS.name}. All rights reserved. {OFFICIAL_BUSINESS.category}.
+            </p>
           </div>
         </div>
       </section>

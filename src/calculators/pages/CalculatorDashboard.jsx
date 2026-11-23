@@ -9,6 +9,7 @@ import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import CalculatorLayout from '../layouts/CalculatorLayout';
 import ExploreServices from '../components/ExploreServices';
+import useSEO from '../../hooks/useSEO';
 import {
   Calculator,
   Percent,
@@ -242,6 +243,13 @@ export const CALCULATOR_REGISTRY = [
 ];
 
 export default function CalculatorDashboard() {
+  useSEO({
+    title: 'Financial Calculators & Loan Planning Tools | Avani Loan Services',
+    description:
+      'Indicative EMI, FOIR eligibility, prepayment, loan comparison, FD, RD, SIP, PPF, and GST calculators provided by AVANI LOAN SERVICES, Latur.',
+    keywords: 'EMI calculator, FOIR calculator, loan comparison calculator, financial tools, Avani Loan Services Latur'
+  });
+
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredCalculators = useMemo(() => {
@@ -270,7 +278,7 @@ export default function CalculatorDashboard() {
           <Calculator size={16} />
           <span>AVANI LOAN SERVICES • FINANCIAL INTELLIGENCE</span>
         </div>
-        <h2 className="calc-hero-title">AVANI FINANCIAL TOOLS</h2>
+        <h1 className="calc-hero-title">AVANI FINANCIAL TOOLS</h1>
         <p className="calc-hero-desc">
           Loan, Investment & Financial Calculators — Professional underwriting tools, interest amortization schedules, and indicative eligibility assessment.
         </p>

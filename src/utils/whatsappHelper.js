@@ -1,45 +1,43 @@
 // src/utils/whatsappHelper.js
-// ─────────────────────────────────────────────────────────────────
-// Centralized Reusable WhatsApp Link Generator for AVANI LOAN SERVICES
-// Primary WABA Number: +91 91756 35165 (International format: 919175635165)
-// ─────────────────────────────────────────────────────────────────
+// Centralized Reusable Contact & WhatsApp Helper for AVANI LOAN SERVICES
+// Official Phone & WhatsApp confirmed under DEC-003B-06: +91 91756 35165
 
-export const WHATSAPP_NUMBER = '919175635165';
-export const PHONE_NUMBER = '+919175635165';
-export const DISPLAY_PHONE = '9175635165';
+import { OFFICIAL_BUSINESS } from '../config/officialBusiness';
+
+export const WHATSAPP_NUMBER = OFFICIAL_BUSINESS.whatsappNumber;
+export const PHONE_NUMBER = OFFICIAL_BUSINESS.phoneE164;
+export const TEL_HREF = OFFICIAL_BUSINESS.telHref;
+export const DISPLAY_PHONE = OFFICIAL_BUSINESS.phoneDisplay;
 
 const PRODUCT_MESSAGES = {
-  'Personal Loan': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Personal Loan. Please share the required documents.',
-  'Salary Loan': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Personal / Salary Loan. Please share the required documents.',
-  'Business Loan': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Business Loan. Please share the required documents.',
-  'Doctor / Professional Loan': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Doctor / Professional Loan. Please share the required documents.',
-  'Doctor Loan': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Doctor / Professional Loan. Please share the required documents.',
-  'Chartered Accountant Loan': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Chartered Accountant / Professional Loan. Please share the required documents.',
-  'Home Loan': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Home Loan. Please share the required documents.',
-  'Mortgage Loan / LAP': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Mortgage Loan / Loan Against Property. Please share the required documents.',
-  'Mortgage Loan': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Mortgage Loan / Loan Against Property. Please share the required documents.',
-  'Loan Against Property': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Mortgage Loan / Loan Against Property. Please share the required documents.',
-  'Education Loan India': 'Hello AVANI LOAN SERVICES, I want the document checklist for an Education Loan in India. Please share the required documents.',
-  'Education Loan Global': 'Hello AVANI LOAN SERVICES, I want the document checklist for a Global Education Loan. Please share the required documents.',
-  'School Funding': 'Hello AVANI LOAN SERVICES, I want the document checklist for School Funding. Please share the required documents.',
-  'College Funding': 'Hello AVANI LOAN SERVICES, I want the document checklist for College Funding. Please share the required documents.',
-  'CIBIL Improvement': 'Hello AVANI LOAN SERVICES, I want the document checklist and consultation details for CIBIL improvement / credit correction. Please guide me.',
-  'CIBIL Correction': 'Hello AVANI LOAN SERVICES, I want the document checklist and consultation details for CIBIL improvement / credit correction. Please guide me.'
+  'Personal Loan': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for a Personal Loan.',
+  'Salary Loan': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for a Personal Loan.',
+  'Business Loan': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for a Business Loan.',
+  'Doctor Loan': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for a Doctor Loan.',
+  'Doctor / Professional Loan': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for a Doctor Loan.',
+  'Home Loan': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for a Home Loan.',
+  'Mortgage Loan': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for a Mortgage Loan (Loan Against Property).',
+  'Mortgage Loan / LAP': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for a Mortgage Loan (Loan Against Property).',
+  'Loan Against Property': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for a Mortgage Loan (Loan Against Property).',
+  'Education Loan India': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for an Education Loan — India.',
+  'Education Loan — India': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for an Education Loan — India.',
+  'Education Loan Global': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for an Education Loan — Global Studies.',
+  'Education Loan — Global Studies': 'Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for an Education Loan — Global Studies.',
+  'School and College Funding': 'Hello AVANI LOAN SERVICES, I would like institutional loan advisory and the indicative document checklist for School and College Funding.',
+  'School Funding': 'Hello AVANI LOAN SERVICES, I would like institutional loan advisory for School and College Funding.',
+  'College Funding': 'Hello AVANI LOAN SERVICES, I would like institutional loan advisory for School and College Funding.',
+  'Credit Readiness Advisory': 'Hello AVANI LOAN SERVICES, I would like educational loan readiness and credit-profile consultation.'
 };
 
-/**
- * Generate product-specific WhatsApp link
- */
 export function generateWhatsAppDocumentLink(productName = 'Personal Loan') {
-  const messageText = PRODUCT_MESSAGES[productName] || `Hello AVANI LOAN SERVICES, I want the document checklist for ${productName}. Please share the required documents.`;
+  const messageText =
+    PRODUCT_MESSAGES[productName] ||
+    `Hello AVANI LOAN SERVICES, I would like loan advisory and the indicative document checklist for ${productName}.`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(messageText)}`;
 }
 
-/**
- * Generate click tracking payload
- */
 export function trackCtaClick(eventName, product = '') {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, { product: product });
+  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    window.gtag('event', eventName, { product });
   }
 }

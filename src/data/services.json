@@ -1,65 +1,356 @@
 [
   {
-    "slug": "salary-loan",
-    "title": "Salary Loan in Latur | Avani Loan Services",
+    "slug": "personal-loan",
+    "legacySlugs": ["salary-loan"],
+    "title": "Personal Loan Advisory in Latur & Maharashtra | Avani Loan Services",
+    "h1": "Personal Loan",
     "ogImage": "og/salary-loan.png",
-    "keywords": ["salary loan latur", "salary loan", "salaried loan in latur", "quick salary loan"],
-    "metaDescription": "Get quick salary loans in Latur — same-day approvals, low documentation and flexible EMIs.",
-    "h1": "Salary Loan",
-    "content": "<p>Get fast <strong>salary loans in Latur</strong> for salaried professionals with same-day approval and doorstep support. We offer flexible EMIs, competitive interest rates, and minimal paperwork.</p><h2>Why choose Avani for Salary Loans?</h2><ul><li>Quick approval within 24-48 hours</li><li>Minimal documentation</li><li>Flexible repayment tenures</li><li>Competitive interest rates and transparent fees</li></ul><h3>Eligibility</h3><ul><li>Salaried individuals with at least 3 months on payroll</li><li>Age between 21 and 58 years</li></ul><h3>Documents required</h3><ul><li>ID proof (Aadhaar / PAN / Passport)</li><li>Last 2 months' salary slips</li><li>Bank statements (last 3 months)</li></ul><p><a href=\"/contact\">Apply now</a> or call us at +91-9175635165 for a free consultation.</p><h3>Common Questions</h3><ul><li><strong>How fast is disbursal?</strong> Eligible applicants can receive funds within 48 hours.</li><li><strong>Can I prepay?</strong> Most lenders allow prepayment; terms vary.</li></ul>"
+    "imageKey": "personal",
+    "whatsappProduct": "Personal Loan",
+    "keywords": ["personal loan latur", "personal loan advisory maharashtra", "salaried personal loan guidance", "avani loan services"],
+    "metaDescription": "Independent Personal Loan advisory and coordination in Latur & Maharashtra. Document checklists, lender comparison guidance, and transparent process support.",
+    "summary": "Structured loan consultancy and lender coordination for salaried employees and eligible individuals seeking unsecured personal financing for planned expenses, medical needs, travel, or debt consolidation.",
+    "targetCustomers": [
+      "Confirmed salaried employees in government, PSU, MNC, and established private organizations",
+      "Individuals with verifiable regular bank-credited salary and documented repayment capacity",
+      "Existing borrowers reviewing balance transfer or structured personal financing options"
+    ],
+    "eligibility": [
+      "Applicant age and minimum employment tenure as specified by the participating bank or NBFC",
+      "Verifiable monthly income credited to a bank account and acceptable FOIR (Fixed Obligation to Income Ratio)",
+      "Credit bureau history and employer categorization reviewed directly by the lending institution"
+    ],
+    "documents": [
+      "Identity & Address KYC: PAN Card, Aadhaar Card, and recent passport-size photograph",
+      "Income Proof: Recent salary slips (typically last 3 months) and Form 16 / ITR where applicable",
+      "Banking Proof: Last 6 months primary salary bank account statements",
+      "Employment Verification: Official employee ID card or employment confirmation letter"
+    ],
+    "processSteps": [
+      "Initial Advisory Consultation: Share your basic requirement and review indicative options with our advisor.",
+      "Document Readiness Check: Organize standard KYC, salary, and banking documents before submission.",
+      "Lender Submission & Verification: Application is forwarded to suitable partner banks/NBFCs for independent credit appraisal.",
+      "Sanction & Disbursal by Lender: Final interest rate, tenure, fees, and disbursal are executed solely by the lending institution."
+    ],
+    "faqs": [
+      {
+        "q": "Does Avani Loan Services lend money directly?",
+        "a": "No. AVANI LOAN SERVICES is an independent loan consultancy and coordination firm. All loan underwriting, sanction terms, and disbursements are handled directly by partner banks and NBFCs."
+      },
+      {
+        "q": "Are interest rates or approval timelines guaranteed?",
+        "a": "No. Applicable interest rates, processing fees, loan amounts, and turnaround times depend entirely on your credit profile, income verification, and the lending institution's prevailing policies."
+      }
+    ],
+    "content": "<p><strong>AVANI LOAN SERVICES</strong> provides transparent <strong>Personal Loan advisory and coordination</strong> in Latur and across Maharashtra. As an independent loan consultancy (not a bank or direct lender), we help salaried individuals understand typical lender eligibility parameters, prepare clean documentation, and coordinate applications with suitable partner financial institutions.</p><h2>Who This Service Suits</h2><ul><li>Confirmed salaried professionals in public, government, or private organizations</li><li>Individuals seeking structured guidance on personal financing or balance transfer evaluation</li></ul><h2>Indicative Eligibility &amp; Documentation</h2><ul><li>Standard KYC (PAN, Aadhaar), recent salary slips, Form 16, and last 6 months salary account statements</li><li>Final eligibility, interest rates, fees, and approval remain solely subject to partner lender underwriting policies</li></ul>"
   },
   {
     "slug": "business-loan",
-    "title": "Business Loan in Latur | Avani Loan Services",
-    "ogImage": "og/business-loan.png",
-    "keywords": ["business loan latur", "business loan", "sme loan latur", "working capital loan"],
-    "metaDescription": "SME business loans in Latur — working capital, equipment finance and fast approvals.",
+    "legacySlugs": ["chartered-accountant-loan"],
+    "title": "Business Loan Advisory in Latur & Maharashtra | Avani Loan Services",
     "h1": "Business Loan",
-    "content": "<p>Flexible <strong>business loans in Latur</strong> for SMEs, traders, and proprietors — working capital, expansion finance, and equipment purchase. We match you with lenders offering the best terms for your needs.</p><h2>Features</h2><ul><li>Loan amounts tailored to business turnover</li><li>Term loans and working capital finance</li><li>Fast approvals with clear terms</li></ul><h3>Eligibility</h3><ul><li>Registered business or proprietorship</li><li>Minimum operating history typically 6-12 months</li></ul><h3>Documents</h3><ul><li>Business registration / GST / PAN</li><li>Bank statements (last 6 months)</li><li>Proof of business address</li></ul><p><a href=\"/contact\">Contact our business loan specialists</a> for a free eligibility check.</p><h3>Use Cases</h3><ul><li>Working capital / inventory purchase</li><li>Business expansion or new equipment</li><li>Debt consolidation</li></ul>"
+    "ogImage": "og/business-loan.png",
+    "imageKey": "business",
+    "whatsappProduct": "Business Loan",
+    "keywords": ["business loan latur", "msme loan consultancy maharashtra", "working capital advisory", "avani loan services"],
+    "metaDescription": "Business Loan advisory and coordination for MSMEs, proprietors, traders, and professionals in Latur & Maharashtra. Clean documentation guidance with partner lenders.",
+    "summary": "Independent advisory and application coordination for proprietors, partnership firms, MSMEs, traders, manufacturers, and practicing professionals seeking working capital, equipment finance, or business expansion facilities.",
+    "targetCustomers": [
+      "Proprietorships, partnership firms, LLPs, and private limited enterprises with active operating history",
+      "Traders, wholesalers, service providers, and MSME manufacturing units in Latur and Maharashtra",
+      "Chartered Accountants and established self-employed professionals expanding practice operations"
+    ],
+    "eligibility": [
+      "Business vintage, annual turnover, and profitability norms as prescribed by the respective bank or NBFC",
+      "Active business registration (Udyam, Shop Act, GST, or professional practice certificate)",
+      "Satisfactory banking turnover, tax filing consistency, and promoter credit history reviewed by the lender"
+    ],
+    "documents": [
+      "Applicant & Co-Applicant KYC: PAN Card, Aadhaar Card, and residential address proof",
+      "Business Registration Proof: Udyam Registration, GST Certificate, Shop Act License, or Partnership Deed / MOA-AOA",
+      "Financial Statements: Last 2–3 years Income Tax Returns (ITR) with computation, Profit & Loss, and Balance Sheet",
+      "Banking Records: Last 12 months primary business current/OD account bank statements"
+    ],
+    "processSteps": [
+      "Requirement & Profile Discussion: Assess funding purpose (working capital, machinery, term facility) and business profile.",
+      "Financial & GST Checklist Review: Compile standard ITR, GST, and banking documentation.",
+      "Lender Coordination: Present complete application files to appropriate partner banks or NBFCs.",
+      "Underwriting & Disbursal by Lender: Credit appraisal, sanction letter issuance, and disbursal are performed exclusively by the lender."
+    ],
+    "faqs": [
+      {
+        "q": "Can startups without financial history apply?",
+        "a": "Most unsecured business loan programs require documented operating vintage and ITRs, though collateral-backed or government-scheme facilities vary by bank policy. Our advisor can clarify typical lender norms during consultation."
+      },
+      {
+        "q": "Do you charge advance cash fees to guarantee approval?",
+        "a": "Never. We do not promise guaranteed approvals or collect advance cash deposits into personal accounts."
+      }
+    ],
+    "content": "<p><strong>AVANI LOAN SERVICES</strong> assists proprietors, traders, MSMEs, and self-employed professionals across Latur and Maharashtra with <strong>Business Loan advisory and coordination</strong>. We help organize financial documentation and coordinate applications with suitable partner banks and NBFCs for term loans, working capital, and equipment financing.</p><h2>Typical Documentation Overview</h2><ul><li>Business KYC &amp; registrations (Udyam, GST, Shop Act, Partnership/Company deeds)</li><li>Last 2–3 years ITRs, audited/CA-certified financials, and 12 months business bank statements</li></ul><p><em>Advisory Notice: Final facility limits, pricing, collateral norms, and sanction decisions rest solely with the lending institution.</em></p>"
   },
   {
-    "slug": "education-loan",
-    "title": "Education Loan in Latur | Avani Loan Services",
-    "ogImage": "og/education-loan.png",
-    "keywords": ["education loan latur", "student loan latur", "education loan india"],
-    "metaDescription": "Education loans for students in Latur with flexible repayment, moratorium options and expert support.",
-    "h1": "Education Loan",
-    "content": "<p>Education loans for students in Latur and across Maharashtra — undergraduate, postgraduate, and professional courses. We help with lender selection, documentation, and loan processing.</p><h2>Highlights</h2><ul><li>Low interest options and flexible repayment</li><li>Moratorium available for most lenders</li><li>Cover tuition, living costs, and exam fees</li></ul><h3>Eligibility</h3><ul><li>Admission to a recognized institution</li><li>Student or parent/co-applicant meeting lender criteria</li></ul><h3>Documents</h3><ul><li>Admission / fee invoice</li><li>Academic records</li><li>ID and address proofs</li></ul><p><a href=\"/contact\">Apply for an education loan</a> and get personal assistance through the application process.</p>"
+    "slug": "doctor-loan",
+    "legacySlugs": ["doctor-professional-loan"],
+    "title": "Doctor Loan Advisory in Latur & Maharashtra | Avani Loan Services",
+    "h1": "Doctor Loan",
+    "ogImage": "og/business-loan.png",
+    "imageKey": "doctor",
+    "whatsappProduct": "Doctor Loan",
+    "keywords": ["doctor loan latur", "medical professional loan advisory", "clinic setup loan maharashtra", "avani loan services"],
+    "metaDescription": "Specialized Doctor Loan advisory and coordination for MBBS, MD, MS, BDS, MDS, and medical practitioners in Latur & Maharashtra for clinic setup or equipment.",
+    "summary": "Dedicated loan consultancy for qualified medical practitioners seeking financing for clinic setup, diagnostic or medical equipment acquisition, hospital expansion, or working capital through partner banks and NBFCs.",
+    "targetCustomers": [
+      "MBBS, MD, MS, BDS, MDS, BHMS, BAMS, and super-specialist medical practitioners",
+      "Doctors establishing new clinics, diagnostic centers, or expanding existing healthcare facilities",
+      "Salaried hospital consultants and self-employed medical professionals"
+    ],
+    "eligibility": [
+      "Recognized medical qualification and valid registration with the relevant Medical / Dental / AYUSH Council",
+      "Post-qualification practice or employment vintage as stipulated by the lending institution",
+      "Satisfactory credit history and verifiable income or hospital/clinic financials"
+    ],
+    "documents": [
+      "Identity & Address KYC: PAN Card, Aadhaar Card, and photographs",
+      "Professional Qualification Proof: Medical degree certificate and active Medical/Dental Council registration certificate",
+      "Practice / Clinic Proof: Clinic or hospital registration, shop/biomedical certificates, or employment appointment letter",
+      "Financial Records: Last 2 years ITR with computation/financials and 6–12 months bank statements (plus equipment quotations where applicable)"
+    ],
+    "processSteps": [
+      "Practice Goal Assessment: Discuss whether financing is for equipment purchase, clinic expansion, or working capital.",
+      "Medical & Financial Document Preparation: Assemble degree/council certificates alongside banking and ITR records.",
+      "Partner Lender Coordination: Match application requirements with professional-loan desks of partner banks/NBFCs.",
+      "Lender Sanction & Disbursal: Terms, interest rates, and disbursement are finalized directly by the lending institution."
+    ],
+    "faqs": [
+      {
+        "q": "Are medical equipment quotations needed upfront?",
+        "a": "For dedicated medical equipment finance, partner lenders typically request proforma invoices from the equipment vendor during appraisal."
+      },
+      {
+        "q": "Does Avani Loan Services decide Doctor Loan interest rates?",
+        "a": "No. All interest rates, tenure limits, and collateral requirements are determined solely by the partner bank or NBFC."
+      }
+    ],
+    "content": "<p><strong>AVANI LOAN SERVICES</strong> provides dedicated <strong>Doctor Loan advisory and coordination</strong> for medical practitioners across Latur and Maharashtra. Whether setting up a new clinic, upgrading medical equipment, or expanding healthcare infrastructure, our consultancy assists with documentation checklists and lender coordination.</p><h2>Key Advisory Scope</h2><ul><li>Degree and Medical Council registration documentation alignment</li><li>Coordination with partner bank/NBFC professional loan desks for unsecured or equipment-linked facilities</li></ul><p><em>Advisory Notice: AVANI LOAN SERVICES is an independent loan consultancy; final eligibility and terms are set exclusively by partner lenders.</em></p>"
   },
   {
     "slug": "home-loan",
-    "title": "Home Loan in Latur | Avani Loan Services",
-    "ogImage": "og/home-loan.png",
-    "keywords": ["home loan latur", "home loan", "home loan india"],
-    "metaDescription": "Home loans in Latur to buy, build or renovate — competitive rates, long tenures and documentation support.",
+    "legacySlugs": [],
+    "title": "Home Loan Advisory in Latur & Maharashtra | Avani Loan Services",
     "h1": "Home Loan",
-    "content": "<p>Home loans to buy, construct, or renovate property in Latur. We assist with lender selection, rate comparison, and paperwork to secure the best terms for your home loan.</p><h2>Benefits</h2><ul><li>Competitive interest rates</li><li>Long repayment tenures up to 30 years</li><li>Assistance with documentation and valuation</li></ul><h3>Eligibility</h3><ul><li>Stable income and credit profile</li><li>Age and property criteria as per lender</li></ul><h3>Documents</h3><ul><li>Property papers and sale agreement</li><li>Income proof and bank statements</li><li>ID and address proof</li></ul><p><a href=\"/contact\">Speak to a home loan advisor</a> to understand EMI options and eligibility.</p>"
+    "ogImage": "og/home-loan.png",
+    "imageKey": "home",
+    "whatsappProduct": "Home Loan",
+    "keywords": ["home loan latur", "housing loan advisory maharashtra", "home construction loan guidance", "avani loan services"],
+    "metaDescription": "Home Loan advisory and coordination in Latur & Maharashtra for home purchase, self-construction, renovation, or balance transfer evaluation.",
+    "summary": "End-to-end loan consultancy for salaried and self-employed homebuyers seeking guidance on home purchase loans, plot-plus-construction finance, home improvement, or balance transfer evaluation.",
+    "targetCustomers": [
+      "Salaried professionals and self-employed individuals purchasing ready or under-construction residential properties",
+      "Plot owners planning self-construction or renovation in Latur and Maharashtra",
+      "Existing home loan borrowers evaluating lender balance transfer options"
+    ],
+    "eligibility": [
+      "Verifiable income stability, age bracket, and FOIR assessment by the lending bank or HFC",
+      "Clear, marketable property title verified through independent legal and technical valuation by the lender",
+      "Co-applicant income and credit bureau profile considered as per lender underwriting policy"
+    ],
+    "documents": [
+      "Personal KYC: PAN Card, Aadhaar Card, and photographs of applicant and co-applicant",
+      "Income Proof: Salary slips & Form 16 (salaried) or 2–3 years ITR & financial statements (self-employed), plus 6–12 months bank statements",
+      "Property Papers: Draft/registered Sale Agreement, allotment letter, 7/12 or PR Card / NA order, approved layout/building plan, and chain of title deeds",
+      "Additional Approvals: Builder/society NOC, RERA registration details (where applicable), and construction cost estimate for self-construction"
+    ],
+    "processSteps": [
+      "Budget & EMI Planning: Use our indicative EMI/FOIR calculators and discuss your property transaction type.",
+      "Income & Property Document Checklist: Prepare personal KYC, income proofs, and property title chain copies.",
+      "Lender Appraisal Coordination: Coordinate submission for bank/HFC credit, legal title scrutiny, and technical property valuation.",
+      "Sanction, Registration & Disbursal: Final LTV, interest rate type (floating/fixed), sanction letter, and disbursal are executed exclusively by the lender."
+    ],
+    "faqs": [
+      {
+        "q": "Who verifies property legality and market valuation?",
+        "a": "Every participating bank or housing finance company conducts its own independent legal title search and technical property valuation before final sanction."
+      },
+      {
+        "q": "Can I estimate my monthly EMI beforehand?",
+        "a": "Yes, you can use our online EMI and FOIR tools for indicative estimates before speaking with our advisor."
+      }
+    ],
+    "content": "<p><strong>AVANI LOAN SERVICES</strong> supports homebuyers across Latur and Maharashtra with structured <strong>Home Loan advisory and coordination</strong>. From ready-to-move purchases to self-construction and balance transfer comparisons, we assist with income and property documentation checklists before bank/HFC appraisal.</p><h2>Property &amp; Income Preparedness</h2><ul><li>KYC, income proofs (salary/ITR), and banking records for applicants and co-applicants</li><li>Property title chain, NA/sanctioned plan, RERA/society NOCs subject to independent lender legal &amp; technical verification</li></ul>"
   },
   {
-    "slug": "mortgage-lap",
-    "title": "Mortgage / LAP in Latur | Avani Loan Services",
-    "ogImage": "og/mortgage-lap.png",
-    "keywords": ["mortgage loan latur", "lap loan", "loan against property latur"],
-    "metaDescription": "Loan Against Property (LAP) and mortgage loans in Latur — competitive rates and higher loan amounts based on property valuation.",
-    "h1": "Mortgage / LAP",
-    "content": "<p>Loan Against Property (LAP) and mortgage loans using residential or commercial property as collateral. Ideal for large funding needs such as business expansion, debt consolidation, or personal goals.</p><h2>Key Points</h2><ul><li>Higher loan amounts based on property valuation</li><li>Competitive interest rates compared to unsecured loans</li><li>Flexible tenures</li></ul><h3>Eligibility & Documents</h3><ul><li>Property ownership documents and valuation</li><li>ID proof, address proof, and bank statements</li></ul><p><a href=\"/contact\">Contact us</a> to get a free property valuation and loan estimate.</p>"
+    "slug": "mortgage-loan",
+    "legacySlugs": ["mortgage-lap"],
+    "title": "Mortgage Loan (LAP) Advisory in Latur & Maharashtra | Avani Loan Services",
+    "h1": "Mortgage Loan",
+    "ogImage": "og/mortgage-loan.png",
+    "imageKey": "mortgage",
+    "whatsappProduct": "Mortgage Loan",
+    "keywords": ["mortgage loan latur", "loan against property advisory maharashtra", "lap loan consultancy", "avani loan services"],
+    "metaDescription": "Mortgage Loan (Loan Against Property / LAP) advisory in Latur & Maharashtra for residential or commercial property owners seeking secured financing.",
+    "summary": "Independent consultancy for residential, commercial, or industrial property owners exploring Loan Against Property (LAP) or lease-rental discounting facilities through partner banks and NBFCs.",
+    "targetCustomers": [
+      "Business owners and self-employed professionals raising secured capital against owned residential or commercial property",
+      "Salaried property owners seeking structured long-tenure secured financing for major legitimate expenses",
+      "Existing LAP borrowers reviewing top-up or balance transfer options"
+    ],
+    "eligibility": [
+      "Clear ownership and marketable title of residential or commercial collateral acceptable to the lender",
+      "Documented repayment capacity through business financials, ITRs, rental agreements, or salary",
+      "Loan-to-Value (LTV) ratio and property valuation determined independently by the partner lender"
+    ],
+    "documents": [
+      "Applicant & Property Co-Owner KYC: PAN Card, Aadhaar Card, and photographs of all title holders",
+      "Income & Banking Documents: Last 2–3 years ITRs, audited financials/business proofs (or salary slips), and 6–12 months bank statements",
+      "Property Ownership Chain: Original title deed copies, 7/12 / City Survey PR Card, NA order, sanctioned building plan, property tax receipts, and encumbrance details"
+    ],
+    "processSteps": [
+      "Collateral & Purpose Consultation: Review property category (residential/commercial) and approximate funding goal.",
+      "Title & Financial Document Organization: Compile ownership records and income proofs for lender review.",
+      "Legal & Technical Appraisal by Lender: Partner lender performs credit evaluation, legal verification, and independent valuation.",
+      "Mortgage Creation & Disbursal: Final sanction terms, mortgage execution, and disbursal are completed solely by the bank or NBFC."
+    ],
+    "faqs": [
+      {
+        "q": "What percentage of property value can be sanctioned?",
+        "a": "Loan-to-Value (LTV) ratios vary significantly by lender policy, property type (residential vs commercial), location, and applicant income eligibility."
+      },
+      {
+        "q": "Must all property co-owners join the application?",
+        "a": "Typically yes — banks and NBFCs require all legal co-owners of the mortgaged property to participate as co-applicants or guarantors per their legal norms."
+      }
+    ],
+    "content": "<p><strong>AVANI LOAN SERVICES</strong> offers clear <strong>Mortgage Loan (Loan Against Property / LAP) advisory and coordination</strong> in Latur and Maharashtra. We assist residential and commercial property owners with financial and property title document checklists ahead of independent legal and technical evaluation by partner banks and NBFCs.</p>"
   },
   {
-    "slug": "chartered-accountant-loan",
-    "title": "Chartered Accountant Loan in Latur | Avani Loan Services",
-    "ogImage": "og/business-loan.png",
-    "keywords": ["ca loan latur", "chartered accountant loan", "professional loan for ca"],
-    "metaDescription": "Specialized loans for Chartered Accountants in Latur with quick approval, low rates, and high limits.",
-    "h1": "Chartered Accountant Loan",
-    "content": "<p>Exclusive <strong>professional loans for Chartered Accountants</strong> to expand practice, set up new offices, or meet personal goals. Enjoy higher loan amounts without collateral and special interest rates.</p><h2>Features</h2><ul><li>No collateral required for high limits</li><li>Quick approvals and customized limits based on COP</li><li>Flexible repayment up to 60 months</li></ul><h3>Eligibility</h3><ul><li>Valid Certificate of Practice (COP)</li><li>Active membership with ICAI</li></ul><h3>Documents</h3><ul><li>ICAI Membership & COP</li><li>Bank statements (last 6-12 months)</li><li>KYC documents (PAN, Aadhaar)</li></ul><p><a href=\"/contact\">Apply now</a> to get special rates designed for CAs.</p>"
+    "slug": "education-loan-india",
+    "legacySlugs": ["education-loan"],
+    "title": "Education Loan — India Advisory | Avani Loan Services Latur",
+    "h1": "Education Loan — India",
+    "ogImage": "og/education-loan.png",
+    "imageKey": "education",
+    "whatsappProduct": "Education Loan India",
+    "keywords": ["education loan india latur", "domestic student loan advisory maharashtra", "college tuition loan guidance", "avani loan services"],
+    "metaDescription": "Education Loan — India advisory and documentation guidance for students pursuing undergraduate, postgraduate, medical, engineering, or management courses in India.",
+    "summary": "Structured loan advisory for Indian students and parents seeking financing for recognized domestic undergraduate, postgraduate, engineering, medical, management, or professional degree programs.",
+    "targetCustomers": [
+      "Students securing admission into recognized Indian universities, colleges, and professional institutes",
+      "Parents and guardians acting as co-applicants planning tuition, hostel, and academic expense financing"
+    ],
+    "eligibility": [
+      "Confirmed admission into an eligible course at a recognized Indian institution per lender guidelines",
+      "Academic track record of the student and income/credit evaluation of the parent or co-applicant",
+      "Collateral requirements (if applicable) determined strictly by the lending institution based on loan slab and institute category"
+    ],
+    "documents": [
+      "Student Documents: PAN, Aadhaar, 10th/12th/graduation mark sheets, entrance exam scorecard, official admission letter, and institute fee schedule",
+      "Co-Applicant KYC & Income Proof: PAN, Aadhaar, salary slips / ITR (2 years), and 6 months bank statements",
+      "Collateral Papers (only where required by lender policy): Property title documents or acceptable security proof"
+    ],
+    "processSteps": [
+      "Course & Fee Structure Review: Understand total academic cost components (tuition, hostel, exam fees).",
+      "Student & Co-Applicant File Assembly: Prepare admission letters, academic transcripts, and co-applicant financial proofs.",
+      "Lender Coordination: Submit complete enquiry documentation to suitable partner banks or education-focused NBFCs.",
+      "Sanction & Fee Disbursement: Moratorium terms, interest servicing rules, and direct fee disbursement are governed exclusively by the lender."
+    ],
+    "faqs": [
+      {
+        "q": "Are education loan funds paid to the college or student?",
+        "a": "Partner lenders typically disburse tuition fees directly to the educational institution against official fee demand letters, per bank policy."
+      },
+      {
+        "q": "Is repayment moratorium available?",
+        "a": "Moratorium duration and interest-servicing terms during study vary by bank/NBFC scheme and are confirmed in the lender's sanction letter."
+      }
+    ],
+    "content": "<p><strong>AVANI LOAN SERVICES</strong> helps students and parents navigate <strong>Education Loan — India advisory and coordination</strong> across Latur and Maharashtra. We assist families in understanding typical bank/NBFC documentation, admission-letter requirements, and co-applicant norms for recognized Indian higher-education courses.</p>"
   },
   {
-    "slug": "doctor-professional-loan",
-    "title": "Doctor / Professional Loan in Latur | Avani Loan Services",
-    "ogImage": "og/business-loan.png",
-    "keywords": ["doctor loan latur", "professional loan latur", "medical equipment loan"],
-    "metaDescription": "Professional loans for doctors and other professionals in Latur. Get funds for clinic expansion, equipment, or personal needs.",
-    "h1": "Doctor / Professional Loan",
-    "content": "<p>Tailor-made <strong>Doctor and Professional Loans</strong> in Latur for medical practitioners, architects, and other certified professionals. Ideal for clinic setup, purchasing medical equipment, or practice expansion.</p><h2>Benefits</h2><ul><li>Special low interest rates for professionals</li><li>Unsecured and secured options available</li><li>Funding for equipment purchase and working capital</li></ul><h3>Eligibility</h3><ul><li>Valid Degree / Registration Certificate</li><li>Minimum years of practice as required by lenders</li></ul><h3>Documents</h3><ul><li>Degree and Professional Registration (e.g., Medical Council)</li><li>Bank statements and ITR (last 2 years)</li><li>Address and Identity Proof</li></ul><p><a href=\"/contact\">Speak to our advisors</a> for customized loan offers.</p>"
+    "slug": "education-loan-global-studies",
+    "legacySlugs": [],
+    "title": "Education Loan — Global Studies Advisory | Avani Loan Services",
+    "h1": "Education Loan — Global Studies",
+    "ogImage": "og/education-loan.png",
+    "imageKey": "education",
+    "whatsappProduct": "Education Loan Global",
+    "keywords": ["overseas education loan latur", "study abroad loan advisory maharashtra", "global studies loan guidance", "avani loan services"],
+    "metaDescription": "Education Loan — Global Studies advisory for students pursuing overseas degrees in USA, UK, Canada, Germany, Australia, Europe, or MBBS abroad.",
+    "summary": "Specialized overseas education loan consultancy assisting students and co-applicants with secured and unsecured partner-lender options, admission offer readiness, and financial-support documentation for international universities.",
+    "targetCustomers": [
+      "Indian students holding or applying for admission offers from accredited international universities (MS, MBA, UG, MBBS abroad)",
+      "Parents/co-applicants planning tuition, living expenses, health insurance, and travel funding for global studies"
+    ],
+    "eligibility": [
+      "Admission offer (conditional/unconditional) from a recognized foreign university acceptable to the lending institution",
+      "Academic scores and standardized test results (IELTS/TOEFL/GRE/GMAT/NEET where applicable per university and lender norms)",
+      "Co-applicant income stability and/or acceptable collateral evaluation per partner bank or NBFC policy"
+    ],
+    "documents": [
+      "Student Documents: Valid Passport, PAN, Aadhaar, academic transcripts, test scorecards, university offer/I-20/CAS letter, and official cost-of-attendance sheet",
+      "Co-Applicant Financials: KYC, last 2–3 years ITRs, salary slips or business financials, and 6–12 months bank statements",
+      "Collateral Documents (for secured overseas loans): Complete property title chain or eligible liquid security documents"
+    ],
+    "processSteps": [
+      "Country & University Cost Planning: Review official tuition and living-cost estimates for the destination country.",
+      "Secured vs Unsecured Path Clarity: Compare general documentation norms for collateral and non-collateral lender programs.",
+      "Application & Sanction Coordination: Organize clean student, co-applicant, and property files for lender evaluation.",
+      "Sanction Letter & Forex Remittance: Sanction issuance (for visa documentation) and fee remittance are executed solely by the lending institution."
+    ],
+    "faqs": [
+      {
+        "q": "When should students start overseas education loan planning?",
+        "a": "Starting 2–4 months before university fee deadlines or visa filing gives sufficient time for credit appraisal and any property legal/technical verification required by banks."
+      },
+      {
+        "q": "Does Avani Loan Services guarantee visa approval or non-collateral sanction?",
+        "a": "No. Visa decisions rest solely with foreign embassies, and loan terms/collateral norms rest solely with participating banks and NBFCs."
+      }
+    ],
+    "content": "<p><strong>AVANI LOAN SERVICES</strong> guides students and families in Latur and Maharashtra through <strong>Education Loan — Global Studies advisory and coordination</strong>. From university cost-of-attendance review to co-applicant and collateral documentation checklists, we help coordinate applications cleanly with partner lenders.</p>"
+  },
+  {
+    "slug": "school-and-college-funding",
+    "legacySlugs": [],
+    "title": "School and College Funding Advisory | Avani Loan Services Maharashtra",
+    "h1": "School and College Funding",
+    "ogImage": "og/education-loan.png",
+    "imageKey": "education",
+    "whatsappProduct": "School and College Funding",
+    "keywords": ["school funding maharashtra", "college infrastructure loan advisory", "educational trust finance latur", "avani loan services"],
+    "metaDescription": "Institutional loan consultancy for recognized schools, colleges, and educational trusts in Maharashtra seeking infrastructure, campus expansion, transport, or lab financing.",
+    "summary": "Dedicated institutional loan advisory and documentation coordination for registered educational trusts, societies, schools, and colleges planning campus expansion, smart classrooms, laboratory upgrades, transport fleets, or operational funding.",
+    "targetCustomers": [
+      "Registered Educational Trusts and Societies operating K-12 schools (State Board, CBSE, ICSE)",
+      "Degree colleges, engineering, pharmacy, medical, and higher-education institutions in Maharashtra",
+      "Trustees and institutional management teams planning campus infrastructure or equipment upgrades"
+    ],
+    "eligibility": [
+      "Valid Trust/Society registration, active institutional affiliation/approvals (Board, UGC, AICTE, NMC, or state authority), and operating track record",
+      "Audited institutional financial statements demonstrating fee cashflows and debt-servicing capacity",
+      "Property ownership/long-term lease compliance and board/trustee borrowing resolution per lender policy"
+    ],
+    "documents": [
+      "Entity & Regulatory Proof: Trust Deed / Society Registration, 12A/80G (if applicable), Board/University/AICTE/UGC affiliation certificates, and Trustee KYC",
+      "Financial Records: Last 3 years audited Balance Sheets, Income & Expenditure statements, ITRs, and 12 months fee-collection bank statements",
+      "Project & Security Documents: Architect construction estimates or equipment quotations, campus land/lease title chain, and governing body borrowing resolution"
+    ],
+    "processSteps": [
+      "Institutional Scope Review: Understand funding requirements (building expansion, classrooms, labs, buses, or refinance).",
+      "Trust & Audit Pack Preparation: Align audited financials, affiliation certificates, and campus title documents.",
+      "Bank / Institutional NBFC Coordination: Present structured institutional proposals to partner banks and specialized education-finance lenders.",
+      "Underwriting, Legal Scrutiny & Sanction: All institutional credit appraisals, sanction terms, and disbursements are executed solely by partner lenders."
+    ],
+    "faqs": [
+      {
+        "q": "Is a formal Trust/Society resolution required for institutional loans?",
+        "a": "Yes. Partner banks and institutional lenders require a duly passed governing-body resolution authorizing borrowing and specifying authorized signatories in accordance with the Trust Deed / Bye-laws."
+      },
+      {
+        "q": "Does Avani Loan Services provide direct institutional grants or funding?",
+        "a": "No. AVANI LOAN SERVICES provides independent institutional loan consultancy and lender coordination only."
+      }
+    ],
+    "content": "<p><strong>AVANI LOAN SERVICES</strong> provides dedicated <strong>School and College Funding advisory and coordination</strong> for educational trusts, societies, schools, and higher-education institutions across Latur and Maharashtra. We assist management teams in preparing audited financial packs, regulatory affiliation sets, and project proposals for partner bank and institutional NBFC appraisal.</p>"
   }
 ]

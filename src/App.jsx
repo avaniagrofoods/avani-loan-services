@@ -9,7 +9,11 @@ import Eligibility from './pages/Eligibility';
 import Documents from './pages/Documents';
 import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import Disclaimer from './pages/Disclaimer';
 import Blog from './pages/Blog';
+import BlogDetail from './pages/BlogDetail';
+import NotFound from './pages/NotFound';
 import CibilCheck from './pages/CibilCheck';
 import AIAssistant from './pages/AIAssistant';
 import AdminDashboard from './pages/AdminDashboard';
@@ -20,10 +24,15 @@ import ServicesList from './pages/ServicesList';
 import Service from './pages/Service';
 import Catalog from './pages/Catalog';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
-import FloatingAIAssistant from './components/FloatingAIAssistant';
 import DownloadApplication from './pages/DownloadApplication';
 import ProductApply from './pages/ProductApply';
 import ErrorBoundary from './components/ErrorBoundary';
+
+// ── AVANI UNIFIED BUSINESS GROWTH & LEAD MANAGEMENT PORTAL ──
+import UnifiedAdminPortal from './pages/UnifiedAdminPortal';
+import AdminIntegrationsPage from './pages/AdminIntegrationsPage';
+import BuilderPartnershipPage from './pages/BuilderPartnershipPage';
+import InstitutionalFundingPage from './pages/InstitutionalFundingPage';
 
 // ── Financial Calculator Suite (Isolated & Password-Protected Admin) ──
 import { CalculatorAuthProvider } from './calculators/auth/CalculatorAuthContext';
@@ -72,20 +81,41 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/loans" element={<Loans />} />
-              <Route path="/eligibility" element={<PasswordGate pageTitle="AI Loan Eligibility Engine"><Eligibility /></PasswordGate>} />
-              <Route path="/documents" element={<PasswordGate pageTitle="Document Vault & Calculator"><Documents /></PasswordGate>} />
+              <Route path="/eligibility" element={<Eligibility />} />
+              <Route path="/documents" element={<Documents />} />
               <Route path="/download-application" element={<DownloadApplication />} />
               <Route path="/loan-documents/:token" element={<DocumentPortal />} />
               <Route path="/cibil-check" element={<CibilCheck />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/privacy" element={<Privacy />} />
+              <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/disclaimer" element={<Disclaimer />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogDetail />} />
               <Route path="/services" element={<ServicesList />} />
               <Route path="/services/:slug" element={<Service />} />
               <Route path="/ai-assistant" element={<AIAssistant />} />
-              <Route path="/admin" element={<PasswordGate pageTitle="Executive Operations Dashboard"><AdminDashboard /></PasswordGate>} />
+              {/* ── Unified Business Growth & Lead Management Portal ── */}
+              <Route path="/admin" element={<UnifiedAdminPortal />} />
+              <Route path="/admin/login" element={<UnifiedAdminPortal />} />
+              <Route path="/admin/dashboard" element={<UnifiedAdminPortal />} />
+              <Route path="/admin/leads" element={<UnifiedAdminPortal initialTab="leads" />} />
+              <Route path="/admin/builder" element={<UnifiedAdminPortal initialTab="builder" />} />
+              <Route path="/admin/schools" element={<UnifiedAdminPortal initialTab="schools" />} />
+              <Route path="/admin/colleges" element={<UnifiedAdminPortal initialTab="colleges" />} />
+              <Route path="/admin/templates" element={<UnifiedAdminPortal initialTab="templates" />} />
+              <Route path="/admin/campaigns" element={<UnifiedAdminPortal initialTab="campaigns" />} />
+              <Route path="/admin/analytics" element={<UnifiedAdminPortal initialTab="analytics" />} />
+              <Route path="/admin/settings" element={<UnifiedAdminPortal initialTab="settings" />} />
+              <Route path="/admin/integrations" element={<AdminIntegrationsPage />} />
+              <Route path="/templates" element={<UnifiedAdminPortal initialTab="templates" />} />
+              <Route path="/campaigns" element={<UnifiedAdminPortal initialTab="campaigns" />} />
+              <Route path="/builder-partnership" element={<BuilderPartnershipPage />} />
+              <Route path="/institutional-funding" element={<InstitutionalFundingPage />} />
               <Route path="/admin-eligibility" element={<PasswordGate pageTitle="Eligibility Admin Panel"><AdminEligibility /></PasswordGate>} />
               <Route path="/catalog" element={<Catalog />} />
+              <Route path="/loan-products" element={<Catalog />} />
               <Route path="/apply" element={<ProductApply />} />
               <Route path="/apply/:productSlug" element={<ProductApply />} />
 
@@ -100,8 +130,8 @@ export default function App() {
                   </CalculatorProtectedRoute>
                 }
               />
-              <Route path="/financial-tools/eligibility" element={<PasswordGate pageTitle="Financial Tools Eligibility Engine"><Eligibility /></PasswordGate>} />
-              <Route path="/financial-tools/documents" element={<PasswordGate pageTitle="Financial Tools Document Vault"><Documents /></PasswordGate>} />
+              <Route path="/financial-tools/eligibility" element={<Eligibility />} />
+              <Route path="/financial-tools/documents" element={<Documents />} />
               <Route path="/financial-tools/services" element={<ServicesList />} />
 
               {/* Financial Tools — Loan Calculators */}
@@ -167,16 +197,16 @@ export default function App() {
               <Route path="/calculators/other/cash-counter" element={<CashCounterPage />} />
               <Route path="/calculators/other/amount-to-words" element={<AmountToWordsPage />} />
 
-              {/* Suite Fallbacks */}
+              {/* Suite Fallbacks & Global 404 */}
               <Route path="/calculators/*" element={<Navigate to="/financial-tools" replace />} />
               <Route path="/financial-tools/*" element={<Navigate to="/financial-tools" replace />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </ErrorBoundary>
         </main>
         <Footer />
         <BottomNavbar />
         <FloatingWhatsApp />
-        <FloatingAIAssistant />
       </div>
     </CalculatorAuthProvider>
   );

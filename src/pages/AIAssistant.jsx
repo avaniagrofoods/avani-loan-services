@@ -14,7 +14,7 @@ const AIAssistant = () => {
   const [showTranscript, setShowTranscript] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [callDuration, setCallDuration] = useState(0);
-  const [assistantId, setAssistantId] = useState('9f322737-3bb8-467a-95e3-7a66f9a93dc1');
+  const [assistantId, setAssistantId] = useState(import.meta.env.VITE_VAPI_ASSISTANT_ID || '');
 
   const loanTypes = {
     personal: { name: 'Personal Loan', icon: '💳', color: '#007bff' },
@@ -195,7 +195,7 @@ const AIAssistant = () => {
         <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
         <div>
           <h1>{t.title}</h1>
-          <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
+          <div className="page-header-address">OLD BARSHI ROAD, 5NO CHAUK, KULSWAMINI NAGAR, NEXT TO SAI SCHOOL, LATUR – 413512, MAHARASHTRA, INDIA</div>
         </div>
       </div>
       <div className="ai-assistant-header">

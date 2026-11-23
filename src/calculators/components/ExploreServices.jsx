@@ -23,15 +23,15 @@ import '../styles/calculators.css';
 
 export const LOAN_SERVICES = [
   {
-    id: 'salary-loan',
-    title: 'Salary Loan',
-    subtitle: 'Fast personal loans for salaried employees',
-    rate: 'From 10.50% p.a.',
-    tenure: 'Up to 5 Years',
-    link: '/services/salary-loan',
-    calcLink: '/calculators/loan/emi',
+    id: 'personal-loan',
+    title: 'Personal Loan',
+    subtitle: 'Loan advisory for salaried professionals',
+    rate: 'As per partner lender policy',
+    tenure: 'Subject to lender terms',
+    link: '/services/personal-loan',
+    calcLink: '/financial-tools/loan/emi',
     icon: <Briefcase size={20} />,
-    description: 'Instant approvals with minimal paperwork for salaried professionals across Maharashtra.',
+    description: 'Transparent loan advisory, document checklist guidance, and lender coordination for salaried individuals across Maharashtra.',
     calcTags: ['emi', 'foir', 'multiplier', 'outstanding', 'prepayment', 'rate-change']
   },
   {

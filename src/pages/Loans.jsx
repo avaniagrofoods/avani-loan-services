@@ -1,152 +1,116 @@
 import useSEO from '../hooks/useSEO';
 import { Link } from 'react-router-dom';
 import { CheckCircle, ArrowRight, MessageCircle, Phone, FileText, Globe, GraduationCap, Building2 } from 'lucide-react';
-import { generateWhatsAppDocumentLink, PHONE_NUMBER, DISPLAY_PHONE } from '../utils/whatsappHelper';
-import brandLogo from '../assets/avani-brand-logo.png';
+import { generateWhatsAppDocumentLink, TEL_HREF, DISPLAY_PHONE } from '../utils/whatsappHelper';
+import { OFFICIAL_BUSINESS } from '../config/officialBusiness';
+import brandLogo from '../assets/optimized/avani-brand-logo.webp';
 import './Loans.css';
 import services from '../data/services.json';
 
-// Import Images
-import personalImg from '../assets/personal-loan.png';
-import businessImg from '../assets/business-loan.png';
-import educationImg from '../assets/education-loan.png';
-import homeImg from '../assets/home-loan.png';
-import mortgageImg from '../assets/mortgage-loan.png';
-import doctorImg from '../assets/business-loan.png'; // Reusing business icon if doctor icon not available, or I should use a more specific one if possible, but I'll stick to a placeholder for now and could use generate_image if needed. Actually, let's use business-loan as a placeholder or search for one.
+// Optimized WebP Images
+import personalImg from '../assets/optimized/personal-loan.webp';
+import businessImg from '../assets/optimized/business-loan.webp';
+import educationImg from '../assets/optimized/education-loan.webp';
+import homeImg from '../assets/optimized/home-loan.webp';
+import mortgageImg from '../assets/optimized/mortgage-loan.webp';
+import doctorImg from '../assets/optimized/doctor-loan.webp';
 
 const loans = [
   {
-    id: 'school-funding',
-    image: educationImg,
-    title: 'School Funding & Infrastructure Loan',
-    tagline: 'Empowering Educational Institutions in Maharashtra',
-    description: 'Comprehensive financial solutions for school trusts, private schools, and educational institutions for infrastructure expansion, Smart Classrooms, buses, and operational working capital.',
-    minAmount: '₹5 Lakhs', maxAmount: '₹5 Crores',
-    tenure: '12–120 months',
-    rate: '9.5% – 14% p.a.',
-    features: ['Trust / Society registration accepted', 'Smart Classroom & EdTech equipment funding', 'School bus & transport fleet finance', 'Working capital for staff salary & expansion', 'Attractive interest rates for rural & urban schools'],
-  },
-  {
-    id: 'college-funding',
-    image: educationImg,
-    title: 'College & Higher Education Funding',
-    tagline: 'Supporting Colleges, Universities & Professional Degree Students',
-    description: 'Tailored funding for degree colleges, engineering/medical institutes, as well as high-value education loans for undergraduate and postgraduate students.',
-    minAmount: '₹2 Lakhs', maxAmount: '₹10 Crores',
-    tenure: 'Up to 15 years',
-    rate: '8.5% – 13.5% p.a.',
-    features: ['Institutional expansion funding', '100% tuition & hostel fee coverage for students', 'Special grants & subvention support', 'No collateral up to ₹7.5 Lakhs for students', 'Fast clearance for NAAC/UGC recognized colleges'],
-  },
-  {
-    id: 'salary',
+    id: 'personal',
+    slug: 'personal-loan',
     image: personalImg,
-    title: 'Salary / Personal Loan',
-    tagline: 'Quick cash for salaried employees',
-    description: 'Unsecured personal loan for government and private sector employees. No collateral required.',
-    minAmount: '₹50,000', maxAmount: '₹50 Lakhs',
-    tenure: '12–60 months',
-    rate: '10.5% – 18% p.a.',
-    features: ['No collateral needed', 'Instant approval for govt employees', 'Salary slip required', 'Minimum salary ₹15,000/month', 'Repayment via auto-EMI'],
+    title: 'Personal Loan',
+    tagline: 'Independent advisory for salaried individuals',
+    description: 'Loan consultancy and documentation coordination for salaried professionals evaluating unsecured personal financing with partner banks and NBFCs.',
+    minAmount: 'As per lender', maxAmount: 'Subject to income',
+    tenure: 'As per lender policy',
+    rate: 'Subject to lender policy',
+    features: ['Structured document checklist guidance', 'FOIR & EMI planning support', 'Comparison of standard lender criteria', 'Salary slip & bank statement review', 'Transparent advisory with no advance cash fees'],
   },
   {
     id: 'business',
+    slug: 'business-loan',
     image: businessImg,
     title: 'Business Loan',
-    tagline: 'Fuel your business growth',
-    description: 'Unsecured business loans for MSMEs, proprietors, and small businesses in Maharashtra.',
-    minAmount: '₹1 Lakh', maxAmount: '₹2 Crores',
-    tenure: '12–84 months',
-    rate: '12% – 24% p.a.',
-    features: ['No collateral up to ₹50L', 'GST / ITR required', 'Bank statement last 12 months', 'Approval within 5 days', 'Balance transfer facility'],
+    tagline: 'Working capital & expansion advisory for MSMEs',
+    description: 'Consultancy and application coordination for proprietors, partnership firms, MSMEs, traders, and practicing professionals in Maharashtra.',
+    minAmount: 'As per lender', maxAmount: 'Subject to turnover',
+    tenure: 'As per lender policy',
+    rate: 'Subject to lender policy',
+    features: ['Term loan & working capital advisory', 'GST, Udyam & ITR readiness checklist', '12-month business banking review', 'Support for Chartered Accountants & MSMEs', 'Final limits & pricing set solely by partner lenders'],
   },
   {
-    id: 'education-india',
-    image: educationImg,
-    title: 'Education Loan (India)',
-    tagline: 'Invest in your future in India',
-    description: 'Education loan for MBBS, Engineering, MBA at top Indian institutions with easy repayment.',
-    minAmount: '₹1 Lakh', maxAmount: '₹75 Lakhs',
-    tenure: 'Up to 15 years',
-    rate: '8.15% – 12% p.a.',
-    features: ['Covers tuition + hostel + books', 'Moratorium period available', 'Tax benefit u/s 80E', 'Co-applicant required', 'No margin for loans up to ₹4L'],
-  },
-  {
-    id: 'education-global',
-    image: educationImg,
-    title: 'Education Loan (Study Abroad)',
-    tagline: 'Study globally, repay easily',
-    description: 'Fund your education at top universities in USA, UK, Canada, Australia, Germany, and more.',
-    minAmount: '₹5 Lakhs', maxAmount: '₹1.5 Crores',
-    tenure: 'Up to 15 years',
-    rate: '9% – 14% p.a.',
-    features: ['GRE/IELTS not required for approval', 'Visa letter assistance', 'Covers living expenses abroad', 'Tax benefit u/s 80E', 'Collateral required above ₹40L'],
+    id: 'doctor',
+    slug: 'doctor-loan',
+    image: doctorImg,
+    title: 'Doctor Loan',
+    tagline: 'Dedicated advisory for medical practitioners',
+    description: 'Specialized loan consultancy for MBBS, MD, MS, BDS, MDS, and registered healthcare practitioners planning clinic setup or medical equipment financing.',
+    minAmount: 'As per lender', maxAmount: 'Subject to profile',
+    tenure: 'As per lender policy',
+    rate: 'Subject to lender policy',
+    features: ['Degree & Medical Council registration alignment', 'Clinic setup & equipment quotation guidance', 'Salaried & self-employed practitioner support', 'Clean ITR & banking file preparation', 'Partner lender underwriting & terms apply'],
   },
   {
     id: 'home',
+    slug: 'home-loan',
     image: homeImg,
     title: 'Home Loan',
-    tagline: 'Own your dream home',
-    description: 'Secured home loans for purchase, construction, or renovation of residential property.',
-    minAmount: '₹5 Lakhs', maxAmount: '₹5 Crores',
-    tenure: 'Up to 30 years',
-    rate: '8.5% – 12% p.a.',
-    features: ['Up to 90% of property value', 'PMAY subsidy available', 'Joint loan with spouse', 'Balance transfer benefits', 'Flexible repayment options'],
+    tagline: 'Home purchase, construction & balance transfer guidance',
+    description: 'Loan consultancy for homebuyers purchasing ready/under-construction residences, self-construction on owned plots, or reviewing balance transfers.',
+    minAmount: 'As per lender', maxAmount: 'Subject to valuation',
+    tenure: 'As per lender policy',
+    rate: 'Subject to lender policy',
+    features: ['Income & co-applicant eligibility planning', 'Property title & NA/sanctioned plan checklist', 'Coordination for bank legal & technical appraisal', 'Balance transfer & EMI estimation tools', 'LTV and final rate decided solely by the lender'],
   },
   {
     id: 'mortgage',
+    slug: 'mortgage-loan',
     image: mortgageImg,
-    title: 'Mortgage / LAP',
-    tagline: 'Unlock your property value',
-    description: 'Loan Against Property (LAP) for business or personal needs by pledging residential/commercial property.',
-    minAmount: '₹5 Lakhs', maxAmount: '₹10 Crores',
-    tenure: 'Up to 20 years',
-    rate: '9% – 14% p.a.',
-    features: ['Up to 70% of property value', 'Both residential & commercial', 'Minimal documentation', 'Income from all sources considered', 'Top-up loans available'],
+    title: 'Mortgage Loan',
+    tagline: 'Loan Against Property (LAP) advisory',
+    description: 'Secured loan consultancy for residential and commercial property owners raising structured financing against marketable property collateral.',
+    minAmount: 'As per lender', maxAmount: 'Subject to valuation',
+    tenure: 'As per lender policy',
+    rate: 'Subject to lender policy',
+    features: ['Residential & commercial property checklists', 'Co-owner & title-chain documentation guidance', 'ITR & business cashflow review', 'Independent lender valuation & legal scrutiny', 'Terms & LTV strictly governed by lender policy'],
   },
   {
-    id: 'chartered-accountant',
-    image: businessImg,
-    title: 'Chartered Accountant Loan',
-    tagline: 'Exclusively for CAs',
-    description: 'Specialized professional loan for Chartered Accountants to expand their practice or meet personal needs.',
-    minAmount: '₹5 Lakhs', maxAmount: '₹1 Crore',
-    tenure: '12–60 months',
-    rate: '10.25% – 14.5% p.a.',
-    features: [
-      'Valid COP required',
-      'ICAI Membership active',
-      'No collateral required',
-      'Special rates for CAs',
-      'Quick approvals'
-    ],
+    id: 'education-india',
+    slug: 'education-loan-india',
+    image: educationImg,
+    title: 'Education Loan — India',
+    tagline: 'Domestic higher-education loan consultancy',
+    description: 'Advisory support for students and parents arranging financing for recognized undergraduate, postgraduate, engineering, medical, or management degrees in India.',
+    minAmount: 'As per lender', maxAmount: 'Subject to course',
+    tenure: 'As per lender policy',
+    rate: 'Subject to lender policy',
+    features: ['Admission letter & fee schedule alignment', 'Co-applicant KYC & income checklist', 'Clarification of moratorium norms per lender', 'Direct institute fee disbursement process overview', 'Final sanction subject to bank/NBFC policy'],
   },
   {
-    id: 'doctor-professional',
-    image: doctorImg,
-    title: 'Doctor / Professional Loan',
-    tagline: 'For Medical & Certified Professionals',
-    description: 'Specialized loan for doctors, architects, and certified professionals to expand their practice, clinics, or personal needs.',
-    minAmount: '₹5 Lakhs', maxAmount: '₹1 Crore',
-    tenure: '12–84 months',
-    rate: '10.25% – 14.5% p.a.',
-    features: [
-      'Degree / Registration required',
-      'No collateral for equipment',
-      'Special rates for professionals',
-      'Flexible repayment options',
-      'Minimum practice experience'
-    ],
+    id: 'education-global',
+    slug: 'education-loan-global-studies',
+    image: educationImg,
+    title: 'Education Loan — Global Studies',
+    tagline: 'Overseas university financing advisory',
+    description: 'Consultancy for Indian students pursuing accredited global degrees (MS, MBA, UG, MBBS abroad) covering cost-of-attendance and co-applicant documentation.',
+    minAmount: 'As per lender', maxAmount: 'Subject to course',
+    tenure: 'As per lender policy',
+    rate: 'Subject to lender policy',
+    features: ['University offer / I-20 / CAS checklist readiness', 'Secured & unsecured lender criteria overview', 'Co-applicant ITR & collateral file guidance', 'Aligned ahead of university & visa timelines', 'Sanction & remittance handled solely by lender'],
   },
   {
-    id: 'car',
-    image: mortgageImg,
-    title: 'Car Loan',
-    tagline: 'Drive your success',
-    description: 'Finance your new or used car with flexible repayment options and competitive interest rates.',
-    minAmount: '₹1 Lakh', maxAmount: '₹50 Lakhs',
-    tenure: '12–84 months',
-    rate: '7.5% – 12% p.a.',
-    features: ['Up to 100% on-road funding', 'Used car loans available', 'Quick processing', 'Flexible EMIs', 'Minimal documentation'],
+    id: 'school-college-funding',
+    slug: 'school-and-college-funding',
+    image: educationImg,
+    title: 'School and College Funding',
+    tagline: 'Institutional advisory for educational trusts',
+    description: 'Dedicated institutional loan consultancy for recognized schools, colleges, and educational trusts planning campus expansion, classrooms, labs, or transport.',
+    minAmount: 'As per lender', maxAmount: 'Subject to audit',
+    tenure: 'As per lender policy',
+    rate: 'Subject to lender policy',
+    features: ['Trust / Society deed & affiliation verification list', '3-year audited financial pack preparation', 'Campus infrastructure & equipment estimate review', 'Governing body borrowing resolution guidance', 'Appraisal & sanction solely by institutional lenders'],
   }
 ];
 
@@ -160,12 +124,12 @@ export default function Loans() {
           <div className="page-header-top">
             <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
             <div>
-              <span className="badge">All Loan Products</span>
-              <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
+              <span className="badge">Official Loan Advisory Overview</span>
+              <div className="page-header-address">{OFFICIAL_BUSINESS.shortAddress}</div>
             </div>
           </div>
-          <h1>Find the Right Loan for You</h1>
-          <p>Explore all loan products with transparent rates, eligibility, and terms</p>
+          <h1>Explore All 8 Loan Advisory Categories</h1>
+          <p>Review indicative loan categories, property documentation checklists, and lender coordination support</p>
         </div>
       </section>
 
@@ -229,13 +193,13 @@ export default function Loans() {
                     📲 Get Document List on WhatsApp
                   </a>
                   <a 
-                    href={PHONE_NUMBER} 
+                    href={TEL_HREF} 
                     className="btn btn-outline" 
                     style={{ flex: '1 1 auto', justifyContent: 'center' }}
-                    aria-label={`Call Avani Loan Services at 9175635165 for ${loan.title}`}
+                    aria-label={`Call ${OFFICIAL_BUSINESS.name} at ${DISPLAY_PHONE} for ${loan.title}`}
                   >
-                    <Phone size={16} style={{ marginRight: '6px' }} />
-                    📞 Call {DISPLAY_PHONE}
+                    <Phone size={16} style={{ marginRight: '6px' }} aria-hidden="true" />
+                    Call {DISPLAY_PHONE}
                   </a>
                 </div>
               </div>

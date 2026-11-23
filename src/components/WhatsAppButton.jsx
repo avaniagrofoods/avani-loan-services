@@ -5,16 +5,20 @@ import './WhatsAppButton.css';
 export default function WhatsAppButton() {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ name: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', phone: '', consent: false });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.consent) return;
     setLoading(true);
 
     try {
-      // 1. Send data to our Lead Capture API (Pabbly + Sheets + HubSpot)
+      // 1. Send data to our Lead Capture API with explicit DPDP consent
       await axios.post('/api/save-lead', {
-        ...formData,
+        name: formData.name,
+        phone: formData.phone,
+        consent: true,
+        consentStatus: 'GRANTED',
         loanType: 'WhatsApp Inquiry',
         source: 'WhatsApp_Floating_Button'
       });
@@ -55,7 +59,16 @@ export default function WhatsAppButton() {
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             />
-            <button type="submit" disabled={loading}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '11px', textAlign: 'left', margin: '6px 0' }}>
+              <input
+                type="checkbox"
+                required
+                checked={formData.consent}
+                onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+              />
+              <span>I consent to AVANI LOAN SERVICES contacting me regarding my loan enquiry (DPDP Act).</span>
+            </label>
+            <button type="submit" disabled={loading || !formData.consent}>
               {loading ? 'Connecting...' : 'Start WhatsApp Chat'}
             </button>
           </form>
