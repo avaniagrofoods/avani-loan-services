@@ -27,8 +27,9 @@ router.get('/webhook', (req, res) => {
 // ── 2. POST /api/whatsapp/webhook (Incoming Messages) ───────────
 router.post('/webhook', async (req, res) => {
   try {
-    const body = req.body;
-    console.log('[WhatsApp Webhook] Payload received:', JSON.stringify(body).slice(0, 300));
+    const body = req.body && typeof req.body === 'object' ? req.body : {};
+    const entryCount = Array.isArray(body.entry) ? body.entry.length : 0;
+    console.log(`[WhatsApp Webhook] Event received (object=${body.object || 'generic'}, entries=${entryCount}).`);
 
     // Handle Meta WhatsApp Cloud API structure
     if (body.object === 'whatsapp_business_account') {
@@ -58,7 +59,7 @@ router.post('/webhook', async (req, res) => {
     return res.status(200).send('OK');
   } catch (err) {
     console.error('[WhatsApp Webhook] Error:', err.message);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: 'Internal webhook processing error.' });
   }
 });
 

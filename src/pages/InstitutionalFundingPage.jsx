@@ -6,9 +6,16 @@
 
 import { useState } from 'react';
 import { GraduationCap, Landmark, ShieldCheck, CheckCircle2, TrendingUp, Send, Loader2 } from 'lucide-react';
+import useSEO from '../hooks/useSEO';
 import './InstitutionalFundingPage.css';
 
 export default function InstitutionalFundingPage() {
+  useSEO({
+    title: 'School, College & Educational Trust Institutional Funding | Avani Loan Services',
+    description:
+      'Independent institutional loan consultancy for recognized schools, colleges, and educational trusts in Latur and Maharashtra seeking campus infrastructure and expansion finance.',
+    keywords: 'school infrastructure loan Maharashtra, college funding consultancy Latur, educational trust project finance Avani Loan Services'
+  });
   const [formData, setFormData] = useState({
     institution_name: '',
     institution_category: 'Private CBSE / ICSE School',

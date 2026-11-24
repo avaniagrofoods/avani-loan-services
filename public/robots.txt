@@ -1,5 +1,11 @@
 User-agent: *
-Disallow: /admin/
-Disallow: /api/
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin-eligibility
+Disallow: /api/
+Disallow: /financial-tools/admin
+Disallow: /financial-tools/login
+Disallow: /calculators/admin
+Disallow: /calculators/login
 Sitemap: https://www.avanifinserv.com/sitemap.xml

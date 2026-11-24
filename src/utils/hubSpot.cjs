@@ -31,8 +31,8 @@ async function getAccessToken() {
   if (refreshToken && refreshToken.startsWith('pat-')) {
     return refreshToken;
   }
-  if (!refreshToken || refreshToken === 'na2-99de-b4d2-4640-af6a-1b35de1eec48') {
-    throw new Error('HubSpot refresh token is a placeholder. Please complete OAuth.');
+  if (!refreshToken || /^(?:your_|placeholder|example|changeme)/i.test(refreshToken)) {
+    throw new Error('HubSpot refresh token is missing or placeholder. Please complete OAuth.');
   }
 
   const response = await axios.post('https://api.hubapi.com/oauth/v1/token', null, {

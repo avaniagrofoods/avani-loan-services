@@ -1,106 +1,123 @@
-import { useState, useEffect } from 'react';
-import { Send, CheckCircle2, AlertCircle, ShieldCheck } from 'lucide-react';
-import axios from 'axios';
+import { useState, useId } from 'react';
+import { Link } from 'react-router-dom';
+import { Send, CheckCircle2, AlertCircle, ShieldCheck, MessageCircle } from 'lucide-react';
+import { OFFICIAL_BUSINESS, OFFICIAL_SERVICES_NAV } from '../config/officialBusiness';
+import { syncLeadData } from '../lib/syncLeads';
+import { generateWhatsAppDocumentLink } from '../utils/whatsappHelper';
+
+const PHONE_REGEX = /^[6-9][0-9]{9}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function getInitialLoanType() {
+  if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search);
+    const product = params.get('product');
+    if (product) return product;
+  }
+  return 'Personal Loan';
+}
 
 export default function SimpleLeadForm() {
-  const [formData, setFormData] = useState({
+  const uid = useId();
+  const [formData, setFormData] = useState(() => ({
     name: '',
     phone: '',
-    whatsapp: '',
     email: '',
     city: 'Latur',
-    state: 'Maharashtra',
     customerProfile: 'Salaried Professional',
-    loanType: 'Personal / Salary Loan',
+    loanType: getInitialLoanType(),
     amount: '₹5–10 Lakh',
     employmentType: 'Salaried',
     monthlyIncome: '₹25,000–₹50,000',
-    existingLoan: 'No',
-    cibilRange: 'Prefer to discuss',
     contactPreference: 'WhatsApp + Call',
-    preferredCallTime: 'Immediately',
-    consent: true,
-    utm_source: 'website',
-    utm_medium: 'cpc',
-    utm_campaign: 'ALS_DIRECT_2026',
-    utm_content: 'cta',
-    utm_term: ''
-  });
+    preferredCallTime: 'During Business Hours',
+    consent: false
+  }));
 
-  const [status, setStatus] = useState('idle'); // idle, loading, success, error
-  const [leadResult, setLeadResult] = useState(null);
-
-  // Extract UTM parameters on component mount
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      setFormData(prev => ({
-        ...prev,
-        utm_source: params.get('utm_source') || prev.utm_source,
-        utm_medium: params.get('utm_medium') || prev.utm_medium,
-        utm_campaign: params.get('utm_campaign') || prev.utm_campaign,
-        utm_content: params.get('utm_content') || prev.utm_content,
-        utm_term: params.get('utm_term') || prev.utm_term,
-        loanType: params.get('product') || prev.loanType
-      }));
-    }
-  }, []);
+  const [status, setStatus] = useState('idle'); // idle | loading | success
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setFormData({ ...formData, [e.target.name]: value });
+    setFormData((prev) => ({ ...prev, [e.target.name]: value }));
+    if (errorMsg) setErrorMsg('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.consent) {
-      alert('Please accept the consent checkbox to proceed.');
+    const cleanPhone = formData.phone.replace(/\D/g, '').replace(/^91(?=\d{10}$)/, '');
+
+    if (!formData.name.trim() || formData.name.trim().length < 2) {
+      setErrorMsg('Please enter your full name.');
       return;
     }
-    setStatus('loading');
-
-    try {
-      const response = await axios.post('/api/lead/submit', {
-        ...formData,
-        timestamp: new Date().toISOString(),
-        source: formData.utm_source || 'website'
-      });
-
-      if (response.data && response.data.success) {
-        setLeadResult(response.data);
-        setStatus('success');
-      } else {
-        setStatus('error');
-      }
-    } catch (error) {
-      console.error('Master lead submission error:', error);
-      setStatus('error');
+    if (!PHONE_REGEX.test(cleanPhone)) {
+      setErrorMsg('Please enter a valid 10-digit Indian mobile number.');
+      return;
     }
+    if (formData.email.trim() && !EMAIL_REGEX.test(formData.email.trim())) {
+      setErrorMsg('Please enter a valid email address or leave it blank.');
+      return;
+    }
+    if (!formData.city.trim()) {
+      setErrorMsg('Please enter your city.');
+      return;
+    }
+    if (!formData.consent) {
+      setErrorMsg('Please check the explicit consent box before submitting your enquiry.');
+      return;
+    }
+
+    setStatus('loading');
+    setErrorMsg('');
+
+    await syncLeadData({
+      ...formData,
+      phone: cleanPhone,
+      consent: true,
+      source: 'Website_Contact_Page'
+    });
+
+    setStatus('success');
   };
 
   if (status === 'success') {
+    const waHref = generateWhatsAppDocumentLink(formData.loanType);
     return (
-      <div className="form-success-card animate-fade-in" style={{ textAlign: 'center', padding: '40px', background: '#f0fdf4', borderRadius: '12px', border: '1px solid #bbf7d0' }}>
-        <CheckCircle2 size={64} color="#16a34a" style={{ margin: '0 auto 20px' }} />
-        <h3 style={{ color: '#166534', marginBottom: '10px' }}>Application Submitted Successfully!</h3>
-        <div style={{ display: 'inline-block', background: '#dcfce7', color: '#15803d', padding: '6px 16px', borderRadius: '20px', fontWeight: 'bold', marginBottom: '15px' }}>
-          Lead ID: {leadResult?.leadId || 'ALS-2026-000001'}
-        </div>
-        <p style={{ color: '#15803d', marginBottom: '20px' }}>
-          Thank you, <strong>{formData.name}</strong>. Your enquiry for <strong>{formData.loanType}</strong> has been logged. Our loan advisor will contact you shortly via <strong>{formData.contactPreference}</strong>.
+      <div
+        className="form-success-card"
+        role="status"
+        aria-live="polite"
+        style={{ textAlign: 'center', padding: '32px', background: '#f0fdf4', borderRadius: '12px', border: '1px solid #bbf7d0' }}
+      >
+        <CheckCircle2 size={56} color="#15803d" style={{ margin: '0 auto 16px' }} aria-hidden="true" />
+        <h3 style={{ color: '#14532d', marginBottom: '10px' }}>Consultation Enquiry Recorded</h3>
+        <p style={{ color: '#166534', marginBottom: '16px' }}>
+          Thank you, <strong>{formData.name}</strong>. Your enquiry for <strong>{formData.loanType}</strong> has been received. Our advisor will reach out via <strong>{formData.contactPreference}</strong> during office hours.
         </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
-          <a 
-            href={leadResult?.whatsAppUrl || `https://wa.me/919175635165?text=Hello AVANI LOAN SERVICES, I submitted enquiry ${leadResult?.leadId || ''} for ${formData.loanType}`} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="btn" 
-            style={{ background: '#25D366', color: '#fff', width: '100%', justifyContent: 'center', fontWeight: 'bold' }}
+        <p style={{ fontSize: '0.84rem', color: 'var(--text-light)', marginBottom: '18px' }}>
+          {OFFICIAL_BUSINESS.advisoryDisclosure}
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn"
+            style={{ background: '#15803d', color: '#ffffff', width: '100%', justifyContent: 'center' }}
           >
-            💬 Chat on WhatsApp Now
+            <MessageCircle size={17} aria-hidden="true" /> Continue on WhatsApp (Optional)
           </a>
-          <button onClick={() => setStatus('idle')} className="btn" style={{ background: 'transparent', border: '1px solid #16a34a', color: '#16a34a', width: '100%', justifyContent: 'center' }}>
-            Submit Another Requirement
+          <button
+            type="button"
+            onClick={() => {
+              setFormData((prev) => ({ ...prev, name: '', phone: '', email: '', consent: false }));
+              setStatus('idle');
+            }}
+            className="btn btn-outline"
+            style={{ width: '100%', justifyContent: 'center' }}
+          >
+            Submit Another Enquiry
           </button>
         </div>
       </div>
@@ -108,157 +125,133 @@ export default function SimpleLeadForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="simple-contact-form glass-card" style={{ padding: '30px', background: '#ffffff', borderRadius: '12px' }}>
-      <div style={{ marginBottom: '20px' }}>
-        <label className="input-label" style={{ fontWeight: 600 }}>Full Name *</label>
-        <input type="text" name="name" required value={formData.name} onChange={handleChange} className="form-input" placeholder="Enter your full name" />
+    <form onSubmit={handleSubmit} className="simple-contact-form glass-card" style={{ padding: '28px', background: '#ffffff', borderRadius: '12px' }} noValidate>
+      {errorMsg && (
+        <div
+          role="alert"
+          style={{
+            marginBottom: '18px',
+            padding: '12px',
+            background: '#fef2f2',
+            border: '1px solid #fecaca',
+            borderRadius: '8px',
+            color: '#b91c1c',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px'
+          }}
+        >
+          <AlertCircle size={19} aria-hidden="true" />
+          <span>{errorMsg}</span>
+        </div>
+      )}
+
+      <div style={{ marginBottom: '16px' }}>
+        <label htmlFor={`${uid}-name`} className="form-label">Full Name *</label>
+        <input id={`${uid}-name`} type="text" name="name" required value={formData.name} onChange={handleChange} className="form-input" placeholder="Enter your full name" autoComplete="name" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '16px', marginBottom: '16px' }}>
         <div>
-          <label className="input-label" style={{ fontWeight: 600 }}>Mobile Number *</label>
-          <input type="tel" name="phone" required pattern="[0-9]{10}" value={formData.phone} onChange={handleChange} className="form-input" placeholder="10-digit mobile" />
+          <label htmlFor={`${uid}-phone`} className="form-label">10-Digit Mobile Number *</label>
+          <input id={`${uid}-phone`} type="tel" name="phone" required value={formData.phone} onChange={handleChange} className="form-input" placeholder="10-digit mobile number" autoComplete="tel" />
         </div>
         <div>
-          <label className="input-label" style={{ fontWeight: 600 }}>Email Address</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} className="form-input" placeholder="Email address (optional)" />
+          <label htmlFor={`${uid}-email`} className="form-label">Email Address (Optional)</label>
+          <input id={`${uid}-email`} type="email" name="email" value={formData.email} onChange={handleChange} className="form-input" placeholder="name@example.com" autoComplete="email" />
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '16px', marginBottom: '16px' }}>
         <div>
-          <label className="input-label" style={{ fontWeight: 600 }}>City *</label>
-          <input type="text" name="city" required value={formData.city} onChange={handleChange} className="form-input" placeholder="Your City (e.g. Latur, Pune)" />
+          <label htmlFor={`${uid}-city`} className="form-label">City *</label>
+          <input id={`${uid}-city`} type="text" name="city" required value={formData.city} onChange={handleChange} className="form-input" placeholder="e.g. Latur, Pune" />
         </div>
         <div>
-          <label className="input-label" style={{ fontWeight: 600 }}>What best describes you? *</label>
-          <select name="customerProfile" value={formData.customerProfile} onChange={handleChange} className="form-input">
+          <label htmlFor={`${uid}-profile`} className="form-label">Applicant Profile *</label>
+          <select id={`${uid}-profile`} name="customerProfile" value={formData.customerProfile} onChange={handleChange} className="form-select">
             <option>Salaried Professional</option>
-            <option>Business Owner</option>
+            <option>Business Owner / MSME</option>
             <option>Self-Employed</option>
-            <option>Doctor</option>
-            <option>Chartered Accountant</option>
-            <option>Architect</option>
-            <option>Engineer</option>
-            <option>Student</option>
-            <option>Parent</option>
-            <option>Property Buyer</option>
-            <option>MSME / SME</option>
-            <option>Other</option>
+            <option>Doctor / Medical Practitioner</option>
+            <option>Chartered Accountant / Professional</option>
+            <option>Student / Parent</option>
+            <option>Home / Property Buyer</option>
+            <option>School / College Trust Management</option>
           </select>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '16px', marginBottom: '16px' }}>
         <div>
-          <label className="input-label" style={{ fontWeight: 600 }}>Which loan do you need? *</label>
-          <select name="loanType" value={formData.loanType} onChange={handleChange} className="form-input">
-            <option>Personal / Salary Loan</option>
-            <option>Business Loan</option>
-            <option>Doctor Loan</option>
-            <option>Home Loan</option>
-            <option>Mortgage / Loan Against Property</option>
-            <option>Education Loan – India</option>
-            <option>Education Loan – Global Studies</option>
-            <option>School Funding</option>
-            <option>College Funding</option>
-            <option>CIBIL Improvement Consultation</option>
-            <option>Not Sure – Need Guidance</option>
+          <label htmlFor={`${uid}-loanType`} className="form-label">Loan Service Required *</label>
+          <select id={`${uid}-loanType`} name="loanType" value={formData.loanType} onChange={handleChange} className="form-select">
+            {OFFICIAL_SERVICES_NAV.map((s) => (
+              <option key={s.slug} value={s.name}>{s.name}</option>
+            ))}
+            <option>Not Sure — Need Advisory Guidance</option>
           </select>
         </div>
         <div>
-          <label className="input-label" style={{ fontWeight: 600 }}>Approximate Amount Required? *</label>
-          <select name="amount" value={formData.amount} onChange={handleChange} className="form-input">
+          <label htmlFor={`${uid}-amount`} className="form-label">Approximate Requirement *</label>
+          <select id={`${uid}-amount`} name="amount" value={formData.amount} onChange={handleChange} className="form-select">
             <option>Below ₹5 Lakh</option>
             <option>₹5–10 Lakh</option>
             <option>₹10–25 Lakh</option>
             <option>₹25–50 Lakh</option>
             <option>₹50 Lakh–₹1 Crore</option>
             <option>Above ₹1 Crore</option>
-            <option>Not Sure</option>
+            <option>To Be Discussed</option>
           </select>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '16px', marginBottom: '16px' }}>
         <div>
-          <label className="input-label" style={{ fontWeight: 600 }}>Employment Type *</label>
-          <select name="employmentType" value={formData.employmentType} onChange={handleChange} className="form-input">
-            <option>Salaried</option>
-            <option>Self-Employed</option>
-            <option>Business</option>
-            <option>Professional</option>
-            <option>Student</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div>
-          <label className="input-label" style={{ fontWeight: 600 }}>Monthly Income *</label>
-          <select name="monthlyIncome" value={formData.monthlyIncome} onChange={handleChange} className="form-input">
-            <option>Below ₹25,000</option>
-            <option>₹25,000–₹50,000</option>
-            <option>₹50,000–₹1 Lakh</option>
-            <option>₹1–2 Lakh</option>
-            <option>₹2–5 Lakh</option>
-            <option>Above ₹5 Lakh</option>
-            <option>Prefer to discuss with advisor</option>
-          </select>
-        </div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
-        <div>
-          <label className="input-label" style={{ fontWeight: 600 }}>Preferred Contact Method *</label>
-          <select name="contactPreference" value={formData.contactPreference} onChange={handleChange} className="form-input">
+          <label htmlFor={`${uid}-pref`} className="form-label">Preferred Contact Method *</label>
+          <select id={`${uid}-pref`} name="contactPreference" value={formData.contactPreference} onChange={handleChange} className="form-select">
             <option>WhatsApp + Call</option>
-            <option>WhatsApp</option>
+            <option>WhatsApp Only</option>
             <option>Phone Call</option>
             <option>Email</option>
           </select>
         </div>
         <div>
-          <label className="input-label" style={{ fontWeight: 600 }}>Preferred Call Time *</label>
-          <select name="preferredCallTime" value={formData.preferredCallTime} onChange={handleChange} className="form-input">
-            <option>Immediately</option>
-            <option>Within 1 Hour</option>
-            <option>Today</option>
-            <option>Tomorrow</option>
-            <option>Prefer WhatsApp</option>
+          <label htmlFor={`${uid}-time`} className="form-label">Preferred Time *</label>
+          <select id={`${uid}-time`} name="preferredCallTime" value={formData.preferredCallTime} onChange={handleChange} className="form-select">
+            <option>During Business Hours</option>
+            <option>Morning (10 AM – 1 PM)</option>
+            <option>Afternoon (2 PM – 5 PM)</option>
+            <option>Evening (5 PM – 7 PM)</option>
           </select>
         </div>
       </div>
 
-      <div style={{ marginBottom: '20px', background: '#F8FAFC', padding: '12px 16px', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-        <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.85rem', color: '#334155', cursor: 'pointer' }}>
-          <input 
-            type="checkbox" 
-            name="consent" 
-            checked={formData.consent} 
-            onChange={handleChange} 
-            style={{ marginTop: '3px' }} 
+      <div style={{ marginBottom: '18px', background: '#f0f9ff', padding: '12px 14px', borderRadius: '8px', border: '1px solid #bae6fd' }}>
+        <label htmlFor={`${uid}-consent`} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.86rem', color: '#0f172a', cursor: 'pointer' }}>
+          <input
+            id={`${uid}-consent`}
+            type="checkbox"
+            name="consent"
+            checked={formData.consent}
+            onChange={handleChange}
+            style={{ marginTop: '3px', width: '16px', height: '16px', flexShrink: 0 }}
             required
           />
           <span>
-            I agree to be contacted by <strong>AVANI LOAN SERVICES</strong> regarding my loan enquiry. Fast application processing and professional loan guidance.
+            {OFFICIAL_BUSINESS.consentText}{' '}
+            <Link to="/privacy" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>Read Privacy Policy</Link>.
           </span>
         </label>
       </div>
 
-      {status === 'error' && (
-        <div style={{ marginBottom: '20px', padding: '12px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', color: '#b91c1c', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <AlertCircle size={20} />
-          <span>Something went wrong submitting your form. Please try again or WhatsApp us.</span>
-        </div>
-      )}
-
       <button type="submit" disabled={status === 'loading'} className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '14px', fontSize: '1rem' }}>
-        {status === 'loading' ? 'Processing Application...' : 'Check Loan Eligibility & Submit'} <Send size={18} style={{ marginLeft: '10px' }} />
+        {status === 'loading' ? 'Submitting Enquiry...' : 'Submit Loan Advisory Enquiry'} <Send size={17} style={{ marginLeft: '6px' }} aria-hidden="true" />
       </button>
 
-      <p style={{ textAlign: 'center', fontSize: '0.8rem', color: '#64748b', marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-        <ShieldCheck size={16} color="#0052CC" /> Loan approval is subject to lender eligibility, documentation, credit profile, underwriting and lender policies.
+      <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-light)', marginTop: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+        <ShieldCheck size={16} color="#0369a1" aria-hidden="true" /> {OFFICIAL_BUSINESS.advisoryDisclosure}
       </p>
     </form>
   );
 }
-

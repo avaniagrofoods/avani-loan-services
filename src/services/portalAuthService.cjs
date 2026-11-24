@@ -4,10 +4,25 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const db = require('../models/portalDatabase.cjs');
 
-const JWT_SECRET = process.env.CALCULATOR_SESSION_SECRET || process.env.JWT_SECRET || 'AVANI_PORTAL_SECURE_KEY_2026_@FINSERV';
+let ephemeralDevSecret = null;
+
+function getPortalJwtSecret() {
+  const configured = String(process.env.CALCULATOR_SESSION_SECRET || process.env.JWT_SECRET || '').trim();
+  if (configured.length >= 16) return configured;
+
+  const isProd = process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL);
+  if (isProd) {
+    throw new Error('PORTAL_JWT_SECRET_UNCONFIGURED');
+  }
+  if (!ephemeralDevSecret) {
+    ephemeralDevSecret = crypto.randomBytes(32).toString('hex');
+  }
+  return ephemeralDevSecret;
+}
 const TOKEN_EXPIRY = '8h';
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
@@ -276,7 +291,7 @@ async function changePassword(userId, currentPassword, newPassword, ip = '127.0.
 
 function verifyToken(token) {
   try {
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, getPortalJwtSecret());
   } catch {
     return null;
   }
@@ -338,7 +353,6 @@ async function revokeSession(sessionId) {
  * Issues a new JWT session for a portal user and persists it to local store + MongoDB Atlas.
  */
 async function issueSession(user, ip = '127.0.0.1', userAgent = '') {
-  const crypto = require('crypto');
   const sessionId = `SESS-${Date.now()}-${crypto.randomBytes(16).toString('hex')}`;
   const token = jwt.sign(
     {
@@ -349,14 +363,16 @@ async function issueSession(user, ip = '127.0.0.1', userAgent = '') {
       sessionId,
       mustChangePassword: Boolean(user.must_change_password)
     },
-    JWT_SECRET,
+    getPortalJwtSecret(),
     { expiresIn: TOKEN_EXPIRY }
   );
 
+  // Store SHA-256 token hash only (never persist raw bearer JWTs on disk or DB — APR005-F-017)
+  const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
   const session = {
     session_id: sessionId,
     user_id: user.user_id,
-    token,
+    token_hash: tokenHash,
     ip_address: ip,
     user_agent: userAgent,
     is_revoked: false,

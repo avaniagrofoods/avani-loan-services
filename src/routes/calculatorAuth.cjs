@@ -79,8 +79,13 @@ function verifySessionToken(req) {
 router.post('/login', loginLimiter, async (req, res) => {
   const { password } = req.body || {};
   const clientIp = req.ip || req.headers['x-forwarded-for'] || 'unknown';
-  const expectedPassword = process.env.ADMIN_INITIAL_PASSWORD || process.env.FINANCIAL_TOOLS_PASSWORD || process.env.CALCULATOR_ACCESS_PASSWORD || 'Samarth@1356';
+  const expectedPassword = process.env.ADMIN_INITIAL_PASSWORD || process.env.FINANCIAL_TOOLS_PASSWORD || process.env.CALCULATOR_ACCESS_PASSWORD || '';
   const passwordHash = process.env.FINANCIAL_TOOLS_PASSWORD_HASH;
+
+  if (!expectedPassword && !(passwordHash && passwordHash.startsWith('$2'))) {
+    recordSecurityAudit('LOGIN_BLOCKED_UNCONFIGURED_SECRET', { ip: clientIp, status: 'MISCONFIGURED' });
+    return res.status(503).json({ success: false, message: 'Authentication service is not configured.' });
+  }
 
   if (!password || typeof password !== 'string') {
     recordSecurityAudit('LOGIN_FAILED_EMPTY_INPUT', { ip: clientIp, status: 'REJECTED' });

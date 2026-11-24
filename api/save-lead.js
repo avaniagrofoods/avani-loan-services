@@ -9,8 +9,31 @@ import axios from 'axios';
 // ─────────────────────────────────────────────────────────────────
 
 const inMemoryIdempotencyCache = new Map();
+const IDEMPOTENCY_WINDOW_MS = 30000;
+const IDEMPOTENCY_TTL_MS = 300000;
+const IDEMPOTENCY_MAX_ENTRIES = 1000;
 
-function normalizeIndianPhone(phone) {
+export function isValidOptionalEmail(email) {
+  if (!email) return true;
+  if (email.length > 254) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+}
+
+export function pruneIdempotencyCache(now = Date.now(), cache = inMemoryIdempotencyCache, maxEntries = IDEMPOTENCY_MAX_ENTRIES) {
+  for (const [k, v] of cache.entries()) {
+    if (!v || (now - v.timestamp > IDEMPOTENCY_TTL_MS)) {
+      cache.delete(k);
+    }
+  }
+  while (cache.size >= maxEntries) {
+    const oldestKey = cache.keys().next().value;
+    if (oldestKey === undefined) break;
+    cache.delete(oldestKey);
+  }
+  return cache.size;
+}
+
+export function normalizeIndianPhone(phone) {
   if (!phone) return null;
   const digits = String(phone).replace(/[^0-9]/g, '');
   const raw10 = digits.length > 10 ? digits.slice(-10) : digits;
@@ -59,7 +82,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // 2. Phone Number Normalization
+    // 2. Phone Number Normalization & Optional Email Format Validation
     const phoneData = normalizeIndianPhone(rawPhone);
     if (!phoneData) {
       return res.status(400).json({
@@ -69,13 +92,29 @@ export default async function handler(req, res) {
       });
     }
 
-    // 3. DPDP Act Consent Check
-    const consentGranted = raw.consent !== false && raw.consentStatus !== 'DENIED';
+    if (!isValidOptionalEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        correlationId,
+        error: 'Invalid email address format.'
+      });
+    }
+
+    // 3. DPDP Act Explicit Affirmative Consent Check (APR006-P1-01)
+    const normalizedConsentStatus = String(raw.consentStatus || '').trim().toUpperCase();
+    const consentExplicitlyDenied =
+      raw.consent === false ||
+      normalizedConsentStatus === 'DENIED' ||
+      normalizedConsentStatus === 'REVOKED' ||
+      normalizedConsentStatus === 'OPTED_OUT';
+    const consentExplicitlyGranted =
+      raw.consent === true || normalizedConsentStatus === 'GRANTED';
+    const consentGranted = !consentExplicitlyDenied && consentExplicitlyGranted;
     if (!consentGranted) {
       return res.status(403).json({
         success: false,
         correlationId,
-        error: 'DPDP Act Consent required: processing cannot proceed without applicant consent.'
+        error: 'DPDP Act Consent required: explicit affirmative applicant consent is required before processing.'
       });
     }
 
@@ -85,7 +124,7 @@ export default async function handler(req, res) {
     const now = Date.now();
     const cached = inMemoryIdempotencyCache.get(cacheKey);
 
-    if (cached && (now - cached.timestamp < 30000)) { // 30-second deduplication window
+    if (cached && (now - cached.timestamp < IDEMPOTENCY_WINDOW_MS)) { // 30-second deduplication window
       return res.status(200).json({
         success: true,
         correlationId,
@@ -94,6 +133,9 @@ export default async function handler(req, res) {
         message: 'Duplicate submission absorbed safely. Your enquiry is already being processed.',
         status: 'RECEIVED'
       });
+    }
+    if (cached && (now - cached.timestamp >= IDEMPOTENCY_TTL_MS)) {
+      inMemoryIdempotencyCache.delete(cacheKey);
     }
 
     const canonicalLoanCategory = normalizeLoanCategory(rawLoanType);
@@ -183,15 +225,11 @@ export default async function handler(req, res) {
       } catch (err) { /* non-fatal */ }
     }
 
-    // Cache idempotency entry
-    inMemoryIdempotencyCache.set(cacheKey, { leadId, timestamp: now });
+    // Prune expired / cap bounded cache size before inserting (APR006-P1-02)
+    pruneIdempotencyCache(now, inMemoryIdempotencyCache, IDEMPOTENCY_MAX_ENTRIES);
 
-    // Clean old cache entries (older than 5 minutes)
-    if (inMemoryIdempotencyCache.size > 1000) {
-      for (const [k, v] of inMemoryIdempotencyCache.entries()) {
-        if (now - v.timestamp > 300000) inMemoryIdempotencyCache.delete(k);
-      }
-    }
+    // Cache idempotency entry (preserve resolvedLeadId)
+    inMemoryIdempotencyCache.set(cacheKey, { leadId: resolvedLeadId, timestamp: now });
 
     return res.status(200).json({
       success: true,

@@ -10,6 +10,79 @@ const db = require('../models/portalDatabase.cjs');
 const { requirePortalAuth, requirePermission } = require('../middleware/portalAuthMiddleware.cjs');
 const ExcelJS = require('exceljs');
 
+// ─────────────────────────────────────────────────────────────────────────────
+// APR-006 Phase 4 Hardening Helpers (Verification, Allowlist, Pagination, Excel Safety)
+// ─────────────────────────────────────────────────────────────────────────────
+const DM_KEYWORDS = ['director', 'managing', 'md', 'ceo', 'promoter', 'founder', 'partner', 'chairman', 'head', 'president', 'executive'];
+
+const VALID_VERIFICATION_STATUSES = new Set(['Verified', 'Unverified_Pending', 'Needs_Review', 'Disqualified']);
+
+const BUILDER_MUTABLE_FIELDS = [
+  'brand_name', 'legal_entity_name', 'corporate_website', 'website_status',
+  'registered_office_address', 'city', 'locality', 'state', 'pincode', 'address_source',
+  'official_telephone', 'official_mobile', 'official_email', 'sales_email', 'general_email',
+  'contact_page_url', 'whatsapp_channel', 'whatsapp_classification', 'whatsapp_link', 'whatsapp_notes',
+  'company_category', 'residential_project_count', 'project_names', 'project_status',
+  'residential_segment', 'maharera_registration', 'maharera_location', 'maharera_url',
+  'maharera_classification', 'maharera_notes', 'project_class', 'primary_asset_type',
+  'outreach_readiness', 'recommended_channel', 'commercial_suitability', 'notes',
+  'lead_priority_tier', 'source_dataset', 'import_batch_id', 'business_mobile',
+  'whatsapp_number', 'whatsapp_direct_link', 'official_contact_page'
+];
+
+function pickAllowedBuilderFields(body = {}) {
+  const safe = {};
+  for (const key of BUILDER_MUTABLE_FIELDS) {
+    if (Object.prototype.hasOwnProperty.call(body, key) && body[key] !== undefined) {
+      safe[key] = body[key];
+    }
+  }
+  return safe;
+}
+
+function isVerifiedContact(contact) {
+  return String(contact && contact.verification_status || '').trim().toLowerCase() === 'verified';
+}
+
+function isVerifiedDecisionMaker(contact) {
+  if (!isVerifiedContact(contact)) return false;
+  const dmClass = String(contact && contact.dm_class || '').trim().toUpperCase();
+  if (dmClass.includes('NOT VERIFIED') || dmClass.includes('SWITCHBOARD') || dmClass.includes('UNVERIFIED')) {
+    return false;
+  }
+  if (dmClass === 'VERIFIED DECISION-MAKER') return true;
+  const des = String(contact && contact.designation || '').toLowerCase();
+  return DM_KEYWORDS.some(k => des.includes(k));
+}
+
+function isCompanyDecisionMakerVerified(builder) {
+  if (!builder) return false;
+  const isVerifiedCompany = String(builder.verification_status || '').trim().toLowerCase() === 'verified';
+  const dmName = String(builder.decision_maker_name || builder.key_decision_maker_name || '').trim();
+  const dmCat = String(builder.decision_maker_category || '').trim().toUpperCase();
+  if (!isVerifiedCompany || !dmName) return false;
+  if (dmCat.includes('NOT VERIFIED') || dmCat.includes('SWITCHBOARD') || dmCat.includes('UNVERIFIED')) return false;
+  return true;
+}
+
+function parsePagination(pageRaw, limitRaw, defaultLimit = 50, maxLimit = 200) {
+  const parsedPage = Number.parseInt(String(pageRaw ?? '1'), 10);
+  const parsedLimit = Number.parseInt(String(limitRaw ?? defaultLimit), 10);
+  const page = Number.isInteger(parsedPage) && parsedPage >= 1 ? parsedPage : 1;
+  const limit = Number.isInteger(parsedLimit) && parsedLimit >= 1 ? Math.min(parsedLimit, maxLimit) : defaultLimit;
+  return { page, limit };
+}
+
+function sanitizeExcelCell(value) {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'number' || typeof value === 'boolean') return value;
+  const str = String(value);
+  if (/^[\s]*[=+\-@\t\r]/.test(str)) {
+    return `'${str}`;
+  }
+  return str;
+}
+
 // 1. GET /api/portal/builder/companies
 router.get('/companies', requirePortalAuth, requirePermission('builder:read'), (req, res) => {
   const { search, city, verification_status, outreach_readiness, subview = 'all', page = 1, limit = 50 } = req.query;
@@ -25,14 +98,11 @@ router.get('/companies', requirePortalAuth, requirePermission('builder:read'), (
   );
 
   const contactBuilderIds = new Set(contacts.map(c => c.builder_id));
-  const dmKeywords = ['director', 'managing', 'md', 'ceo', 'promoter', 'founder', 'partner', 'chairman', 'head', 'president', 'executive'];
-  const dmContacts = contacts.filter(c => {
-    const des = (c.designation || '').toLowerCase();
-    return dmKeywords.some(k => des.includes(k));
-  });
+  // APR006-P4-01: Never treat unverified contacts as valid decision-makers
+  const dmContacts = contacts.filter(isVerifiedDecisionMaker);
   const dmBuilderIds = new Set([
     ...dmContacts.map(c => c.builder_id),
-    ...builders.filter(b => b.decision_maker_name || b.key_decision_maker_name).map(b => b.builder_id)
+    ...builders.filter(isCompanyDecisionMakerVerified).map(b => b.builder_id)
   ]);
   const pipelineBuilderIds = new Set(pipeline.map(d => d.builder_id));
   const activityBuilderIds = new Set(activities.map(a => a.builder_id));
@@ -61,7 +131,7 @@ router.get('/companies', requirePortalAuth, requirePermission('builder:read'), (
 
   // General Filter
   if (search) {
-    const q = search.toLowerCase();
+    const q = String(search).toLowerCase();
     builders = builders.filter(b =>
       (b.company_name && b.company_name.toLowerCase().includes(q)) ||
       (b.brand_name && b.brand_name.toLowerCase().includes(q)) ||
@@ -70,7 +140,8 @@ router.get('/companies', requirePortalAuth, requirePermission('builder:read'), (
     );
   }
   if (city) {
-    builders = builders.filter(b => b.city && b.city.toLowerCase() === city.toLowerCase());
+    const cityLower = String(city).toLowerCase();
+    builders = builders.filter(b => b.city && b.city.toLowerCase() === cityLower);
   }
   if (verification_status) {
     builders = builders.filter(b => b.verification_status === verification_status);
@@ -79,18 +150,19 @@ router.get('/companies', requirePortalAuth, requirePermission('builder:read'), (
     builders = builders.filter(b => b.outreach_readiness === outreach_readiness);
   }
 
-  // Enrich builder records with contacts and pipeline summaries for views
+  // Enrich builder records with verified contacts and pipeline summaries for views
   const enrichedBuilders = builders.map(b => {
     const bContacts = contacts.filter(c => c.builder_id === b.builder_id);
+    const bVerifiedContacts = bContacts.filter(isVerifiedContact);
     const bPipeline = pipeline.find(p => p.builder_id === b.builder_id);
     const bActivities = activities.filter(a => a.builder_id === b.builder_id);
-    const bDMs = bContacts.filter(c => {
-      const des = (c.designation || '').toLowerCase();
-      return dmKeywords.some(k => des.includes(k));
-    });
+    const bDMs = bContacts.filter(isVerifiedDecisionMaker);
+    const companyDmVerified = isCompanyDecisionMakerVerified(b);
 
-    const dmName = b.decision_maker_name || b.key_decision_maker_name || (bDMs[0] && bDMs[0].contact_name) || '';
-    const dmRole = b.executive_designation || b.key_decision_maker_role || (bDMs[0] && bDMs[0].designation) || '';
+    // APR006-P4-02: Resolve verified decision-maker using canonical full_name fallback to contact_name
+    const verifiedDmFromContact = bDMs[0] ? (bDMs[0].full_name || bDMs[0].contact_name || '') : '';
+    const dmName = verifiedDmFromContact || (companyDmVerified ? (b.decision_maker_name || b.key_decision_maker_name || '') : '');
+    const dmRole = (bDMs[0] && bDMs[0].designation) || (companyDmVerified ? (b.executive_designation || b.key_decision_maker_role || '') : '');
     const waUrl = b.whatsapp_direct_link || b.whatsapp_direct_url || (b.official_mobile ? `https://wa.me/${b.official_mobile.replace(/[^0-9]/g, '')}` : '');
     const reraUrl = b.maharera_url || b.maharera_verification_url || 'https://maharera.maharashtra.gov.in/';
     const batchId = b.import_batch_id || b.source_lineage_batch_id || 'BATCH-20261107-P5318';
@@ -99,10 +171,13 @@ router.get('/companies', requirePortalAuth, requirePermission('builder:read'), (
       ...b,
       key_decision_maker_name: dmName,
       key_decision_maker_role: dmRole,
+      decision_maker_verified: Boolean(dmName && (bDMs.length > 0 || companyDmVerified)),
       whatsapp_direct_url: waUrl,
       maharera_verification_url: reraUrl,
       source_lineage_batch_id: batchId,
       contactsCount: bContacts.length,
+      verifiedContactsCount: bVerifiedContacts.length,
+      unverifiedContactsCount: bContacts.length - bVerifiedContacts.length,
       decisionMakers: bDMs,
       contacts: bContacts,
       pipelineDeal: bPipeline || null,
@@ -110,10 +185,9 @@ router.get('/companies', requirePortalAuth, requirePermission('builder:read'), (
     };
   });
 
-  // Pagination
+  // Bounded Pagination (APR006-P4-03)
   const total = enrichedBuilders.length;
-  const p = parseInt(page);
-  const l = parseInt(limit);
+  const { page: p, limit: l } = parsePagination(page, limit);
   const startIndex = (p - 1) * l;
   const paginated = enrichedBuilders.slice(startIndex, startIndex + l);
 
@@ -156,7 +230,7 @@ router.get('/companies/:id', requirePortalAuth, requirePermission('builder:read'
 
 // 2b. POST /api/portal/builder/companies
 router.post('/companies', requirePortalAuth, requirePermission('builder:write'), async (req, res) => {
-  const { builder_id, company_name, city } = req.body;
+  const { builder_id, company_name, city } = req.body || {};
   if (!company_name || !company_name.toString().trim()) {
     return res.status(400).json({ success: false, message: 'company_name is required.' });
   }
@@ -178,15 +252,19 @@ router.post('/companies', requirePortalAuth, requirePermission('builder:write'),
     ? builder_id.toString().trim()
     : `ALS-BLD-${Date.now().toString(36).toUpperCase()}`;
 
+  // APR006-P4-03 / APR006-P4-05: Strict allowlist + force Unverified_Pending + provenance on creation
+  const safeFields = pickAllowedBuilderFields(req.body);
   const created = await db.upsertAsync('builder_companies', 'builder_id', {
-    ...req.body,
+    ...safeFields,
     builder_id: newId,
     company_name: normalizedName,
     city: normalizedCity,
-    state: req.body.state || 'Maharashtra',
-    lead_priority_tier: req.body.lead_priority_tier || 'A',
-    verification_status: req.body.verification_status || 'Unverified_Pending',
-    pipeline_stage: req.body.pipeline_stage || 1,
+    state: safeFields.state || 'Maharashtra',
+    lead_priority_tier: safeFields.lead_priority_tier || 'A',
+    verification_status: 'Unverified_Pending',
+    pipeline_stage: 1,
+    source_dataset: safeFields.source_dataset || 'MANUAL_PORTAL_ENTRY',
+    import_batch_id: safeFields.import_batch_id || `MANUAL-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}`,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   });
@@ -204,14 +282,29 @@ router.put('/companies/:id', requirePortalAuth, requirePermission('builder:write
     return res.status(404).json({ success: false, message: 'Builder company not found.' });
   }
 
+  // APR006-P4-03: Strict allowlist (no mass-assignment of privileged or internal fields)
+  const safeFields = pickAllowedBuilderFields(req.body);
+  if (req.body && req.body.company_name && String(req.body.company_name).trim()) {
+    safeFields.company_name = String(req.body.company_name).trim();
+  }
+  if (req.body && req.body.verification_status !== undefined) {
+    if (!VALID_VERIFICATION_STATUSES.has(req.body.verification_status)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid verification_status. Allowed values: ${Array.from(VALID_VERIFICATION_STATUSES).join(', ')}.`
+      });
+    }
+    safeFields.verification_status = req.body.verification_status;
+  }
+
   const updated = await db.upsertAsync('builder_companies', 'builder_id', {
     ...existing,
-    ...req.body,
+    ...safeFields,
     builder_id: builderId, // Prevent tampering with PK
     updated_at: new Date().toISOString()
   });
 
-  db.logAudit(req.portalUser.userId, 'BUILDER', 'UPDATE_BUILDER_COMPANY', { builder_id: builderId, changes: Object.keys(req.body) }, req.ip);
+  db.logAudit(req.portalUser.userId, 'BUILDER', 'UPDATE_BUILDER_COMPANY', { builder_id: builderId, changes: Object.keys(safeFields) }, req.ip);
 
   return res.json({ success: true, message: 'Builder company updated successfully.', data: updated });
 });
@@ -265,16 +358,26 @@ router.get('/pipeline', requirePortalAuth, requirePermission('builder:read'), (r
 // 5. PUT /api/portal/builder/pipeline/:dealId/stage
 router.put('/pipeline/:dealId/stage', requirePortalAuth, requirePermission('builder:write'), (req, res) => {
   const dealId = req.params.dealId;
-  const { stage, stage_name, notes } = req.body;
+  const { stage, stage_name, notes } = req.body || {};
+
+  // APR006-P4-03: Strictly validate stage integer 1..19
+  const parsedStage = Number(stage);
+  if (!Number.isInteger(parsedStage) || parsedStage < 1 || parsedStage > 19) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid pipeline stage. Must be an integer between 1 and 19.'
+    });
+  }
+
   const deal = db.getById('builder_pipeline', dealId);
   if (!deal) {
     return res.status(404).json({ success: false, message: 'Pipeline deal not found.' });
   }
 
   const prevStage = deal.stage;
-  deal.stage = parseInt(stage);
-  if (stage_name) deal.stage_name = stage_name;
-  if (notes) deal.notes = (deal.notes ? deal.notes + '\n' : '') + `[${new Date().toISOString().split('T')[0]}] Stage changed to ${stage}: ${notes}`;
+  deal.stage = parsedStage;
+  if (stage_name) deal.stage_name = String(stage_name).trim();
+  if (notes) deal.notes = (deal.notes ? deal.notes + '\n' : '') + `[${new Date().toISOString().split('T')[0]}] Stage changed to ${parsedStage}: ${String(notes)}`;
   deal.updated_at = new Date().toISOString();
 
   // Probability auto-adjustment based on stage progression
@@ -315,6 +418,17 @@ router.get('/export', requirePortalAuth, requirePermission('builder:export'), as
   try {
     const format = req.query.format || 'xlsx';
     const builders = db.getAll('builder_companies');
+    const contacts = db.getAll('builder_contacts');
+    const mahareraRecords = db.getAll('builder_maharera');
+
+    const reraByBuilder = new Map();
+    mahareraRecords.forEach(r => {
+      if (!r || !r.builder_id || !r.registration_number) return;
+      const list = reraByBuilder.get(r.builder_id) || [];
+      list.push(String(r.registration_number).trim());
+      reraByBuilder.set(r.builder_id, list);
+    });
+
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Maharashtra Builders');
 
@@ -341,26 +455,40 @@ router.get('/export', requirePortalAuth, requirePermission('builder:export'), as
     ];
 
     builders.forEach(b => {
+      const bVerifiedDMs = contacts.filter(c => c.builder_id === b.builder_id && isVerifiedDecisionMaker(c));
+      const companyDmOk = isCompanyDecisionMakerVerified(b);
+      const dmName = (bVerifiedDMs[0] && (bVerifiedDMs[0].full_name || bVerifiedDMs[0].contact_name)) ||
+        (companyDmOk ? (b.decision_maker_name || b.key_decision_maker_name || '') : '');
+      const dmRole = (bVerifiedDMs[0] && bVerifiedDMs[0].designation) ||
+        (companyDmOk ? (b.executive_designation || b.key_decision_maker_role || '') : '');
+
+      const joinedRera = reraByBuilder.get(b.builder_id) || [];
+      const fallbackRera = Array.isArray(b.maharera_reg_numbers)
+        ? b.maharera_reg_numbers
+        : (b.maharera_registration ? [String(b.maharera_registration)] : []);
+      const reraJoinedStr = Array.from(new Set([...joinedRera, ...fallbackRera].filter(Boolean))).join(', ');
+
+      // APR006-P4-04: Formula-injection sanitization across all exported cells
       worksheet.addRow({
-        builder_id: b.builder_id,
-        company_name: b.company_name,
-        brand_name: b.brand_name,
-        city: b.city,
-        key_decision_maker_name: b.key_decision_maker_name || '',
-        key_decision_maker_role: b.key_decision_maker_role || '',
-        official_telephone: b.official_telephone,
-        official_mobile: b.whatsapp_channel || b.official_mobile,
-        whatsapp_direct_url: b.whatsapp_direct_url || '',
-        official_email: b.official_email,
-        corporate_website: b.corporate_website,
-        project_class: b.project_class || '',
-        primary_asset_type: b.primary_asset_type || '',
-        rera_numbers: b.maharera_reg_numbers ? b.maharera_reg_numbers.join(', ') : '',
-        maharera_verification_url: b.maharera_verification_url || '',
+        builder_id: sanitizeExcelCell(b.builder_id),
+        company_name: sanitizeExcelCell(b.company_name),
+        brand_name: sanitizeExcelCell(b.brand_name),
+        city: sanitizeExcelCell(b.city),
+        key_decision_maker_name: sanitizeExcelCell(dmName),
+        key_decision_maker_role: sanitizeExcelCell(dmRole),
+        official_telephone: sanitizeExcelCell(b.official_telephone),
+        official_mobile: sanitizeExcelCell(b.whatsapp_channel || b.official_mobile),
+        whatsapp_direct_url: sanitizeExcelCell(b.whatsapp_direct_link || b.whatsapp_direct_url || ''),
+        official_email: sanitizeExcelCell(b.official_email),
+        corporate_website: sanitizeExcelCell(b.corporate_website),
+        project_class: sanitizeExcelCell(b.project_class || b.residential_segment || ''),
+        primary_asset_type: sanitizeExcelCell(b.primary_asset_type || b.company_category || ''),
+        rera_numbers: sanitizeExcelCell(reraJoinedStr),
+        maharera_verification_url: sanitizeExcelCell(b.maharera_url || b.maharera_verification_url || ''),
         qualification_score: b.qualification_score,
-        verification_status: b.verification_status,
-        outreach_readiness: b.outreach_readiness,
-        source_lineage_batch_id: b.source_lineage_batch_id || 'BATCH-20261107-P5318'
+        verification_status: sanitizeExcelCell(b.verification_status),
+        outreach_readiness: sanitizeExcelCell(b.outreach_readiness),
+        source_lineage_batch_id: sanitizeExcelCell(b.import_batch_id || b.source_lineage_batch_id || 'BATCH-20261107-P5318')
       });
     });
 
@@ -375,5 +503,154 @@ router.get('/export', requirePortalAuth, requirePermission('builder:export'), as
     return res.status(500).json({ success: false, message: 'Failed to generate export file.' });
   }
 });
+
+// 9. POST /api/portal/builder/companies/:id/crm-handover
+// Controlled Qualified Builder Prospect -> AVANI AI CRM Handover (Sections 6, 10, 15)
+router.post('/companies/:id/crm-handover', requirePortalAuth, requirePermission('builder:write'), async (req, res) => {
+  try {
+    const builderId = req.params.id;
+    const builder = db.getById('builder_companies', builderId);
+    if (!builder) {
+      return res.status(404).json({ success: false, code: 'BUILDER_NOT_FOUND', message: 'Builder company not found.' });
+    }
+
+    const body = req.body || {};
+
+    // 1. Strict verification guard: never promote unverified builder or unverified contact into CRM
+    const contacts = db.getAll('builder_contacts').filter(c => c.builder_id === builderId);
+    const verifiedDMs = contacts.filter(isVerifiedDecisionMaker);
+    const companyDmVerified = isCompanyDecisionMakerVerified(builder);
+
+    if (verifiedDMs.length === 0 && !companyDmVerified) {
+      return res.status(400).json({
+        success: false,
+        code: 'UNVERIFIED_PROSPECT_CONTACT',
+        message: 'CRM handover blocked: Builder company or decision-maker contact is not verified. Unverified database prospects cannot be converted into active CRM leads.'
+      });
+    }
+
+    // 2. Strict legitimate communication permission / consent guard
+    const isConsentGranted = body.consent === true || body.consentStatus === 'GRANTED';
+    if (!isConsentGranted) {
+      return res.status(403).json({
+        success: false,
+        code: 'CONSENT_REQUIRED',
+        message: 'CRM handover blocked: Explicit communication permission (consent=true or consentStatus="GRANTED") is required before transferring a builder prospect to AVANI AI CRM.'
+      });
+    }
+
+    // 3. Resolve verified contact person & valid Indian 10-digit mobile
+    const primaryDm = verifiedDMs[0] || {};
+    const contactName = String(
+      body.contact_person ||
+      primaryDm.full_name ||
+      primaryDm.contact_name ||
+      builder.decision_maker_name ||
+      builder.key_decision_maker_name ||
+      builder.company_name
+    ).trim();
+
+    const rawPhone = String(
+      body.phone ||
+      body.mobile ||
+      primaryDm.mobile ||
+      primaryDm.phone ||
+      builder.official_mobile ||
+      builder.whatsapp_channel ||
+      builder.official_telephone ||
+      ''
+    ).trim();
+    const digits = rawPhone.replace(/\D/g, '');
+    const raw10 = digits.length > 10 ? digits.slice(-10) : digits;
+    if (raw10.length !== 10 || !/^[6-9]\d{9}$/.test(raw10)) {
+      return res.status(400).json({
+        success: false,
+        code: 'INVALID_MOBILE',
+        message: 'A valid 10-digit Indian mobile number (starting with 6-9) is required for CRM handover.'
+      });
+    }
+
+    const requestedAmount = body.requestedAmount ?? body.estimated_amount ?? 25000000;
+    const idempotencyKey = String(body.idempotencyKey || `BLD-CRM-${builderId}`).trim().slice(0, 64);
+    const provenanceBatchId = builder.import_batch_id || builder.source_lineage_batch_id || 'BATCH-20261107-P5318';
+
+    const crmPayload = {
+      name: `${contactName} (${builder.company_name})`.slice(0, 110),
+      phone: `+91${raw10}`,
+      city: String(builder.city || 'Latur').trim(),
+      loanType: 'Home Loan',
+      requestedAmount: String(requestedAmount),
+      leadSource: 'BUILDER_DATABASE_HANDOVER',
+      consent: true,
+      consentStatus: 'GRANTED',
+      idempotencyKey,
+      sourceProject: 'PROJECT_A_UNIFIED_PORTAL',
+      sourceModule: 'BUILDER_DATABASE',
+      sourceRecordId: builderId,
+      provenanceBatchId
+    };
+
+    const crmBaseUrl = String(body.crmBaseUrl || process.env.AVANI_CRM_URL || process.env.NEXT_PUBLIC_CRM_URL || '').trim();
+    let crmResponse = null;
+
+    if (crmBaseUrl) {
+      const axios = require('axios');
+      const resp = await axios.post(`${crmBaseUrl.replace(/\/+$/, '')}/api/public/enquiry`, crmPayload, {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 8000,
+        validateStatus: () => true
+      });
+      if (resp.status >= 400 || !resp.data || !resp.data.success) {
+        return res.status(resp.status >= 400 ? resp.status : 502).json({
+          success: false,
+          code: (resp.data && resp.data.error) || 'CRM_HANDOVER_REJECTED',
+          message: (resp.data && resp.data.message) || 'AVANI AI CRM rejected the builder handover request.'
+        });
+      }
+      crmResponse = resp.data;
+    }
+
+    db.logAudit(
+      req.portalUser.userId,
+      'BUILDER',
+      'BUILDER_CRM_HANDOVER',
+      {
+        builderId,
+        idempotencyKey,
+        provenanceBatchId,
+        crmLeadId: crmResponse ? crmResponse.leadId : null,
+        crmCustomerId: crmResponse ? crmResponse.customerId : null
+      },
+      req.ip
+    );
+
+    return res.status(201).json({
+      success: true,
+      handover: true,
+      sourceModule: 'BUILDER_DATABASE',
+      builder_id: builderId,
+      provenanceBatchId,
+      idempotencyKey,
+      crmPayload,
+      crmResult: crmResponse
+    });
+  } catch (err) {
+    console.error('[BuilderCrmHandover] Error:', err.message);
+    return res.status(502).json({
+      success: false,
+      code: 'CRM_HANDOVER_UNAVAILABLE',
+      message: 'Unable to reach AVANI AI CRM for builder opportunity handover.'
+    });
+  }
+});
+
+router._helpers = {
+  isVerifiedContact,
+  isVerifiedDecisionMaker,
+  isCompanyDecisionMakerVerified,
+  parsePagination,
+  sanitizeExcelCell,
+  pickAllowedBuilderFields
+};
 
 module.exports = router;

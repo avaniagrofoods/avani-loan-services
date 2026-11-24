@@ -11,7 +11,7 @@
  */
 export function formatINR(val, options = {}) {
   const num = typeof val === 'number' ? val : parseFloat(val);
-  if (isNaN(num)) return '₹0';
+  if (!Number.isFinite(num)) return '₹0';
 
   const defaultDecimals = Number.isInteger(num) ? 0 : 2;
   const maxDigits = options.maximumFractionDigits !== undefined ? options.maximumFractionDigits : defaultDecimals;
@@ -33,7 +33,7 @@ export function formatINR(val, options = {}) {
  */
 export function formatNumber(val, decimals = 0) {
   const num = typeof val === 'number' ? val : parseFloat(val);
-  if (isNaN(num)) return '0';
+  if (!Number.isFinite(num)) return '0';
 
   return new Intl.NumberFormat('en-IN', {
     minimumFractionDigits: decimals,
@@ -49,7 +49,7 @@ export function formatNumber(val, decimals = 0) {
  */
 export function formatPercent(val, decimals = 2) {
   const num = typeof val === 'number' ? val : parseFloat(val);
-  if (isNaN(num)) return '0%';
+  if (!Number.isFinite(num)) return '0%';
   return `${num.toFixed(decimals).replace(/\.?0+$/, '')}%`;
 }
 
@@ -61,10 +61,10 @@ export function formatPercent(val, decimals = 2) {
  */
 export function parseNumber(val, fallback = 0) {
   if (val === null || val === undefined || val === '') return fallback;
-  if (typeof val === 'number') return isNaN(val) ? fallback : val;
+  if (typeof val === 'number') return Number.isFinite(val) ? val : fallback;
   const cleaned = String(val).replace(/,/g, '').trim();
   const parsed = parseFloat(cleaned);
-  return isNaN(parsed) ? fallback : parsed;
+  return Number.isFinite(parsed) ? parsed : fallback;
 }
 
 // Word maps for Indian Number-to-Words

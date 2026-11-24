@@ -6,11 +6,17 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCalculatorAuth } from '../auth/CalculatorAuthContext';
+import useSEO from '../../hooks/useSEO';
 import { Lock, KeyRound, Eye, EyeOff, ShieldAlert, ArrowRight, Calculator } from 'lucide-react';
 import logo from '../../assets/avani-brand-logo.png';
 import '../styles/calculators.css';
 
 export default function CalculatorLogin() {
+  useSEO({
+    title: 'Financial Tools Admin Login | Avani Loan Services',
+    description: 'Protected administrative authentication gate for AVANI LOAN SERVICES Financial Calculator Suite.',
+    noindex: true
+  });
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');

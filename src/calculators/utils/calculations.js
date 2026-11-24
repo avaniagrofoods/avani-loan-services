@@ -413,11 +413,13 @@ export function calculatePrepayment({
     // Keep same monthly EMI, reduce tenure
     let newMonths = 0;
     if (r === 0) {
-      newMonths = Math.ceil(newPrincipal / emi);
-    } else {
+      newMonths = emi > 0 ? Math.ceil(newPrincipal / emi) : 0;
+    } else if (emi > newPrincipal * r) {
       const top = Math.log(emi / (emi - newPrincipal * r));
       const bottom = Math.log(1 + r);
       newMonths = Math.ceil(top / bottom);
+    } else {
+      newMonths = n;
     }
 
     const newTotalInterest = Math.max(0, (emi * newMonths) - newPrincipal);

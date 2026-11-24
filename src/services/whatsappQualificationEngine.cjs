@@ -53,9 +53,12 @@ function scheduleDripCampaign(fromPhone) {
     8 * 24 * 60 * 60 * 1000          // 8 days
   ];
 
+  const maskedDripPhone = String(fromPhone || '').replace(/[^0-9]/g, '').length > 4
+    ? `******${String(fromPhone || '').replace(/[^0-9]/g, '').slice(-4)}`
+    : '****';
   const timeouts = intervals.map(interval => {
     return setTimeout(async () => {
-      console.log(`[Drip Campaign] Firing drip message to ${fromPhone} after ${interval}ms`);
+      console.log(`[Drip Campaign] Firing drip message to ${maskedDripPhone} after ${interval}ms`);
       await sendMetaWhatsAppMessage(fromPhone, DRIP_MESSAGE);
     }, interval);
   });
@@ -316,8 +319,9 @@ async function sendMetaWhatsAppMessage(toPhone, messageText, templateName = null
     }
   }
 
-  // 3. Fallback logging
-  console.log(`[WhatsApp Engine] Mock Message Dispatched to ${formattedPhone}:\n${messageText}`);
+  // 3. Fallback logging (strictly masked PII)
+  const maskedFallbackPhone = formattedPhone && formattedPhone.length > 4 ? `******${formattedPhone.slice(-4)}` : '****';
+  console.log(`[WhatsApp Engine] Mock Message Dispatched to ${maskedFallbackPhone} (len=${String(messageText || '').length})`);
   return { success: true, provider: 'Internal_Logger', text: messageText };
 }
 
@@ -370,7 +374,7 @@ Reply to this message to receive your exact Document Checklist!`;
  * Synchronize lead across HubSpot, Google Sheets, Zapier, and Pabbly
  */
 async function syncAllIntegrations(payload) {
-  console.log('[Integrations Engine] Syncing lead across ecosystem...', payload.name);
+  console.log(`[Integrations Engine] Syncing lead across ecosystem (source=${payload?.source || 'unknown'})...`);
 
   // 1. Google Sheets
   try {
@@ -405,7 +409,10 @@ async function processIncomingWhatsAppMessage(fromPhone, textMessage) {
   const normText = (textMessage || '').trim().toLowerCase();
   let session = conversationSessions.get(fromPhone) || { step: 'INIT' };
 
-  console.log(`[WhatsApp Bot] Incoming from ${fromPhone} (Step: ${session.step}): "${textMessage}"`);
+  const maskedIncomingPhone = String(fromPhone || '').replace(/[^0-9]/g, '').length > 4
+    ? `******${String(fromPhone || '').replace(/[^0-9]/g, '').slice(-4)}`
+    : '****';
+  console.log(`[WhatsApp Bot] Incoming from ${maskedIncomingPhone} (Step: ${session.step}, msgLen: ${normText.length})`);
 
   let replyText = '';
 
@@ -413,7 +420,7 @@ async function processIncomingWhatsAppMessage(fromPhone, textMessage) {
     session.step = 'AWAITING_NAME';
     conversationSessions.set(fromPhone, session);
     replyText = `Welcome to *AVANI LOAN SERVICES*! 🏦
-We provide fast loans up to ₹50 Lakhs with 48-hour approvals across Maharashtra.
+We provide independent loan consultancy and advisory across Maharashtra (subject to lender eligibility and underwriting).
 
 Step 1 of 4: Please enter your *Full Name*:`;
   } 

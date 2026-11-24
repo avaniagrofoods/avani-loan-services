@@ -16,7 +16,7 @@ import {
   FileDown,
   Lock
 } from 'lucide-react';
-import logo from '../../assets/avani-brand-logo.png';
+import logo from '../../assets/optimized/avani-brand-logo.webp';
 import '../styles/calculators.css';
 
 export default function CalculatorLayout({ children }) {
@@ -25,7 +25,7 @@ export default function CalculatorLayout({ children }) {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/calculators', { replace: true });
+    navigate('/financial-tools', { replace: true });
   };
 
   const handlePrint = () => {
@@ -36,10 +36,10 @@ export default function CalculatorLayout({ children }) {
     <div className="calc-suite-container animate-fade-in">
       {/* Top Suite Bar */}
       <header className="calc-topbar">
-        <Link to="/calculators" className="calc-topbar-brand">
-          <img src={logo} alt="AVANI LOAN SERVICES Logo" className="calc-topbar-logo" />
+        <Link to="/financial-tools" className="calc-topbar-brand">
+          <img src={logo} alt="AVANI LOAN SERVICES Logo" className="calc-topbar-logo" width="40" height="40" />
           <div>
-            <h1 className="calc-topbar-title">AVANI LOAN SERVICES</h1>
+            <div className="calc-topbar-title">AVANI LOAN SERVICES</div>
             <p className="calc-topbar-subtitle">Financial Calculator Suite</p>
           </div>
         </Link>

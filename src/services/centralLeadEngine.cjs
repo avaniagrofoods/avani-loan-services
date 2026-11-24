@@ -106,7 +106,8 @@ function processIncomingLead(leadPayload) {
   if (existingIndex !== -1) {
     // DUPLICATE DETECTED
     const existing = leads[existingIndex];
-    console.log(`[CentralLeadEngine] Duplicate detected for mobile ${mobile}. Original Lead ID: ${existing.leadId}`);
+    const maskedMobile = mobile && mobile.length > 4 ? `${'*'.repeat(mobile.length - 4)}${mobile.slice(-4)}` : '****';
+    console.log(`[CentralLeadEngine] Duplicate detected for mobile ${maskedMobile}. Original Lead ID: ${existing.leadId}`);
 
     const duplicateHistory = existing.duplicateEvents || [];
     duplicateHistory.push({

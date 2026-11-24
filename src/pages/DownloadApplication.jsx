@@ -6,6 +6,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import useSEO from '../hooks/useSEO';
 import {
   FileDown,
   Download,
@@ -26,6 +27,12 @@ import {
 import './Documents.css';
 
 export default function DownloadApplication() {
+  useSEO({
+    title: 'Download Loan Application Kits & Document Checklists | Avani Loan Services',
+    description:
+      'Download printable loan advisory application kits and standard KYC, income, property, and institutional documentation checklists from AVANI LOAN SERVICES, Latur.',
+    keywords: 'loan application form download, loan document checklist PDF Latur, Avani Loan Services application kit'
+  });
   const [activeTab, setActiveTab] = useState('application-forms');
   const [downloadSuccess, setDownloadSuccess] = useState('');
 

@@ -5,15 +5,16 @@
 // ─────────────────────────────────────────────────────────────────
 const axios = require('axios');
 
-// Apps Script endpoint (confirmed 200 OK)
-const APPS_SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbyoAmAabpO9PUDH-AXatZm5Td7pO9n5W00Eoh6TNIkPtjbQZiYrhAv27XgyMtJdBxchEg/exec';
+// Apps Script endpoint loaded strictly from server environment variable (never hardcoded)
+const APPS_SCRIPT_URL = process.env.GOOGLE_SHEET_APP_SCRIPT_URL || '';
 
 /**
- * Send row data to the confirmed Apps Script endpoint.
- * Always succeeds even if the service‑account key is not yet set.
+ * Send row data to the configured Apps Script endpoint when explicitly configured.
  */
 async function appendViaAppsScript(row) {
+  if (!APPS_SCRIPT_URL) {
+    return;
+  }
   const payload = {
     timestamp : row.timestamp  || '',
     name      : row.name       || '',

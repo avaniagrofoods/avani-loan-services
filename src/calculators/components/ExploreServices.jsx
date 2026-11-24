@@ -23,111 +23,111 @@ import '../styles/calculators.css';
 
 export const LOAN_SERVICES = [
   {
-    id: 'salary-loan',
-    title: 'Salary Loan',
-    subtitle: 'Fast personal loans for salaried employees',
-    rate: 'From 10.50% p.a.',
-    tenure: 'Up to 5 Years',
-    link: '/services/salary-loan',
-    calcLink: '/calculators/loan/emi',
+    id: 'personal-loan',
+    title: 'Personal Loan',
+    subtitle: 'Loan advisory for salaried professionals',
+    rate: 'As per partner lender policy',
+    tenure: 'Subject to lender terms',
+    link: '/services/personal-loan',
+    calcLink: '/financial-tools/loan/emi',
     icon: <Briefcase size={20} />,
-    description: 'Instant approvals with minimal paperwork for salaried professionals across Maharashtra.',
+    description: 'Transparent loan advisory, document checklist guidance, and lender coordination for salaried individuals across Maharashtra.',
     calcTags: ['emi', 'foir', 'multiplier', 'outstanding', 'prepayment', 'rate-change']
   },
   {
     id: 'business-loan',
     title: 'Business Loan',
-    subtitle: 'Working capital & expansion funding',
-    rate: 'From 11.25% p.a.',
-    tenure: 'Up to 7 Years',
+    subtitle: 'Working capital & expansion advisory',
+    rate: 'As per partner lender policy',
+    tenure: 'Subject to lender terms',
     link: '/services/business-loan',
-    calcLink: '/calculators/loan/overdraft',
+    calcLink: '/financial-tools/loan/overdraft',
     icon: <Building2 size={20} />,
-    description: 'Customized credit limits, machinery loans, and working capital for SMEs and traders.',
+    description: 'Independent loan consultancy and documentation checklists for MSMEs, traders, proprietors, and practicing professionals.',
     calcTags: ['emi', 'foir', 'multiplier', 'overdraft', 'outstanding', 'foreclosure']
   },
   {
     id: 'education-loan-india',
     title: 'Education Loan — India',
-    subtitle: 'Secured & unsecured domestic studies',
-    rate: 'From 8.85% p.a.',
-    tenure: 'Up to 15 Years',
-    link: '/services/education-loan',
-    calcLink: '/calculators/loan/emi',
+    subtitle: 'Domestic higher-education loan advisory',
+    rate: 'As per partner lender policy',
+    tenure: 'Subject to lender terms',
+    link: '/services/education-loan-india',
+    calcLink: '/financial-tools/loan/emi',
     icon: <GraduationCap size={20} />,
-    description: 'Comprehensive tuition, hostel, and laptop funding with flexible course moratorium.',
+    description: 'Structured admission-letter, co-applicant, and fee-schedule documentation guidance for recognized Indian institutions.',
     calcTags: ['emi', 'foir', 'outstanding', 'interest']
   },
   {
     id: 'education-loan-global',
     title: 'Education Loan — Global Studies',
-    subtitle: 'Study abroad funding up to ₹1.5 Cr',
-    rate: 'From 9.25% p.a.',
-    tenure: 'Up to 15 Years',
-    link: '/services/education-loan',
-    calcLink: '/calculators/loan/emi',
+    subtitle: 'Overseas university financing advisory',
+    rate: 'As per partner lender policy',
+    tenure: 'Subject to lender terms',
+    link: '/services/education-loan-global-studies',
+    calcLink: '/financial-tools/loan/emi',
     icon: <GraduationCap size={20} />,
-    description: 'Pre-visa sanction letters, living expenses, and international university fee disbursal.',
+    description: 'Advisory support for international university offer readiness, cost-of-attendance checklists, and partner lender coordination.',
     calcTags: ['emi', 'foir', 'gst-interest', 'interest']
   },
   {
     id: 'home-loan',
     title: 'Home Loan',
-    subtitle: 'Purchase, construction & renovation',
-    rate: 'From 8.40% p.a.',
-    tenure: 'Up to 30 Years',
+    subtitle: 'Purchase, construction & renovation advisory',
+    rate: 'As per partner lender policy',
+    tenure: 'Subject to lender terms',
     link: '/services/home-loan',
-    calcLink: '/calculators/loan/comparison',
+    calcLink: '/financial-tools/loan/comparison',
     icon: <Home size={20} />,
-    description: 'Lowest EMI schemes, doorstep documentation, and seamless balance transfer support.',
+    description: 'Income, co-applicant, and property title chain checklist guidance for home purchase, self-construction, or balance transfer.',
     calcTags: ['emi', 'foir', 'comparison', 'prepayment', 'rate-change', 'foreclosure']
   },
   {
     id: 'mortgage-lap',
-    title: 'Mortgage / LAP',
+    title: 'Mortgage Loan (LAP)',
     subtitle: 'Loan against residential/commercial property',
-    rate: 'From 9.00% p.a.',
-    tenure: 'Up to 20 Years',
-    link: '/services/mortgage-lap',
-    calcLink: '/calculators/loan/emi',
+    rate: 'As per partner lender policy',
+    tenure: 'Subject to lender terms',
+    link: '/services/mortgage-loan',
+    calcLink: '/financial-tools/loan/emi',
     icon: <Building2 size={20} />,
-    description: 'Unlock high-value liquidity against your property with flexible repayment tenures.',
+    description: 'Secured financing consultancy and property title documentation preparation for residential and commercial property owners.',
     calcTags: ['emi', 'foir', 'multiplier', 'outstanding', 'foreclosure']
   },
   {
     id: 'ca-loan',
-    title: 'Chartered Accountant Loan',
-    subtitle: 'Specialized financing for CAs & practitioners',
-    rate: 'From 10.25% p.a.',
-    tenure: 'Up to 5 Years',
-    link: '/services/chartered-accountant-loan',
-    calcLink: '/calculators/loan/multiplier-eligibility',
+    title: 'Chartered Accountant & Professional Advisory',
+    subtitle: 'Practice expansion & working capital guidance',
+    rate: 'As per partner lender policy',
+    tenure: 'Subject to lender terms',
+    link: '/services/business-loan',
+    calcLink: '/financial-tools/loan/multiplier-eligibility',
     icon: <FileCheck size={20} />,
-    description: 'Collateral-free credit limits based on Certificate of Practice (COP) and ICAI seniority.',
+    description: 'Documentation checklists and partner lender coordination for practicing Chartered Accountants and certified professionals.',
     calcTags: ['emi', 'multiplier', 'foir', 'outstanding']
   },
   {
     id: 'doctor-loan',
-    title: 'Doctor / Professional Loan',
-    subtitle: 'Clinic setup & medical equipment finance',
-    rate: 'From 9.75% p.a.',
-    tenure: 'Up to 7 Years',
-    link: '/services/doctor-professional-loan',
-    calcLink: '/calculators/loan/foir-eligibility',
+    title: 'Doctor Loan',
+    subtitle: 'Clinic setup & medical equipment advisory',
+    rate: 'As per partner lender policy',
+    tenure: 'Subject to lender terms',
+    link: '/services/doctor-loan',
+    calcLink: '/financial-tools/loan/foir-eligibility',
     icon: <Stethoscope size={20} />,
-    description: 'Custom credit lines for MBBS, MD, BDS, architects, and certified professionals.',
+    description: 'Dedicated loan consultancy for MBBS, MD, MS, BDS, MDS, and registered medical practitioners across Maharashtra.',
     calcTags: ['emi', 'foir', 'multiplier', 'outstanding', 'foreclosure']
   },
   {
     id: 'school-college-funding',
-    title: 'School & College Funding',
+    title: 'School and College Funding',
     subtitle: 'Institutional expansion & campus infrastructure',
-    rate: 'From 9.50% p.a.',
-    tenure: 'Up to 15 Years',
-    link: '/loans#school-funding',
-    calcLink: '/calculators/loan/comparison',
+    rate: 'As per partner lender policy',
+    tenure: 'Subject to lender terms',
+    link: '/services/school-and-college-funding',
+    calcLink: '/financial-tools/loan/comparison',
     icon: <BookOpen size={20} />,
-    description: 'Secured and unsecured project loans for educational trusts, schools, and private colleges.',
+    description: 'Institutional loan consultancy and 3-year audited financial pack guidance for recognized educational trusts, schools, and colleges.',
     calcTags: ['emi', 'comparison', 'interest', 'foir']
   }
 ];
@@ -148,13 +148,13 @@ export default function ExploreServices({ currentCalcTag, heading = "Explore Our
       <div className="calc-explore-header">
         <div className="calc-explore-badge">
           <Sparkles size={14} />
-          <span>Tailored Financial Solutions</span>
+          <span>Independent Loan Consultancy</span>
         </div>
         <h3 id="explore-services-title" className="calc-explore-title">
           {heading}
         </h3>
         <p className="calc-explore-desc">
-          Calculated your estimates? Speak with our lending advisors for custom loan structuring, fast sanctions, and doorstep service.
+          Reviewed your indicative estimates? Speak with our loan advisory desk for documentation checklists and partner lender coordination.
         </p>
       </div>
 
@@ -195,8 +195,8 @@ export default function ExploreServices({ currentCalcTag, heading = "Explore Our
 
       <div className="calc-explore-cta-banner">
         <div className="calc-cta-info">
-          <h4>Need immediate personalized loan assistance?</h4>
-          <p>Talk to our loan experts in Latur for instant eligibility checks across 40+ leading partner banks & NBFCs.</p>
+          <h4>Need personalized loan advisory guidance?</h4>
+          <p>Connect with AVANI LOAN SERVICES in Latur for transparent document checklists and lender coordination across Maharashtra.</p>
         </div>
         <div className="calc-cta-buttons">
           <a href="tel:+919175635165" className="calc-btn calc-btn-primary">

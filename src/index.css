@@ -1,22 +1,38 @@
 :root {
-  --primary: #0a4f8b;     /* Deep Trust Blue */
-  --primary-light: #1670c0;
-  --secondary: #e8a317;   /* Gold / Action */
-  --secondary-hover: #cf8c0c;
-  --bg-dark: #0f172a;
+  /* Sky Blue Primary + Light Golden Accent Design System (APR-004) */
+  --primary: #0369a1;        /* Accessible Sky Blue 700 (>=5.9:1 on white) */
+  --primary-light: #0284c7;  /* Sky Blue 600 */
+  --primary-soft: #f0f9ff;   /* Sky Blue 50 surface */
+  --primary-tint: #e0f2fe;   /* Sky Blue 100 highlight */
+  --primary-deep: #0c4a6e;   /* Sky Blue 900 header/footer */
+  --secondary: #d97706;      /* Light Golden Amber 600 */
+  --secondary-light: #f59e0b;/* Light Golden 500 accent */
+  --secondary-soft: #fffbeb; /* Light Golden soft badge surface */
+  --secondary-hover: #b45309;/* Accessible Golden hover */
+  --bg-dark: #0c4a6e;
   --bg-light: #f8fafc;
   --bg-card: #ffffff;
-  --text-dark: #1e293b;
-  --text-light: #64748b;
+  --text-dark: #0f172a;
+  --text-light: #475569;     /* High-contrast Slate 600 (>=7.0:1 on white) */
   --text-white: #ffffff;
-  --border: #e2e8f0;
+  --border: #bae6fd;
+  --border-subtle: #e2e8f0;
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 20px;
-  --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-glow: 0 0 15px rgba(232, 163, 23, 0.4);
+  --radius-lg: 18px;
+  --shadow-sm: 0 2px 6px rgba(3, 105, 161, 0.08);
+  --shadow-md: 0 8px 20px rgba(3, 105, 161, 0.1);
+  --shadow-lg: 0 16px 32px rgba(12, 74, 110, 0.12);
+  --shadow-glow: 0 4px 14px rgba(217, 119, 6, 0.28);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #0284c7;
+  outline-offset: 2px;
 }
 
 * {

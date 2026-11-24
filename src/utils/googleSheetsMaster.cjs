@@ -7,9 +7,7 @@ const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
 
-const APPS_SCRIPT_URL =
-  process.env.GOOGLE_SHEET_APP_SCRIPT_URL ||
-  'https://script.google.com/macros/s/AKfycbyoAmAabpO9PUDH-AXatZm5Td7pO9n5W00Eoh6TNIkPtjbQZiYrhAv27XgyMtJdBxchEg/exec';
+const APPS_SCRIPT_URL = process.env.GOOGLE_SHEET_APP_SCRIPT_URL || '';
 
 let globalLeadCounter = Date.now() % 100000;
 

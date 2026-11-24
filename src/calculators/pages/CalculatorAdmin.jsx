@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CalculatorLayout from '../layouts/CalculatorLayout';
 import { useCalculatorAuth } from '../auth/CalculatorAuthContext';
+import useSEO from '../../hooks/useSEO';
 import {
   ShieldCheck,
   Settings,
@@ -23,40 +24,62 @@ import {
 } from 'lucide-react';
 import '../styles/calculators.css';
 
+const INITIAL_ADMIN_DEFAULTS = {
+  defaultFoir: '50',
+  defaultMultiplier: '60',
+  defaultHomeLoanRate: '8.50',
+  defaultPersonalLoanRate: '10.50',
+  defaultBusinessLoanRate: '11.25',
+  defaultGstRate: '18',
+  defaultForeclosureCharge: '2.0',
+  defaultPpfRate: '7.1',
+};
+
 export default function CalculatorAdmin() {
+  useSEO({
+    title: 'Financial Tools Administration | Avani Loan Services',
+    description: 'Protected administrative configuration center for AVANI LOAN SERVICES Financial Calculator Suite.',
+    noindex: true
+  });
   const { logout } = useCalculatorAuth();
 
-  // Configurable Defaults State (Stored locally in session / admin state)
-  const [defaults, setDefaults] = useState({
-    defaultFoir: '50',
-    defaultMultiplier: '60',
-    defaultHomeLoanRate: '8.50',
-    defaultPersonalLoanRate: '10.50',
-    defaultBusinessLoanRate: '11.25',
-    defaultGstRate: '18',
-    defaultForeclosureCharge: '2.0',
-    defaultPpfRate: '7.1',
+  // Configurable Defaults State (Persisted in sessionStorage during authenticated session)
+  const [defaults, setDefaults] = useState(() => {
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        const stored = window.sessionStorage.getItem('avani_calc_admin_defaults');
+        if (stored) return { ...INITIAL_ADMIN_DEFAULTS, ...JSON.parse(stored) };
+      }
+    } catch {
+      // ignore storage access issues
+    }
+    return INITIAL_ADMIN_DEFAULTS;
   });
 
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   const handleSave = (e) => {
     e.preventDefault();
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        window.sessionStorage.setItem('avani_calc_admin_defaults', JSON.stringify(defaults));
+      }
+    } catch {
+      // ignore storage write errors
+    }
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 4000);
   };
 
   const handleReset = () => {
-    setDefaults({
-      defaultFoir: '50',
-      defaultMultiplier: '60',
-      defaultHomeLoanRate: '8.50',
-      defaultPersonalLoanRate: '10.50',
-      defaultBusinessLoanRate: '11.25',
-      defaultGstRate: '18',
-      defaultForeclosureCharge: '2.0',
-      defaultPpfRate: '7.1',
-    });
+    setDefaults(INITIAL_ADMIN_DEFAULTS);
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        window.sessionStorage.removeItem('avani_calc_admin_defaults');
+      }
+    } catch {
+      // ignore storage errors
+    }
   };
 
   return (
@@ -65,7 +88,7 @@ export default function CalculatorAdmin() {
         {/* Workspace Header */}
         <section className="calc-workspace-header">
           <div className="calc-breadcrumbs">
-            <Link to="/calculators" className="calc-breadcrumb-link">Calculators</Link>
+            <Link to="/financial-tools" className="calc-breadcrumb-link">Calculators</Link>
             <span>/</span>
             <span style={{ fontWeight: 600, color: 'var(--calc-text-main)' }}>Admin Operations</span>
           </div>

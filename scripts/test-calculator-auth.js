@@ -28,6 +28,26 @@ async function runAuthTests() {
 
   try {
     let cookieHeader = '';
+    const prevCalcPass = process.env.CALCULATOR_ACCESS_PASSWORD;
+    delete process.env.CALCULATOR_ACCESS_PASSWORD;
+
+    // Test 0: Verify fail-closed 503 when password secret is unconfigured
+    console.log('Test 0: Verify fail-closed 503 when CALCULATOR_ACCESS_PASSWORD is unconfigured');
+    const res0 = await fetch(`${BASE_URL}/api/calculator-auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: 'any' }),
+    });
+    if (res0.status === 503) {
+      console.log('  ✅ PASS: Unconfigured secret rejected fail-closed with 503\n');
+    } else {
+      console.error('  ❌ FAIL: Unconfigured secret did not fail closed with 503');
+      process.exitCode = 1;
+    }
+
+    // Configure synthetic password for remaining tests
+    const syntheticTestPassword = prevCalcPass || 'SyntheticCalcAuthTest#2026';
+    process.env.CALCULATOR_ACCESS_PASSWORD = syntheticTestPassword;
 
     // Test 1: Verify unauthenticated state
     console.log('Test 1: Check unauthenticated /api/calculator-auth/verify');
@@ -75,7 +95,7 @@ async function runAuthTests() {
 
     // Test 4: Attempt login with correct password
     console.log('\nTest 4: Attempt login with correct password (configured in environment)');
-    const expectedPassword = process.env.CALCULATOR_ACCESS_PASSWORD || 'Samarth@1356';
+    const expectedPassword = process.env.CALCULATOR_ACCESS_PASSWORD;
     const res4 = await fetch(`${BASE_URL}/api/calculator-auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

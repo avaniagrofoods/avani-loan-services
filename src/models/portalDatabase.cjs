@@ -319,7 +319,7 @@ function seedDefaultTemplates() {
       language: 'en',
       header: 'Partnership Proposal: Exclusive Home Loan & APF Desk for {{1}}',
       body: 'Dear {{2}},\n\nAvani Loan Services is pleased to present our Builder Partnership Program for {{1}} in {{3}}.\n\nKey Partnership Deliverables:\n1. Dedicated On-Site / Virtual Home Loan Desk\n2. Empaneled with 30+ Leading Private, PSU Banks & HFCs\n3. Accelerated APF (Advance Processing Facility) tie-ups\n4. Transparent Referral Structure & SLA-backed Buyer Sanctions\n\nWe look forward to formalizing our mutual MOU.\n\nWarm regards,\nAvani Loan Services Alliances Team\n+91 9175635165 | partnerships@avanifinserv.com',
-      footer: 'Old Barshi Road, 5 no Chauk, KulswaminiNagar, Latur-413531, Maharashtra',
+      footer: 'OLD BARSHI ROAD, 5NO CHAUK, KULSWAMINI NAGAR, NEXT TO SAI SCHOOL, LATUR – 413512, MAHARASHTRA, INDIA',
       buttons: ['Download Partnership Deck', 'Schedule Meeting'],
       variables: ['1', '2', '3'],
       variable_labels: ['Company Name', 'Decision Maker Name', 'City'],

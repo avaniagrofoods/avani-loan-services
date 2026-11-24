@@ -1,12 +1,14 @@
 import useSEO from '../hooks/useSEO';
-import brandLogo from '../assets/avani-brand-logo.png';
+import { OFFICIAL_BUSINESS } from '../config/officialBusiness';
+import brandLogo from '../assets/optimized/avani-brand-logo.webp';
 import './Privacy.css';
 
 export default function Terms() {
   useSEO({
     title: 'Terms and Conditions | Avani Loan Services',
-    description: 'Terms and conditions governing the financial facilitation and advisory services of Avani Loan Services in Maharashtra, India.',
-    keywords: 'Terms, Conditions, Legal, Avani Loan Services, DSA, Financial Facilitation, Maharashtra'
+    description:
+      'Terms and conditions governing the loan consultancy and advisory services of AVANI LOAN SERVICES in Latur, Maharashtra, India.',
+    keywords: 'Terms and Conditions, Legal, Avani Loan Services, loan consultancy Maharashtra'
   });
 
   return (
@@ -14,71 +16,61 @@ export default function Terms() {
       <section className="page-header">
         <div className="container">
           <div className="page-header-top">
-            <img src={brandLogo} alt="Avani Loan Services" className="page-header-logo" />
+            <img src={brandLogo} alt="Avani Loan Services Logo" className="page-header-logo" width="56" height="56" />
             <div>
               <span className="badge">Legal Terms</span>
-              <div className="page-header-address">Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</div>
+              <div className="page-header-address">{OFFICIAL_BUSINESS.shortAddress}</div>
             </div>
           </div>
           <h1>Terms and Conditions</h1>
-          <p>Effective Date: November 6, 2026</p>
+          <p>Effective Date: November 22, 2026</p>
         </div>
       </section>
 
       <section className="section">
         <div className="container">
           <div className="privacy-body glass-card">
-            <h2>1. Nature of Business & Direct Selling Agent (DSA) Disclosure</h2>
+            <h2>1. Nature of Business &amp; Consultancy Disclosure</h2>
             <p>
-              Avani Loan Services operates as a professional financial facilitation firm, corporate advisory, and authorized Direct Selling Agent (DSA).
-              We partner with Reserve Bank of India (RBI) regulated commercial banks, housing finance companies (HFCs), and Non-Banking Financial Companies (NBFCs).
+              <strong>{OFFICIAL_BUSINESS.name}</strong> operates in the category of <strong>{OFFICIAL_BUSINESS.category}</strong> with the business model of <strong>{OFFICIAL_BUSINESS.model}</strong>, headquartered in Latur, Maharashtra.
             </p>
-            <div className="notice-box" style={{ background: '#f8fafc', padding: '16px', borderLeft: '4px solid #2563eb', borderRadius: '4px', margin: '16px 0' }}>
-              <strong>Important Statutory Disclosure:</strong> Avani Loan Services is <strong>NOT</strong> a bank, NBFC, or direct lender.
-              We do not directly disburse loans, issue credit cards, accept public deposits, or collect advance cash security fees.
-              All loan underwriting, interest rate approvals, sanction letters, and disbursements are executed exclusively by our partner banks and NBFCs at their sole discretion.
+            <div
+              className="notice-box"
+              style={{ background: 'var(--primary-soft)', padding: '16px', borderLeft: '4px solid var(--primary)', borderRadius: '6px', margin: '16px 0' }}
+            >
+              <strong>Important Disclosure:</strong> {OFFICIAL_BUSINESS.advisoryDisclosure}
             </div>
 
-            <h2>2. Permitted Use of Website & Consultation Services</h2>
+            <h2>2. Permitted Use of Website &amp; Calculators</h2>
             <p>
-              By accessing this website (https://www.avanifinserv.com or https://avanifinserv.com), you agree to provide true, accurate, current, and complete information when submitting loan enquiries, builder partnership forms, or institutional funding requests.
-              Any unauthorized use of our proprietary builder intelligence, institutional records, calculators, or administrative portals is strictly prohibited.
+              By accessing {OFFICIAL_BUSINESS.websiteUrl}, you agree to provide accurate contact information when submitting a consented loan advisory enquiry. Online EMI, FOIR, and financial tools are provided strictly for illustrative planning and do not constitute a binding offer of credit.
             </p>
 
-            <h2>3. No Advance Fee Guarantee</h2>
+            <h2>3. No Advance Cash Fee Policy</h2>
+            <p>{OFFICIAL_BUSINESS.noAdvanceFeeNotice}</p>
+
+            <h2>4. No Guarantee of Sanction, Rate, or Timeline</h2>
             <p>
-              Avani Loan Services strictly adheres to fair lending standards. We <strong>never</strong> request cash payments or advance processing fees through personal UPI IDs or unofficial channels.
-              Official processing fees (if applicable) are paid directly to the lending bank or NBFC via designated banking instruments after receiving a formal sanction letter.
+              {OFFICIAL_BUSINESS.name} does not promise or guarantee loan approval, minimum interest rates, specific disbursement timelines, or credit score changes. All credit decisions rest solely with participating banks and NBFCs following independent verification and underwriting.
             </p>
 
-            <h2>4. Intellectual Property Rights</h2>
+            <h2>5. Intellectual Property</h2>
             <p>
-              All trademarks, service marks, logos, brand elements, calculators, software algorithms, and database compilations displayed on this portal are the intellectual property of Avani Loan Services or licensed partners.
-              Unauthorized reproduction, web scraping, redistribution, or framing without prior written consent is actionable under the Copyright Act, 1957 and Information Technology Act, 2000.
+              All website content, branding, and custom tools displayed on {OFFICIAL_BUSINESS.websiteUrl} belong to {OFFICIAL_BUSINESS.name} unless attributed to third parties. Unauthorized reproduction or scraping is prohibited.
             </p>
 
-            <h2>5. Limitation of Liability</h2>
+            <h2>6. Governing Law &amp; Jurisdiction</h2>
             <p>
-              Avani Loan Services makes every reasonable effort to ensure the accuracy of loan calculators, interest rate estimates, and eligibility parameters.
-              However, final eligibility, interest rates, loan-to-value (LTV) ratios, processing fees, and repayment schedules are determined solely by lending institutions after comprehensive credit appraisal and physical verification.
-              Avani Loan Services shall not be held liable for any delay, rejection, or modification of loan terms by partner financial institutions.
+              These Terms and Conditions are governed by the laws of India, with exclusive jurisdiction of competent courts in Latur, Maharashtra, India.
             </p>
 
-            <h2>6. Governing Law and Jurisdiction</h2>
-            <p>
-              These Terms and Conditions shall be governed by and construed in accordance with the laws of India.
-              Any disputes or legal proceedings arising out of or relating to our services shall be subject to the exclusive jurisdiction of the competent courts in Latur, Maharashtra, India.
-            </p>
-
-            <h2>7. Contact Information</h2>
-            <p>
-              If you have any questions or concerns regarding these Terms and Conditions, please contact our Legal & Compliance Desk:
-            </p>
+            <h2>7. Official Contact</h2>
             <ul>
-              <li><strong>Firm:</strong> Avani Loan Services</li>
-              <li><strong>Corporate Address:</strong> Old Barshi Road, 5 no Chauk, next to Sai School, KulswaminiNagar, Latur-413531, Maharashtra, India</li>
-              <li><strong>Telephone:</strong> <a href="tel:+919175635165">+91-9175635165</a></li>
-              <li><strong>Email:</strong> <a href="mailto:enquiry@avanifinserv.com">enquiry@avanifinserv.com</a></li>
+              <li><strong>Business Name:</strong> {OFFICIAL_BUSINESS.name}</li>
+              <li><strong>Owner &amp; Founder:</strong> {OFFICIAL_BUSINESS.owner}</li>
+              <li><strong>Address:</strong> {OFFICIAL_BUSINESS.fullAddress}</li>
+              <li><strong>Telephone / WhatsApp:</strong> <a href={OFFICIAL_BUSINESS.telHref}>{OFFICIAL_BUSINESS.phoneDisplay}</a></li>
+              <li><strong>Email:</strong> <a href={OFFICIAL_BUSINESS.emailHref}>{OFFICIAL_BUSINESS.email}</a></li>
             </ul>
           </div>
         </div>

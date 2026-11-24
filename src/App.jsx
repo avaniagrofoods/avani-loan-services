@@ -12,6 +12,8 @@ import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Disclaimer from './pages/Disclaimer';
 import Blog from './pages/Blog';
+import BlogDetail from './pages/BlogDetail';
+import NotFound from './pages/NotFound';
 import CibilCheck from './pages/CibilCheck';
 import AIAssistant from './pages/AIAssistant';
 import AdminDashboard from './pages/AdminDashboard';
@@ -22,7 +24,6 @@ import ServicesList from './pages/ServicesList';
 import Service from './pages/Service';
 import Catalog from './pages/Catalog';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
-import FloatingAIAssistant from './components/FloatingAIAssistant';
 import DownloadApplication from './pages/DownloadApplication';
 import ProductApply from './pages/ProductApply';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -87,9 +88,11 @@ export default function App() {
               <Route path="/cibil-check" element={<CibilCheck />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/privacy" element={<Privacy />} />
+              <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/disclaimer" element={<Disclaimer />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogDetail />} />
               <Route path="/services" element={<ServicesList />} />
               <Route path="/services/:slug" element={<Service />} />
               <Route path="/ai-assistant" element={<AIAssistant />} />
@@ -194,16 +197,16 @@ export default function App() {
               <Route path="/calculators/other/cash-counter" element={<CashCounterPage />} />
               <Route path="/calculators/other/amount-to-words" element={<AmountToWordsPage />} />
 
-              {/* Suite Fallbacks */}
+              {/* Suite Fallbacks & Global 404 */}
               <Route path="/calculators/*" element={<Navigate to="/financial-tools" replace />} />
               <Route path="/financial-tools/*" element={<Navigate to="/financial-tools" replace />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </ErrorBoundary>
         </main>
         <Footer />
         <BottomNavbar />
         <FloatingWhatsApp />
-        <FloatingAIAssistant />
       </div>
     </CalculatorAuthProvider>
   );

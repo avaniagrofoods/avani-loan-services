@@ -22,12 +22,21 @@ export default function AdminEligibility() {
     setEnquiries(data.sort((a, b) => b.id - a.id));
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (password === 'Samarth@1356') {
-      setIsAuthenticated(true);
-    } else {
-      alert('Incorrect Password');
+    try {
+      const res = await fetch('/api/calculator-auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      if (res.ok) {
+        setIsAuthenticated(true);
+      } else {
+        alert('Invalid administrator credentials.');
+      }
+    } catch {
+      alert('Authentication server unavailable. Please sign in through the authorized backend.');
     }
   };
 

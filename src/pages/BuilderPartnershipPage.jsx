@@ -6,9 +6,16 @@
 
 import { useState } from 'react';
 import { Building2, ShieldCheck, CheckCircle2, Award, Clock, ArrowRight, Loader2, Send } from 'lucide-react';
+import useSEO from '../hooks/useSEO';
 import './BuilderPartnershipPage.css';
 
 export default function BuilderPartnershipPage() {
+  useSEO({
+    title: 'Builder Partnership & Home Loan Referral Tie-Ups | Avani Loan Services',
+    description:
+      'Partner with AVANI LOAN SERVICES for residential project home loan advisory, buyer documentation support, and bank/HFC coordination across Latur and Maharashtra.',
+    keywords: 'builder home loan partnership Maharashtra, residential project loan tie-up Latur, Avani Loan Services builder alliance'
+  });
   const [formData, setFormData] = useState({
     company_name: '',
     contact_person: '',
