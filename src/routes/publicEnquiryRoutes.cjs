@@ -7,7 +7,43 @@
 const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
+const axios = require('axios');
 const db = require('../models/portalDatabase.cjs');
+
+/**
+ * APR-025 P0-FIX: Forward public Builder & Institutional enquiries directly to the canonical
+ * AVANI AI CRM Google Sheets intake (`POST /api/public/enquiry`) so enquiries are NEVER
+ * trapped solely in ephemeral serverless local JSON files.
+ */
+async function forwardPortalEnquiryToCanonicalCrm(payload) {
+  const crmBaseUrl = String(process.env.AVANI_CRM_URL || process.env.NEXT_PUBLIC_CRM_URL || 'https://avani-ai-crm.vercel.app').trim();
+  if (!crmBaseUrl) {
+    return { attempted: false, persisted: false, reason: 'CRM_URL_UNCONFIGURED' };
+  }
+  try {
+    const resp = await axios.post(`${crmBaseUrl.replace(/\/+$/, '')}/api/public/enquiry`, payload, {
+      headers: { 'Content-Type': 'application/json' },
+      timeout: 8000,
+      validateStatus: () => true
+    });
+    if ((resp.status === 200 || resp.status === 201) && resp.data && resp.data.success) {
+      return {
+        attempted: true,
+        persisted: true,
+        crmLeadId: resp.data.leadId || null,
+        crmCustomerId: resp.data.customerId || null
+      };
+    }
+    return {
+      attempted: true,
+      persisted: false,
+      status: resp.status,
+      reason: (resp.data && (resp.data.error || resp.data.message)) || 'CRM_REJECTED'
+    };
+  } catch (err) {
+    return { attempted: true, persisted: false, reason: err.code || err.message || 'CRM_UNREACHABLE' };
+  }
+}
 
 // Rate limiting: max 10 enquiry submissions per hour per IP to prevent spam (relaxed in test mode)
 const enquiryLimiter = rateLimit({
@@ -28,7 +64,7 @@ const PHONE_REGEX = /^[0-9+ \-()]{8,20}$/;
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. POST /api/portal/public/builder-enquiry
 // ─────────────────────────────────────────────────────────────────────────────
-router.post('/builder-enquiry', enquiryLimiter, (req, res) => {
+router.post('/builder-enquiry', enquiryLimiter, async (req, res) => {
   try {
     const {
       company_name,
@@ -124,8 +160,37 @@ router.post('/builder-enquiry', enquiryLimiter, (req, res) => {
 
     db.logAudit('PUBLIC_FORM', 'ENQUIRY', 'SUBMIT_BUILDER_ENQUIRY', { enquiryId, company: company_name }, req.ip);
 
+    // APR-025 P0-FIX: Forward directly to canonical Google Sheets CRM when configured
+    const bDigits = business_telephone.replace(/\D/g, '');
+    const bRaw10 = bDigits.length > 10 ? bDigits.slice(-10) : bDigits;
+    let crmHandover = { attempted: false, persisted: false, reason: 'INVALID_MOBILE_FOR_CRM' };
+    if (bRaw10.length === 10 && /^[6-9]\d{9}$/.test(bRaw10)) {
+      crmHandover = await forwardPortalEnquiryToCanonicalCrm({
+        name: `${contact_person.trim()} (${company_name.trim()})`.slice(0, 110),
+        phone: `+91${bRaw10}`,
+        city: city.trim(),
+        loanType: 'Home Loan',
+        requestedAmount: '0',
+        leadSource: 'WEBSITE_BUILDER_ENQUIRY',
+        consent: true,
+        consentStatus: 'GRANTED',
+        idempotencyKey: enquiryId
+      });
+    }
+    if (crmHandover.attempted && !crmHandover.persisted) {
+      return res.status(503).json({
+        success: false,
+        persisted: false,
+        enquiry_id: enquiryId,
+        error: 'CANONICAL_HANDOVER_FAILED',
+        message: 'We could not confirm registration of your Builder Partnership enquiry with our CRM right now. Please try again shortly or contact us on WhatsApp at +91 91756 35165.'
+      });
+    }
+
     return res.status(201).json({
       success: true,
+      persisted: true,
+      crmHandover,
       message: 'Thank you! Your Builder Partnership Enquiry has been registered successfully. Our Home Loan Alliance Director will contact you within 1 business day.',
       enquiry_id: enquiryId
     });
@@ -139,7 +204,7 @@ router.post('/builder-enquiry', enquiryLimiter, (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // 2. POST /api/portal/public/education-enquiry
 // ─────────────────────────────────────────────────────────────────────────────
-router.post('/education-enquiry', enquiryLimiter, (req, res) => {
+router.post('/education-enquiry', enquiryLimiter, async (req, res) => {
   try {
     const {
       institution_name,
@@ -252,8 +317,38 @@ router.post('/education-enquiry', enquiryLimiter, (req, res) => {
 
     db.logAudit('PUBLIC_FORM', 'ENQUIRY', 'SUBMIT_EDUCATION_ENQUIRY', { enquiryId, institution: institution_name }, req.ip);
 
+    // APR-025 P0-FIX: Forward directly to canonical Google Sheets CRM when configured
+    const eDigits = telephone.replace(/\D/g, '');
+    const eRaw10 = eDigits.length > 10 ? eDigits.slice(-10) : eDigits;
+    const eduLoanType = /school/i.test(String(institution_category || '')) ? 'School Funding' : 'College Funding';
+    let crmHandover = { attempted: false, persisted: false, reason: 'INVALID_MOBILE_FOR_CRM' };
+    if (eRaw10.length === 10 && /^[6-9]\d{9}$/.test(eRaw10)) {
+      crmHandover = await forwardPortalEnquiryToCanonicalCrm({
+        name: `${contact_person.trim()} (${institution_name.trim()})`.slice(0, 110),
+        phone: `+91${eRaw10}`,
+        city: city.trim(),
+        loanType: eduLoanType,
+        requestedAmount: String(newEnquiry.estimated_amount),
+        leadSource: 'WEBSITE_INSTITUTIONAL_ENQUIRY',
+        consent: true,
+        consentStatus: 'GRANTED',
+        idempotencyKey: enquiryId
+      });
+    }
+    if (crmHandover.attempted && !crmHandover.persisted) {
+      return res.status(503).json({
+        success: false,
+        persisted: false,
+        enquiry_id: enquiryId,
+        error: 'CANONICAL_HANDOVER_FAILED',
+        message: 'We could not confirm registration of your Institutional Funding enquiry with our CRM right now. Please try again shortly or contact us on WhatsApp at +91 91756 35165.'
+      });
+    }
+
     return res.status(201).json({
       success: true,
+      persisted: true,
+      crmHandover,
       message: 'Thank you! Your Institutional Funding Enquiry has been recorded. Our Senior Education Finance Consultant will connect with you within 1 business day.',
       enquiry_id: enquiryId
     });

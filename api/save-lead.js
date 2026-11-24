@@ -228,11 +228,27 @@ export default async function handler(req, res) {
     // Prune expired / cap bounded cache size before inserting (APR006-P1-02)
     pruneIdempotencyCache(now, inMemoryIdempotencyCache, IDEMPOTENCY_MAX_ENTRIES);
 
-    // Cache idempotency entry (preserve resolvedLeadId)
+    // APR-025 P1-FIX: Fail closed — NEVER claim success if canonical Google Sheets CRM handover failed!
+    const canonicalPersisted = Boolean(syncResults.crm || syncResults.googleWebApp);
+    if (!canonicalPersisted) {
+      return res.status(503).json({
+        success: false,
+        persisted: false,
+        leadId: resolvedLeadId,
+        correlationId,
+        status: 'HANDOVER_UNAVAILABLE',
+        syncResults,
+        error: 'CANONICAL_HANDOVER_FAILED',
+        message: 'We could not confirm registration of your enquiry with our CRM right now. Please try again in a moment or contact us directly on WhatsApp at +91 91756 35165.'
+      });
+    }
+
+    // Cache idempotency entry ONLY after canonical handover is acknowledged
     inMemoryIdempotencyCache.set(cacheKey, { leadId: resolvedLeadId, timestamp: now });
 
     return res.status(200).json({
       success: true,
+      persisted: true,
       leadId: resolvedLeadId,
       correlationId,
       status: 'RECEIVED',
