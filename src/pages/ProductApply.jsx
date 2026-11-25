@@ -31,6 +31,8 @@ import {
 } from 'lucide-react';
 import { formatINR, parseNumber } from '../calculators/utils/formatters.js';
 import { calculateFOIREligibility } from '../calculators/utils/calculations.js';
+import { isLeadCaptureHoldActive } from '../config/leadCaptureHold.js';
+import LeadCaptureHoldNotice from '../components/LeadCaptureHoldNotice';
 import './ProductApply.css';
 
 // ── 14 Unified Loan Services Catalog ──
@@ -303,6 +305,7 @@ export default function ProductApply() {
   // Step Wizard State (1 to 4)
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isHold, setIsHold] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
 
   // Form State
@@ -372,6 +375,12 @@ export default function ProductApply() {
   // Submission Handler
   const handleSubmitApplication = async (e) => {
     if (e) e.preventDefault();
+
+    if (isLeadCaptureHoldActive()) {
+      setIsHold(true);
+      return;
+    }
+
     setIsSubmitting(true);
 
     // Collision-resistant Application Reference ID
@@ -411,11 +420,19 @@ export default function ProductApply() {
         applicationId: payload.applicationId
       };
 
-      await fetch('/api/lead/submit', {
+      const resp = await fetch('/api/lead/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(meta)
-      }).catch(() => {});
+      }).catch(() => null);
+
+      if (resp && resp.status === 503) {
+        const data = await resp.json().catch(() => ({}));
+        if (data.hold) {
+          setIsHold(true);
+          return;
+        }
+      }
 
       setSubmissionResult(payload);
       setCurrentStep(4);
@@ -794,8 +811,22 @@ export default function ProductApply() {
           </div>
         )}
 
+        {/* ── TEMPORARY LEAD CAPTURE HOLD (APR-033) ── */}
+        {isHold && (
+          <div className="apply-card animate-fade-in" style={{ padding: '24px' }}>
+            <LeadCaptureHoldNotice
+              form={{
+                name: formData.applicantName,
+                loanType: selectedProduct.title
+              }}
+              loanType={selectedProduct.title}
+              onBack={() => setIsHold(false)}
+            />
+          </div>
+        )}
+
         {/* ── STEP 4: ELIGIBILITY RESULT & APPLICATION SUMMARY ── */}
-        {currentStep === 4 && submissionResult && (
+        {currentStep === 4 && !isHold && submissionResult && (
           <div className="apply-card animate-fade-in">
             <div className="apply-result-hero">
               <div className="apply-result-id-badge">

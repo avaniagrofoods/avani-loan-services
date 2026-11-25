@@ -10,11 +10,25 @@ const { syncToHubSpot } = require('../utils/hubSpot.cjs');
 const axios = require('axios');
 
 const { processIncomingLead } = require('../services/centralLeadEngine.cjs');
+const { isLeadCaptureHoldActive, HOLD_CONTACT_INFO } = require('../config/leadCaptureHold.cjs');
 
 // ── 1. POST /api/lead/submit (Centralized Master Lead Capture) ───
 router.post('/submit', async (req, res) => {
   try {
     const rawData = req.body;
+
+    // APR-033: Temporary Lead Capture Hold Enforcement
+    if (isLeadCaptureHoldActive()) {
+      return res.status(503).json({
+        success: false,
+        hold: true,
+        persisted: false,
+        error: 'LEAD_CAPTURE_HOLD',
+        message: 'Online application submission is temporarily held for scheduled systems verification. Please contact Senior Loan Advisor Sachin Shinde directly on WhatsApp (+91 91756 35165) or phone.',
+        contact: HOLD_CONTACT_INFO
+      });
+    }
+
     console.log('[FormTracking] New Lead submission received:', rawData.name || rawData.fullName);
 
     // Process through Central Lead Engine (Deduplication & Lead ID generation)

@@ -7,6 +7,8 @@
 import { useState } from 'react';
 import { Building2, ShieldCheck, CheckCircle2, Award, Clock, ArrowRight, Loader2, Send } from 'lucide-react';
 import useSEO from '../hooks/useSEO';
+import { isLeadCaptureHoldActive } from '../config/leadCaptureHold.js';
+import LeadCaptureHoldNotice from '../components/LeadCaptureHoldNotice';
 import './BuilderPartnershipPage.css';
 
 export default function BuilderPartnershipPage() {
@@ -34,6 +36,7 @@ export default function BuilderPartnershipPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isHold, setIsHold] = useState(false);
   const [enquiryId, setEnquiryId] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -51,6 +54,12 @@ export default function BuilderPartnershipPage() {
       setErrorMsg('Please acknowledge the privacy policy to submit your enquiry.');
       return;
     }
+
+    if (isLeadCaptureHoldActive()) {
+      setIsHold(true);
+      return;
+    }
+
     setSubmitting(true);
     setErrorMsg('');
 
@@ -61,6 +70,10 @@ export default function BuilderPartnershipPage() {
         body: JSON.stringify(formData)
       });
       const data = await res.json();
+      if (res.status === 503 && data.hold) {
+        setIsHold(true);
+        return;
+      }
       if (res.ok && data.success) {
         setSubmitted(true);
         setEnquiryId(data.enquiry_id);
@@ -156,7 +169,13 @@ export default function BuilderPartnershipPage() {
           {/* Right: Enquiry Form */}
           <div className="bp-form-column">
             <div className="bp-form-card">
-              {submitted ? (
+              {isHold ? (
+                <LeadCaptureHoldNotice
+                  form={formData}
+                  loanType={formData.partnership_interest}
+                  onBack={() => setIsHold(false)}
+                />
+              ) : submitted ? (
                 <div className="bp-success-card">
                   <div className="bp-success-icon"><CheckCircle2 size={48} color="#10B981" /></div>
                   <h3>Partnership Enquiry Registered</h3>

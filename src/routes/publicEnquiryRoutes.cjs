@@ -9,6 +9,7 @@ const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const axios = require('axios');
 const db = require('../models/portalDatabase.cjs');
+const { isLeadCaptureHoldActive, HOLD_CONTACT_INFO } = require('../config/leadCaptureHold.cjs');
 
 /**
  * APR-025 P0-FIX: Forward public Builder & Institutional enquiries directly to the canonical
@@ -119,6 +120,19 @@ router.post('/builder-enquiry', enquiryLimiter, async (req, res) => {
 
     // Generate unique enquiry ID
     const enquiryId = `ALS-ENQ-BLD-${Date.now()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`;
+
+    // APR-033: Temporary Lead Capture Hold Enforcement
+    if (isLeadCaptureHoldActive()) {
+      return res.status(503).json({
+        success: false,
+        hold: true,
+        persisted: false,
+        enquiry_id: enquiryId,
+        error: 'LEAD_CAPTURE_HOLD',
+        message: 'Online Builder Partnership enquiry submission is temporarily held for scheduled systems verification. Please contact Senior Loan Advisor Sachin Shinde directly on WhatsApp (+91 91756 35165) or phone.',
+        contact: HOLD_CONTACT_INFO
+      });
+    }
 
     const newEnquiry = {
       enquiry_id: enquiryId,
@@ -269,6 +283,19 @@ router.post('/education-enquiry', enquiryLimiter, async (req, res) => {
 
     // Generate unique enquiry ID
     const enquiryId = `ALS-ENQ-EDU-${Date.now()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`;
+
+    // APR-033: Temporary Lead Capture Hold Enforcement
+    if (isLeadCaptureHoldActive()) {
+      return res.status(503).json({
+        success: false,
+        hold: true,
+        persisted: false,
+        enquiry_id: enquiryId,
+        error: 'LEAD_CAPTURE_HOLD',
+        message: 'Online Institutional Funding enquiry submission is temporarily held for scheduled systems verification. Please contact Senior Loan Advisor Sachin Shinde directly on WhatsApp (+91 91756 35165) or phone.',
+        contact: HOLD_CONTACT_INFO
+      });
+    }
 
     const newEnquiry = {
       enquiry_id: enquiryId,

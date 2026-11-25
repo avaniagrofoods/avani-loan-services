@@ -4,6 +4,7 @@ import { Send, CheckCircle2, AlertCircle, ShieldCheck, MessageCircle } from 'luc
 import { OFFICIAL_BUSINESS, OFFICIAL_SERVICES_NAV } from '../config/officialBusiness';
 import { syncLeadData } from '../lib/syncLeads';
 import { generateWhatsAppDocumentLink } from '../utils/whatsappHelper';
+import LeadCaptureHoldNotice from './LeadCaptureHoldNotice';
 
 const PHONE_REGEX = /^[6-9][0-9]{9}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -71,15 +72,34 @@ export default function SimpleLeadForm() {
     setStatus('loading');
     setErrorMsg('');
 
-    await syncLeadData({
+    const result = await syncLeadData({
       ...formData,
       phone: cleanPhone,
       consent: true,
       source: 'Website_Contact_Page'
     });
 
-    setStatus('success');
+    if (result && result.hold) {
+      setStatus('hold');
+      return;
+    }
+
+    if (result && result.ok) {
+      setStatus('success');
+    } else {
+      setStatus('hold');
+    }
   };
+
+  if (status === 'hold') {
+    return (
+      <LeadCaptureHoldNotice
+        form={formData}
+        loanType={formData.loanType}
+        onBack={() => setStatus('idle')}
+      />
+    );
+  }
 
   if (status === 'success') {
     const waHref = generateWhatsAppDocumentLink(formData.loanType);

@@ -7,6 +7,8 @@
 import { useState } from 'react';
 import { GraduationCap, Landmark, ShieldCheck, CheckCircle2, TrendingUp, Send, Loader2 } from 'lucide-react';
 import useSEO from '../hooks/useSEO';
+import { isLeadCaptureHoldActive } from '../config/leadCaptureHold.js';
+import LeadCaptureHoldNotice from '../components/LeadCaptureHoldNotice';
 import './InstitutionalFundingPage.css';
 
 export default function InstitutionalFundingPage() {
@@ -41,6 +43,7 @@ export default function InstitutionalFundingPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isHold, setIsHold] = useState(false);
   const [enquiryId, setEnquiryId] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -58,6 +61,12 @@ export default function InstitutionalFundingPage() {
       setErrorMsg('Please acknowledge the privacy policy to submit your funding consultation enquiry.');
       return;
     }
+
+    if (isLeadCaptureHoldActive()) {
+      setIsHold(true);
+      return;
+    }
+
     setSubmitting(true);
     setErrorMsg('');
 
@@ -68,6 +77,10 @@ export default function InstitutionalFundingPage() {
         body: JSON.stringify(formData)
       });
       const data = await res.json();
+      if (res.status === 503 && data.hold) {
+        setIsHold(true);
+        return;
+      }
       if (res.ok && data.success) {
         setSubmitted(true);
         setEnquiryId(data.enquiry_id);
@@ -169,7 +182,13 @@ export default function InstitutionalFundingPage() {
           {/* Right Column: Enquiry Form */}
           <div className="if-form-column">
             <div className="if-form-card">
-              {submitted ? (
+              {isHold ? (
+                <LeadCaptureHoldNotice
+                  form={formData}
+                  loanType={formData.funding_requirement || formData.institution_category}
+                  onBack={() => setIsHold(false)}
+                />
+              ) : submitted ? (
                 <div className="if-success-card">
                   <div className="if-success-icon"><CheckCircle2 size={48} color="#059669" /></div>
                   <h3>Funding Consultation Requested</h3>

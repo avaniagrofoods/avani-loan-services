@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { isLeadCaptureHoldActive, HOLD_CONTACT_INFO } from '../src/config/leadCaptureHold.js';
 
 // ─────────────────────────────────────────────────────────────────
 // AVANI LOAN SERVICES — SECURE WEBSITE LEAD INTAKE API
@@ -141,6 +142,22 @@ export default async function handler(req, res) {
     const canonicalLoanCategory = normalizeLoanCategory(rawLoanType);
     const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     const leadId = raw.leadId || `AVL-${dateStr}-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    // 4b. APR-033 Temporary Lead Capture Hold Enforcement
+    // Blocks unverified downstream forwarding while canonical CRM storage is unverified
+    if (isLeadCaptureHoldActive()) {
+      return res.status(503).json({
+        success: false,
+        hold: true,
+        persisted: false,
+        leadId,
+        correlationId,
+        status: 'LEAD_CAPTURE_TEMPORARILY_HELD',
+        error: 'LEAD_CAPTURE_HOLD',
+        message: 'Online automated enquiry submission is temporarily held for scheduled systems verification. Please contact Senior Loan Advisor Sachin Shinde directly on WhatsApp (+91 91756 35165) or phone.',
+        contact: HOLD_CONTACT_INFO
+      });
+    }
 
     const crmPayload = {
       leadId,

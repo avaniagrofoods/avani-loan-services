@@ -1,0 +1,144 @@
+/* src/components/LeadCaptureHoldNotice.css */
+/* AVANI LOAN SERVICES — Temporary Lead Capture Containment UI */
+
+.lead-hold-card {
+  background: #ffffff;
+  border: 1px solid #fed7aa;
+  border-left: 5px solid #f97316;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 16px 0;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.08);
+  font-family: inherit;
+  color: #1e293b;
+}
+
+.lead-hold-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff7ed;
+  color: #c2410c;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #ffedd5;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lead-hold-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #9a3412;
+  margin: 0 0 10px 0;
+  line-height: 1.3;
+}
+
+.lead-hold-message {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #475569;
+  margin-bottom: 18px;
+}
+
+.lead-hold-retained-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 0.88rem;
+  color: #334155;
+}
+
+.lead-hold-retained-box strong {
+  color: #0f172a;
+}
+
+.lead-hold-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.lead-hold-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.lead-hold-btn-whatsapp {
+  background: #15803d;
+  color: #ffffff !important;
+}
+
+.lead-hold-btn-whatsapp:hover {
+  background: #166534;
+  color: #ffffff !important;
+}
+
+.lead-hold-btn-phone {
+  background: #0284c7;
+  color: #ffffff !important;
+}
+
+.lead-hold-btn-phone:hover {
+  background: #0369a1;
+  color: #ffffff !important;
+}
+
+.lead-hold-btn-outline {
+  background: #ffffff;
+  color: #475569 !important;
+  border: 1px solid #cbd5e1;
+}
+
+.lead-hold-btn-outline:hover {
+  background: #f1f5f9;
+  color: #1e293b !important;
+}
+
+.lead-hold-footer {
+  font-size: 0.8rem;
+  color: #64748b;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 12px;
+  margin-top: 12px;
+  line-height: 1.4;
+}
+
+.lead-hold-channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.84rem;
+  color: #475569;
+  margin-top: 8px;
+}
+
+.lead-hold-channels a {
+  color: #0284c7;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .lead-hold-actions {
+    flex-direction: column;
+  }
+  .lead-hold-btn {
+    width: 100%;
+  }
+}
